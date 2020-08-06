@@ -21,9 +21,9 @@ fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
 
 fn main() {
     // Code for running in libpanda mode goes here
-    // unsafe {
-    //     panda::sys::panda_set_library_mode(true);
-    //     panda::sys::panda_init(0, y, y);
-    //     panda::sys::panda_run();
-    // }
+    unsafe {
+        panda::sys::panda_set_library_mode(true);
+        // panda::sys::panda_init(0, y, y);
+        panda::sys::panda_run();
+    }
 }

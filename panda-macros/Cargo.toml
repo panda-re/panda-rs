@@ -10,3 +10,4 @@ proc-macro = true
 [dependencies]
 syn = { version = "1.0.37", features = ["full"] }
 quote = "1.0.7"
+doc-comment = "0.3.3"
