@@ -1,0 +1,12 @@
+[package]
+name = "panda-macros"
+version = "0.1.0"
+authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "1.0.37", features = ["full"] }
+quote = "1.0.7"
