@@ -1,0 +1,13 @@
+[package]
+name = "panda"
+version = "0.1.0"
+authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>"]
+edition = "2018"
+
+[dependencies]
+panda-sys = { path = "../panda-sys" }
+panda-macros = { path = "../panda-macros" }
+inventory = "0.1.7"
+
+[features]
+libpanda = ["panda-sys/libpanda"]
