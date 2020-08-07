@@ -1,6 +1,18 @@
 use proc_macro::TokenStream;
 use quote::quote;
 
+/// (**Required** Callback) Called when the plugin is being uninitialized
+///
+///### Example
+///
+/// ```rust
+///use panda::PluginHandle;
+///
+/// #[panda::init]
+/// fn start(_: &mut PluginHandle) {
+///     println!("Plugin started up!");
+/// }
+/// ```
 #[proc_macro_attribute]
 pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
     let func = syn::parse_macro_input!(function as syn::ItemFn);
@@ -38,6 +50,7 @@ pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
     ).into()
 }
 
+/// (Callback) Called when the plugin is being uninitialized
 #[proc_macro_attribute]
 pub fn uninit(_: TokenStream, function: TokenStream) -> TokenStream {
     let func = syn::parse_macro_input!(function as syn::ItemFn);
@@ -59,9 +72,7 @@ macro_rules! define_callback_attributes {
     ),*) => {
         $(
             doc_comment::doc_comment!{
-                concat!("(Callback) ", $($doc, "\n",)* "
-
-    Callback arguments: (", $("`", stringify!($arg), "`, ",)* ")"),
+                concat!("(Callback) ", $($doc, "\n",)* "\n\nCallback arguments: (", $("`", stringify!($arg), "`, ",)* ")\n### Example\n```rust\nuse panda::{sys::*, PluginHandle};\n\n#[panda::", stringify!($attr_name),"]\nfn callback(", $("_: ", stringify!($arg), ", ", )* ") {\n    // do stuff\n}\n```"),
                 #[proc_macro_attribute]
                 pub fn $attr_name(_: TokenStream, function: TokenStream) -> TokenStream {
                     let function = syn::parse_macro_input!(function as syn::ItemFn);
@@ -71,6 +82,7 @@ macro_rules! define_callback_attributes {
                         const _: fn() = || {
                             use ::panda::sys::*;
                             fn assert_callback_arg_types<T: ?Sized + Fn($($arg),*)>(_ :&T) {}
+
                             assert_callback_arg_types(&#func);
                         };
 
@@ -91,9 +103,7 @@ macro_rules! define_callback_attributes {
 }
 
 define_callback_attributes!(
-    "
-
-    Called before translation of each basic block.
+    "Called before translation of each basic block.
 
     Callback ID: PANDA_CB_BEFORE_BLOCK_TRANSLATE
     
@@ -125,13 +135,12 @@ define_callback_attributes!(
         none
     "
     (after_block_translate, panda_cb_type_PANDA_CB_AFTER_BLOCK_TRANSLATE, (&mut CPUState, &mut TranslationBlock)),
-    "
+    "Called before execution of every basic block, with the option
+        to invalidate the TB.
 
     Callback ID: PANDA_CB_BEFORE_BLOCK_EXEC_INVALIDATE_OPT
 
        before_block_exec_invalidate_opt:
-        Called before execution of every basic block, with the option
-        to invalidate the TB.
 
        Arguments:
         CPUState *env:        the current CPU state
@@ -446,8 +455,6 @@ define_callback_attributes!(
 
     Callback ID: PANDA_CB_GUEST_HYPERCALL
 
-       guest_hypercall:
-
        Arguments:
         CPUState *env: the current CPU state
 
@@ -466,12 +473,9 @@ define_callback_attributes!(
         of the normal instruction is skipped.
     "
     (guest_hypercall, panda_cb_type_PANDA_CB_GUEST_HYPERCALL, (&mut CPUState)),
-    "
+    "Called when someone uses the plugin_cmd monitor command.
 
     Callback ID: PANDA_CB_MONITOR
-
-       monitor:
-        Called when someone uses the plugin_cmd monitor command.
 
        Arguments:
         Monitor *mon:    a pointer to the Monitor
@@ -495,13 +499,10 @@ define_callback_attributes!(
         as a prefix (\"sample_do_foo\" rather than \"do_foo\").
     "
     (monitor, panda_cb_type_PANDA_CB_MONITOR, (&mut Monitor, *const u8)),
-    "
+    "Called inside of cpu_restore_state(), when there is a CPU
+        fault/exception.
 
     Callback ID: PANDA_CB_CPU_RESTORE_STATE
-
-       cpu_restore_state:
-        Called inside of cpu_restore_state(), when there is a CPU
-        fault/exception.
 
        Arguments:
         CPUState *env:        the current CPU state
@@ -513,15 +514,12 @@ define_callback_attributes!(
         none
     "
     (cpu_restore_state, panda_cb_type_PANDA_CB_CPU_RESTORE_STATE, (&mut CPUState, &mut TranslationBlock)),
-    "
-
-    Callback ID: PANDA_CB_BEFORE_LOADVM
-
-       before_loadvm:
-        Called at start of replay, before loadvm is called. This allows
+    "Called at start of replay, before loadvm is called. This allows
         us to hook devices' loadvm handlers. Remember to unregister the
         existing handler for the device first. See the example in the
         sample plugin.
+
+    Callback ID: PANDA_CB_BEFORE_LOADVM
 
        Arguments:
         none
@@ -532,12 +530,9 @@ define_callback_attributes!(
         unused
     "
     (before_loadvm, panda_cb_type_PANDA_CB_BEFORE_LOADVM, ()),
-    "
+    "Called when asid changes.
 
     Callback ID: PANDA_CB_ASID_CHANGED
-
-       asid_changed:
-        Called when asid changes.
 
        Arguments:
         CPUState *env:       pointer to CPUState
@@ -556,12 +551,9 @@ define_callback_attributes!(
         switches in any other architecture.
     "
     (asid_changed, panda_cb_type_PANDA_CB_ASID_CHANGED, (&mut CPUState, target_ptr_t, target_ptr_t)),
-    "
+    "In replay only. Some kind of data transfer involving hard drive.
 
     Callback ID:     PANDA_CB_REPLAY_HD_TRANSFER,
-
-       replay_hd_transfer:
-        In replay only. Some kind of data transfer involving hard drive.
 
        Arguments:
         CPUState *env:          pointer to CPUState
@@ -583,13 +575,10 @@ define_callback_attributes!(
         which it happened, really.
     "
     (replay_hd_transfer, panda_cb_type_PANDA_CB_REPLAY_HD_TRANSFER, (&mut CPUState, u32, target_ptr_t, target_ptr_t, usize)),
-    "
+    "In replay only, some kind of data transfer within the network card
+       (currently, only the E1000 is supported).
 
     Callback ID:     PANDA_CB_REPLAY_NET_TRANSFER,
-
-       replay_net_transfer:
-       In replay only, some kind of data transfer within the network card
-       (currently, only the E1000 is supported).
 
        Arguments:
         CPUState *env:          pointer to CPUState
@@ -611,12 +600,9 @@ define_callback_attributes!(
         in the emulated network device) or guest, depending upon the type.
     "
     (replay_net_transfer, panda_cb_type_PANDA_CB_REPLAY_NET_TRANSFER, (&mut CPUState, u32, u64, u64, usize)),
-    "
+    "In replay only, called when a byte is received on the serial port.
 
     Callback ID:     PANDA_CB_REPLAY_SERIAL_RECEIVE,
-
-        replay_serial_receive:
-        In replay only, called when a byte is received on the serial port.
 
        Arguments:
         CPUState *env:          pointer to CPUState
@@ -629,12 +615,9 @@ define_callback_attributes!(
         unused
     "
     (replay_serial_receive, panda_cb_type_PANDA_CB_REPLAY_SERIAL_RECEIVE, (&mut CPUState, target_ptr_t, u8)),
-    "
+    "In replay only, called when a byte read from the serial RX FIFO
 
     Callback ID:     PANDA_CB_REPLAY_SERIAL_READ,
-
-       replay_serial_read:
-        In replay only, called when a byte read from the serial RX FIFO
 
        Arguments:
         CPUState *env:          pointer to CPUState
@@ -648,12 +631,9 @@ define_callback_attributes!(
         none
     "
     (replay_serial_read, panda_cb_type_PANDA_CB_REPLAY_SERIAL_READ, (&mut CPUState, target_ptr_t, u32, u8)),
-    "
+    "In replay only, called when a byte is sent on the serial port.
 
     Callback ID:     PANDA_CB_REPLAY_SERIAL_SEND,
-
-       replay_serial_send:
-        In replay only, called when a byte is sent on the serial port.
 
        Arguments:
         CPUState *env:          pointer to CPUState
@@ -666,11 +646,10 @@ define_callback_attributes!(
         none
     "
     (replay_serial_send, panda_cb_type_PANDA_CB_REPLAY_SERIAL_SEND, (&mut CPUState, target_ptr_t, u8)),
-    "
+    "In replay only, called when a byte written to the serial TX FIFO
 
     Callback ID:     PANDA_CB_REPLAY_SERIAL_WRITE,
 
-       In replay only, called when a byte written to the serial TX FIFO
 
        Arguments:
         CPUState *env:          pointer to CPUState

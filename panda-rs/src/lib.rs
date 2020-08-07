@@ -7,10 +7,25 @@
 //! ### Feature flags:
 //! * `libpanda` - enable libpanda mode. This is used to allow for compiling as a binary that links
 //! against libpanda, for pypanda-style use.
+//!
+//! ### Callbacks
+//! panda-rs makes extensive use of callbacks for handling analyses on various events. To use
+//! callbacks, you simply apply the callback's attribute to any functions which should be called
+//! for the given callback. In order to use a callback in a PANDA plugin (not to be confused with
+//! an application that uses libpanda), one plugin must be marked `#[panda::init]`, otherwise the
+//! plugin will not work in PANDA.
+//!
+//! ### libpanda Mode
+//!
+//! PANDA also offers a dynamic library (libpanda). panda-rs allows linking against libpanda
+//! instead of linking as a PANDA plugin. This creates a executable that requires libpanda to run.
+//! To compile in libpanda mode, make sure the `PANDA_PATH` environment variable is set to your
+//! PANDA `build` folder.
 
 /// Raw bindings to the PANDA API
 pub use panda_sys as sys;
 pub use panda_macros::*;
+pub use panda_macros as base_callbacks;
 
 /// For internal use. Access to inventory for managing callbacks.
 pub use inventory;
@@ -49,3 +64,8 @@ pub struct UninitCallback(pub fn(&mut PluginHandle));
 
 inventory::collect!(Callback);
 inventory::collect!(UninitCallback);
+
+pub mod prelude {
+    pub use crate::PluginHandle;
+    pub use crate::sys::CPUState;
+}
