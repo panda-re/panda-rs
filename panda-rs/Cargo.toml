@@ -8,6 +8,7 @@ edition = "2018"
 panda-sys = { path = "../panda-sys" }
 panda-macros = { path = "../panda-macros" }
 inventory = "0.1.7"
+dirs = "3.0.1"
 
 [features]
 libpanda = ["panda-sys/libpanda"]
