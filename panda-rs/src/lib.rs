@@ -27,6 +27,10 @@ pub use panda_sys as sys;
 pub use panda_macros::*;
 pub use panda_macros as base_callbacks;
 
+/// Safe wrappers for the libpanda API for helping create and manage an instance of the PANDA API
+mod library_mode;
+pub use library_mode::*;
+
 /// For internal use. Access to inventory for managing callbacks.
 pub use inventory;
 
