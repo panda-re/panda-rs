@@ -16,7 +16,7 @@ fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
         println!("pc: {:X}", tb.pc);
     }
 
-    let x: u32 = cpu.mem_read_val(tb.pc);
+    //let x: u32 = cpu.mem_read_val(tb.pc);
 }
 
 use panda::Panda;

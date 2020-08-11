@@ -34,6 +34,7 @@ pub struct Panda {
     os_version: Option<String>,
     qcow: Option<String>,
     raw_monitor: bool,
+    graphics: bool,
     os: String,
     mem: Option<String>,
     arch: Option<Arch>,
@@ -85,12 +86,11 @@ impl Panda {
         
         self
     }
-    
-    /// When set, don't specify a `-monitor`. This argument allows for use of `-nographc` in args
-    /// with `ctrl-a+c` for interactive QEMU prompt.
-    pub fn raw_monitor(&mut self, x: bool) -> &mut Self {
-        self.raw_monitor = x;
-        
+
+    // Don't pass `-nographic` to QEMU, allowing you use to use a monitor
+    pub fn enable_graphics(&mut self) -> &mut Self {
+        self.graphics = true;
+
         self
     }
 
@@ -142,7 +142,7 @@ impl Panda {
 
         assert_eq!(arch, Arch::x86_64, "Only x86_64 is currently supported");
 
-        let args = vec![
+        let mut args = vec![
             "".into(), // filler, argv[0] == path of executable, n/a
             "-L".into(),
             std::env::var("PANDA_PATH")
@@ -151,9 +151,11 @@ impl Panda {
             "-m".into(),
             mem,
             qcow_path,
-            // "-serial".into(),
-            // "stdio".into()
         ];
+
+        if !self.graphics {
+            args.push("-nographic".into());
+        }
 
         args
     }
@@ -173,6 +175,11 @@ impl Panda {
         unsafe {
             panda_set_library_mode(true);
             panda_init(args_ptrs.len() as i32, transmute(args_ptrs.as_ptr()), empty);
+
+            for cb in crate::inventory::iter::<crate::Callback> {
+                crate::sys::panda_register_callback(self as *mut _ as _, cb.cb_type, ::core::mem::transmute(cb.fn_pointer));
+            }
+
             panda_run();
         }
     }
