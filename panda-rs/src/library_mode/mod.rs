@@ -39,6 +39,7 @@ pub struct Panda {
     mem: Option<String>,
     arch: Option<Arch>,
     extra_args: Vec<String>,
+    replay: Option<String>,
 }
 
 impl Panda {
@@ -115,6 +116,12 @@ impl Panda {
         
         self
     }
+    
+    pub fn replay<S: Into<String>>(&mut self, replay: S) -> &mut Self {
+        self.replay = Some(replay.into());
+        
+        self
+    }
 
     fn get_args(&self) -> Vec<String> {
         let generic_info =
@@ -155,6 +162,11 @@ impl Panda {
 
         if !self.graphics {
             args.push("-nographic".into());
+        }
+
+        if let Some(replay) = &self.replay {
+            args.push("-replay".into());
+            args.push(replay.clone());
         }
 
         args

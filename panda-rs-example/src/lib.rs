@@ -24,5 +24,6 @@ use panda::Panda;
 fn main() {
     Panda::new()
         .generic("x86_64")
+        .replay("test")
         .run();
 }
