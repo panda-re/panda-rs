@@ -1,17 +1,34 @@
 use crate::sys::*;
 use std::ffi::{CStr, CString};
 
+/// A trait for allowing conversion to and from PANDA command line arguments. Should only be used
+/// with the provided derive macro.
+///
+/// ### Example
+/// ```rust
+/// use panda::prelude::*;
+///
+/// #[derive(PandaArgs)]
+/// #[name = "my_plugin"]
+/// struct MyPluginArgs {
+///     file: String,
+/// }
+///
+/// let args = MyPluginArgs::from_panda_args();
+/// ```
 pub trait PandaArgs {
+    /// Get an instance of this struct from the PANDA arguments for the given plugin
     fn from_panda_args() -> Self;
-
+    /// Convert this struct into a string to be passed via PANDA command line arguments. Used
+    /// internally by `Panda::plugin_args`.
     fn to_panda_args_str(&self) -> std::string::String;
 }
 
+/// A wrapper trait for getting a PANDA argument as a given type. Used internally by the `PandaArgs`
+/// derive macro.
 pub trait GetPandaArg {
     fn get_panda_arg(args: *mut panda_arg_list, name: &str, default: Self, description: &str, required: bool) -> Self;
 }
-
-
 
 impl GetPandaArg for u64 {
     fn get_panda_arg(args: *mut panda_arg_list, name: &str, default: Self, description: &str, required: bool) -> Self {
