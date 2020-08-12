@@ -7,7 +7,7 @@ edition = "2018"
 [dependencies]
 panda-sys = { path = "../panda-sys" }
 panda-macros = { path = "../panda-macros" }
-inventory = "0.1.7"
+inventory = "0.1.8"
 dirs = "3.0.1"
 
 [features]

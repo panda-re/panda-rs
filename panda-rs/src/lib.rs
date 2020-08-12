@@ -69,7 +69,15 @@ pub struct UninitCallback(pub fn(&mut PluginHandle));
 inventory::collect!(Callback);
 inventory::collect!(UninitCallback);
 
+/// Helpers for getting plugin arguments from panda
+pub mod panda_arg;
+pub use panda_arg::PandaArgs;
+
 pub mod prelude {
+    pub use crate::Panda;
     pub use crate::PluginHandle;
     pub use crate::sys::CPUState;
+    pub use crate::sys::TranslationBlock;
+    pub use crate::panda_arg::PandaArgs;
+    pub use panda_macros::PandaArgs;
 }

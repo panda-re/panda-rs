@@ -1,9 +1,10 @@
 mod qcows;
 use std::fmt;
-use panda_sys::{panda_set_library_mode, panda_init, panda_run};
+use panda_sys::{panda_set_library_mode, panda_init, panda_run, panda_set_qemu_path};
 use std::os::raw::c_char;
 use std::ffi::CString;
 use std::mem::transmute;
+use super::{inventory, Callback, sys, PandaArgs};
 
 /// Architecture of the guest system
 #[allow(non_camel_case_types)]
@@ -47,11 +48,9 @@ impl Panda {
     ///
     /// ### Example
     /// ```rust
-    /// # use panda::{Panda, Arch};
+    /// # use panda::prelude::*;
     /// Panda::new()
-    ///     .arch(Arch::i386)
-    ///     .arg("-nomonitor")
-    ///     .mem("2G")
+    ///     .generic("x86_64")
     ///     .run();
     /// ```
     pub fn new() -> Self {
@@ -62,6 +61,14 @@ impl Panda {
     }
 
     /// Add an argument for PANDA
+    ///
+    /// ### Example
+    /// ```rust
+    /// # use panda::prelude::*;
+    /// Panda::new()
+    ///     .arg("-nomonitor")
+    ///     .run();
+    /// ```
     pub fn arg<S: Into<String>>(&mut self, arg: S) -> &mut Self {
         self.extra_args.push(arg.into());
 
@@ -69,6 +76,14 @@ impl Panda {
     }
 
     /// Add a set of extra arguments for PANDA
+    ///
+    /// ### Example
+    /// ```rust
+    /// # use panda::prelude::*;
+    /// Panda::new()
+    ///     .args(&["-panda", "callstack_instr"])
+    ///     .run();
+    /// ```
     pub fn args<I, S>(&mut self, args: I) -> &mut Self
     where
         I: IntoIterator<Item = S>,
@@ -82,6 +97,14 @@ impl Panda {
     }
 
     /// Sets the architecture of the guest
+    ///
+    /// ### Example
+    /// ```rust
+    /// # use panda::{prelude::*, Arch};
+    /// Panda::new()
+    ///     .arch(Arch::i386)
+    ///     .run();
+    /// ```
     pub fn arch(&mut self, arch: Arch) -> &mut Self {
         self.arch = Some(arch);
         
@@ -89,6 +112,14 @@ impl Panda {
     }
 
     // Don't pass `-nographic` to QEMU, allowing you use to use a monitor
+    ///
+    /// ### Example
+    /// ```rust
+    /// # use panda::prelude::*;
+    /// Panda::new()
+    ///     .enable_graphics()
+    ///     .run();
+    /// ```
     pub fn enable_graphics(&mut self) -> &mut Self {
         self.graphics = true;
 
@@ -111,16 +142,63 @@ impl Panda {
         self
     }
     
+    /// Use generic PANDA Qcow for run
+    ///
+    /// ### Example
+    /// ```rust
+    /// # use panda::prelude::*;
+    /// Panda::new()
+    ///     .generic("x86_64")
+    ///     .run();
+    /// ```
     pub fn generic<S: Into<String>>(&mut self, generic: S) -> &mut Self {
         self.generic_qcow = Some(generic.into());
         
         self
     }
     
+    /// Run the given replay in the PANDA instance. Equivalent to `-replay [name]` from the PANDA
+    /// command line.
+    ///
+    /// ### Example
+    /// ```rust
+    /// # use panda::prelude::*;
+    /// Panda::new()
+    ///     .replay("grep_recording")
+    ///     .run();
+    /// ```
     pub fn replay<S: Into<String>>(&mut self, replay: S) -> &mut Self {
         self.replay = Some(replay.into());
         
         self
+    }
+
+    /// Load a plugin with args provided by a `PandaArgs` struct.
+    ///
+    /// ### Example
+    ///
+    /// ```rust
+    /// use panda::prelude::*;
+    ///
+    /// #[derive(PandaArgs)]
+    /// #[name = "stringsearch"]
+    /// struct StringSearch {
+    ///     str: String
+    /// }
+    /// 
+    /// fn main() {
+    ///     Panda::new()
+    ///         .generic("x86_64")
+    ///         .replay("test")
+    ///         .plugin_args(&StringSearch {
+    ///             str: "test".into()
+    ///         })
+    ///         .run();
+    /// }
+    /// ```
+    pub fn plugin_args<T: PandaArgs>(&mut self, args: &T) -> &mut Self {
+        self.arg("-panda")
+            .arg(args.to_panda_args_str())
     }
 
     fn get_args(&self) -> Vec<String> {
@@ -169,18 +247,29 @@ impl Panda {
             args.push(replay.clone());
         }
 
+        args.extend(self.extra_args.clone().into_iter());
+
         args
     }
 
     /// Start the PANDA instance with the given settings. This is a blocking operation.
+    ///
+    /// ### Example
+    /// ```rust
+    /// # use panda::prelude::*;
+    /// Panda::new()
+    ///     .generic("x86_64")
+    ///     .run();
+    /// ```
     pub fn run(&mut self) {
         let args = self.get_args();
 
         println!("Running with args: {:?}", args);
 
         let args: Vec<_> = args.into_iter().map(|x| CString::new(x).unwrap()).collect();
-
         let args_ptrs: Vec<_> = args.iter().map(|s| s.as_ptr()).collect();
+
+        std::env::set_var("PANDA_DIR", std::env::var("PANDA_PATH").unwrap());
 
         let x = &mut 0i8;
         let empty = &mut (x as *mut c_char);
@@ -188,8 +277,8 @@ impl Panda {
             panda_set_library_mode(true);
             panda_init(args_ptrs.len() as i32, transmute(args_ptrs.as_ptr()), empty);
 
-            for cb in crate::inventory::iter::<crate::Callback> {
-                crate::sys::panda_register_callback(self as *mut _ as _, cb.cb_type, ::core::mem::transmute(cb.fn_pointer));
+            for cb in inventory::iter::<Callback> {
+                sys::panda_register_callback(self as *mut _ as _, cb.cb_type, ::core::mem::transmute(cb.fn_pointer));
             }
 
             panda_run();
