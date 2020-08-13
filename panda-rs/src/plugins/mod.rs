@@ -1,0 +1,135 @@
+use std::path::Path;
+use libloading::Symbol;
+use crate::sys::panda_require_from_library;
+use std::ffi::CString;
+
+pub mod osi;
+pub mod syscalls2;
+
+#[macro_export]
+macro_rules! plugin_import {
+    {
+        static $static:ident : $ty:ident = extern $name:literal {
+        $(
+            $(
+                #[$meta:meta]
+             )*
+            fn $fn_name:ident(
+                $(
+                    $arg_name:ident : $arg_ty:ty
+                 ),*
+                $(,)?
+            ) $(-> $fn_ret:ty)?;
+         )*
+        $(
+            callbacks {
+                $(
+                    fn $cb_fn_name:ident(
+                        $(
+                            $cb_arg_name:ident : $cb_arg_ty:ty
+                         ),*
+                        $(,)?
+                    ) $(-> $cb_fn_ret:ty)?;
+                )*
+            }
+        )?
+        };
+    } => {
+        pub struct $ty {
+            plugin: $crate::plugins::Plugin
+        }
+
+        impl $ty {
+            /// Create a new handle to this plugin
+            pub fn new() -> Self {
+                Self {
+                    plugin: $crate::plugins::Plugin::new($name)
+                }
+            }
+
+            /// Load the plugin and initialize it if it hasn't been loaded already.
+            pub fn ensure_init(&self) {}
+
+            $(
+                $(
+                    #[$meta]
+                 )*
+                pub fn $fn_name(&self $(, $arg_name : $arg_ty )*) $(-> $fn_ret)? {
+                    unsafe {
+                        self.plugin.get::<unsafe extern "C" fn($($arg_ty),*) $(-> $fn_ret)?>(
+                            stringify!($fn_name)
+                        )(
+                            $(
+                                $arg_name
+                            ),*
+                        )
+                    }
+                }
+             )*
+
+            $($(
+                ::paste::paste!{
+                    pub fn [<add_callback_ $cb_fn_name>](
+                        &self,
+                        callback: extern "C" fn(
+                            cpu: &mut $crate::sys::CPUState,
+                            pc: $crate::sys::target_ulong,
+                            $($cb_arg_name: $cb_arg_ty),*
+                        )
+                    )
+                    {
+                        let add_cb = self.plugin.get::<
+                            extern "C" fn(
+                                extern "C" fn(
+                                    &mut $crate::sys::CPUState,
+                                    $crate::sys::target_ulong,
+                                    $($cb_arg_ty),*
+                                ) $(-> $cb_fn_ret)?
+                            )
+                        >(
+                            concat!("ppp_add_cb_", stringify!($cb_fn_name))
+                        );
+
+                        add_cb(callback);
+                    }
+                }
+            )*)?
+        }
+
+        lazy_static::lazy_static!{
+            pub static ref $static: $ty = $ty::new();
+        }
+    }
+}
+
+struct Plugin {
+    lib: libloading::Library,
+}
+
+const PLUGIN_DIR: &str = "x86_64-softmmu/panda/plugins";
+
+impl Plugin {
+    pub fn new(name: &str) -> Self {
+        std::env::set_var("PANDA_DIR", std::env::var("PANDA_PATH").expect("Missing PANDA_PATH"));
+        let c_name = CString::new(name).unwrap();
+        unsafe {
+            panda_require_from_library(c_name.as_ptr(), &mut (&mut 0i8 as _), 0);
+        }
+        let path = 
+            Path::new(&std::env::var("PANDA_PATH").unwrap())
+                .join(PLUGIN_DIR)
+                .join(&format!("panda_{}.so", name));
+        Self {
+            lib: libloading::Library::new(
+                path
+            ).expect("Failed to load plugin")
+        }
+    }
+
+    pub fn get<T>(&self, sym: &str) -> Symbol<T> {
+        let symbol: Vec<_> = sym.bytes().chain(std::iter::once(0)).collect();
+        unsafe {
+            self.lib.get(&symbol).expect("Could not find symbol")
+        }
+    }
+}

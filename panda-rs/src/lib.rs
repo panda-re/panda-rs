@@ -31,51 +31,25 @@ pub use panda_macros as base_callbacks;
 mod library_mode;
 pub use library_mode::*;
 
+mod callbacks;
+pub use callbacks::*;
+
 /// For internal use. Access to inventory for managing callbacks.
 pub use inventory;
-
-/// An opaque type used to register/unregister callbacks with PANDA. Passed into init/unit
-/// callbacks
-pub struct PluginHandle;
-
-/// A typeless PANDA callback used internally by callback attributes. Not recommended for direct
-/// use.
-pub struct Callback {
-    pub cb_type: sys::panda_cb_type,
-    pub fn_pointer: *const (),
-}
-
-impl Callback {
-    pub fn new(cb_type: sys::panda_cb_type, fn_pointer: *const ()) -> Self {
-        Self { cb_type, fn_pointer }
-    }
-}
-
-/// A callback set to run on plugin uninit. To add an uninit callback use `#[panda::uninit]` on a
-/// function which takes an `&mut PluginHandle` as an argument.
-///
-/// ### Example
-///
-/// ```rust
-/// use panda::PluginHandle;
-///
-/// #[panda::uninit]
-/// fn on_exit(plugin: &mut PluginHandle) {
-///     // Do stuff
-/// }
-/// ```
-pub struct UninitCallback(pub fn(&mut PluginHandle));
-
-inventory::collect!(Callback);
-inventory::collect!(UninitCallback);
 
 /// Helpers for getting plugin arguments from panda
 pub mod panda_arg;
 pub use panda_arg::PandaArgs;
 
+pub mod plugins;
+
 pub mod prelude {
     pub use crate::Panda;
     pub use crate::PluginHandle;
+    pub use crate::sys::target_long;
+    pub use crate::sys::target_ulong;
+    pub use crate::sys::target_ptr_t;
+    pub use crate::sys::target_pid_t;
     pub use crate::sys::CPUState;
     pub use crate::sys::TranslationBlock;
     pub use crate::panda_arg::PandaArgs;

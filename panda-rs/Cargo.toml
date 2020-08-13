@@ -9,6 +9,9 @@ panda-sys = { path = "../panda-sys" }
 panda-macros = { path = "../panda-macros" }
 inventory = "0.1.8"
 dirs = "3.0.1"
+lazy_static = "1.4.0"
+libloading = "0.6.2"
+paste = "1.0.0"
 
 [features]
 libpanda = ["panda-sys/libpanda"]

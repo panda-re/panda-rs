@@ -1,10 +1,10 @@
 mod qcows;
 use std::fmt;
-use panda_sys::{panda_set_library_mode, panda_init, panda_run, panda_set_qemu_path};
+use panda_sys::{panda_set_library_mode, panda_init, panda_run};
 use std::os::raw::c_char;
 use std::ffi::CString;
 use std::mem::transmute;
-use super::{inventory, Callback, sys, PandaArgs};
+use super::{inventory, Callback, PPPCallbackSetup, sys, PandaArgs};
 
 /// Architecture of the guest system
 #[allow(non_camel_case_types)]
@@ -238,6 +238,11 @@ impl Panda {
             qcow_path,
         ];
 
+        if let Some(generic) = generic_info {
+            args.push("-os".into());
+            args.push(generic.os.into());
+        }
+
         if !self.graphics {
             args.push("-nographic".into());
         }
@@ -279,6 +284,10 @@ impl Panda {
 
             for cb in inventory::iter::<Callback> {
                 sys::panda_register_callback(self as *mut _ as _, cb.cb_type, ::core::mem::transmute(cb.fn_pointer));
+            }
+            
+            for cb in inventory::iter::<PPPCallbackSetup> {
+                cb.0();
             }
 
             panda_run();
