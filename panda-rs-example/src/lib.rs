@@ -1,4 +1,5 @@
 use panda::prelude::*;
+use panda::plugins::osi::OSI;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static NUM_BB: AtomicU64 = AtomicU64::new(0);
@@ -23,12 +24,10 @@ fn sys_write_test(cpu: &mut CPUState, pc: u64, fd: u64, buf: u64, count: u64) {
 
 #[panda::init]
 fn init(_: &mut PluginHandle) {
-    //let args = Args::from_panda_args();
+    // let args = Args::from_panda_args();
 
-    //println!("Test plugin init, num: {}, file: {}", args.num, args.file);
+    // println!("Test plugin init, num: {}, file: {}", args.num, args.file);
 }
-
-use panda::plugins::osi::OSI;
 
 #[panda::before_block_exec]
 fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
@@ -38,7 +37,7 @@ fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
         unsafe {
             let proc = OSI.get_current_process(cpu);
             if proc.is_null() {
-                println!("proc null");
+                println!("no process");
             } else {
                 println!("pid: {:X}", (*proc).pid);
             }

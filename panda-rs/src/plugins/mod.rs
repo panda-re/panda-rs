@@ -1,7 +1,7 @@
 use std::path::Path;
-use libloading::Symbol;
-use crate::sys::panda_require_from_library;
 use std::ffi::CString;
+use libloading::Symbol;
+use crate::sys::panda_require;
 
 pub mod osi;
 pub mod syscalls2;
@@ -113,7 +113,7 @@ impl Plugin {
         std::env::set_var("PANDA_DIR", std::env::var("PANDA_PATH").expect("Missing PANDA_PATH"));
         let c_name = CString::new(name).unwrap();
         unsafe {
-            panda_require_from_library(c_name.as_ptr(), &mut (&mut 0i8 as _), 0);
+            panda_require(c_name.as_ptr());
         }
         let path = 
             Path::new(&std::env::var("PANDA_PATH").unwrap())

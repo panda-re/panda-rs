@@ -64,6 +64,7 @@ pub fn uninit(_: TokenStream, function: TokenStream) -> TokenStream {
 
     quote!(
         ::panda::inventory::submit! {
+            #![crate = ::panda]
             ::panda::UninitCallback(#func_name)
         }
 
@@ -201,11 +202,21 @@ impl syn::parse::Parse for Idents {
 macro_rules! define_callback_attributes {
     ($(
         $($doc:literal)*
-        ($attr_name:ident, $const_name:ident, ($($arg:ty),*))
+        ($attr_name:ident, $const_name:ident, ($($arg:ty),*) $(-> $ret:ty)?)
     ),*) => {
         $(
             doc_comment::doc_comment!{
-                concat!("(Callback) ", $($doc, "\n",)* "\n\nCallback arguments: (", $("`", stringify!($arg), "`, ",)* ")\n### Example\n```rust\nuse panda::prelude::*;\n\n#[panda::", stringify!($attr_name),"]\nfn callback(", $("_: ", stringify!($arg), ", ", )* ") {\n    // do stuff\n}\n```"),
+                concat!(
+                    "(Callback) ",
+                    $($doc, "\n",)*
+                    "\n\nCallback arguments: (",
+                    $("`", stringify!($arg), "`, ",)*
+                    ")\n### Example\n```rust\nuse panda::prelude::*;\n\n#[panda::",
+                    stringify!($attr_name),
+                    "]\nfn callback(",
+                    $("_: ", stringify!($arg), ", ", )* ")",
+                    $(" -> ", stringify!($ret),)?
+                    " {\n    // do stuff\n}\n```"),
                 #[proc_macro_attribute]
                 pub fn $attr_name(_: TokenStream, function: TokenStream) -> TokenStream {
                     let mut function = syn::parse_macro_input!(function as syn::ItemFn);
@@ -215,7 +226,7 @@ macro_rules! define_callback_attributes {
                     quote!(
                         const _: fn() = || {
                             use ::panda::sys::*;
-                            fn assert_callback_arg_types(_ : extern "C" fn($($arg),*)) {}
+                            fn assert_callback_arg_types(_ : extern "C" fn($($arg),*) $(-> $ret)?) {}
 
                             assert_callback_arg_types(#func);
                         };

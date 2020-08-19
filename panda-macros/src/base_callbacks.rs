@@ -99,7 +99,7 @@ define_callback_attributes!(
         If you do want to instrument every single instruction, just return
         true. See the documentation for PANDA_CB_INSN_EXEC for more detail.
     "
-    (insn_translate, panda_cb_type_PANDA_CB_INSN_TRANSLATE, (&mut CPUState, target_ptr_t)),
+    (insn_translate, panda_cb_type_PANDA_CB_INSN_TRANSLATE, (&mut CPUState, target_ptr_t) -> bool),
     "Called before execution of any instruction identified by the
         PANDA_CB_INSN_TRANSLATE callback.
 
