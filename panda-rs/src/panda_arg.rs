@@ -30,6 +30,21 @@ pub trait GetPandaArg {
     fn get_panda_arg(args: *mut panda_arg_list, name: &str, default: Self, description: &str, required: bool) -> Self;
 }
 
+impl GetPandaArg for bool {
+    fn get_panda_arg(args: *mut panda_arg_list, name: &str, _default: Self, description: &str, required: bool) -> Self {
+        let name = CString::new(name).unwrap();
+        let desc = CString::new(description).unwrap();
+
+        unsafe {
+            if required {
+                panda_parse_bool_req(args, name.as_ptr(), desc.as_ptr())
+            } else {
+                panda_parse_bool_opt(args, name.as_ptr(), desc.as_ptr())
+            }
+        }
+    }
+}
+
 impl GetPandaArg for u64 {
     fn get_panda_arg(args: *mut panda_arg_list, name: &str, default: Self, description: &str, required: bool) -> Self {
         let name = CString::new(name).unwrap();
