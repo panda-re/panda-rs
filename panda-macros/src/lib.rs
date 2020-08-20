@@ -1,7 +1,7 @@
 use std::iter;
 use proc_macro::TokenStream;
 use quote::quote;
-use darling::{FromMeta, FromField};
+use darling::FromField;
 
 /// (**Required** Callback) Called when the plugin is being uninitialized
 ///
@@ -281,12 +281,15 @@ macro_rules! define_syscalls_callbacks {
         #[proc_macro]
         pub fn generate_syscalls_callbacks(_: TokenStream) -> TokenStream {
             quote!(
-
                 plugin_import!{
                     static SYSCALLS: Syscalls2 = extern "syscalls2" {
                         callbacks {
                             $(
-                                fn $attr_name($($arg_name : $arg),*);
+                                fn $attr_name(
+                                    cpu: &mut crate::sys::CPUState,
+                                    pc: crate::sys::target_ulong,
+                                    $($arg_name : $arg),*
+                                );
                             )*
                             //fn on_sys_read_enter(fd: target_ulong, buf: target_ptr_t, count: target_ulong);
                             //fn on_sys_write_enter(fd: target_ulong, buf: target_ptr_t, count: target_ulong);
@@ -298,5 +301,57 @@ macro_rules! define_syscalls_callbacks {
     };
 }
 
+macro_rules! define_hooks2_callbacks {
+    ($(
+        $($doc:literal)*
+        fn($cb_name:ident) $attr_name:ident ($($arg_name:ident : $arg:ty),* $(,)?);
+    )*) => {
+        $(
+            doc_comment::doc_comment!{
+                concat!("(Callback) ", $($doc, "\n",)* "\n\nCallback arguments: ("$(, "`", stringify!($arg), "`")*, ")\n### Example\n```rust\nuse panda::prelude::*;\n\n#[panda::", stringify!($attr_name),"]\nfn callback(", $(", _: ", stringify!($arg), )* ") {\n    // do stuff\n}\n```"),
+                #[proc_macro_attribute]
+                pub fn $attr_name(_: TokenStream, function: TokenStream) -> TokenStream {
+                    let mut function = syn::parse_macro_input!(function as syn::ItemFn);
+                    function.sig.abi = Some(syn::parse_quote!(extern "C"));
+                    let func = &function.sig.ident;
+
+                    quote!(
+                        ::panda::inventory::submit! {
+                            #![crate = ::panda]
+                            ::panda::PPPCallbackSetup(
+                                || {
+                                    ::panda::plugins::hooks2::HOOKS.$cb_name(#func);
+                                }
+                            )
+                        }
+
+                        #function
+                    ).into()
+                }
+            }
+        )*
+
+        /// For internal use only
+        #[proc_macro]
+        pub fn generate_hooks2_callbacks(_: TokenStream) -> TokenStream {
+            quote!(
+
+                plugin_import!{
+                    static HOOKS: Hooks2 = extern "hooks2" {
+                        callbacks {
+                            $(
+                                fn $attr_name(
+                                    $($arg_name : $arg),*
+                                );
+                            )*
+                        }
+                    };
+                }
+            ).into()
+        }
+    };
+}
+
 include!("base_callbacks.rs");
 include!("syscalls.rs");
+include!("hooks2.rs");

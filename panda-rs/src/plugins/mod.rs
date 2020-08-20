@@ -4,6 +4,7 @@ use libloading::Symbol;
 use crate::sys::panda_require;
 
 pub mod osi;
+pub mod hooks2;
 pub mod syscalls2;
 
 #[macro_export]
@@ -72,8 +73,6 @@ macro_rules! plugin_import {
                     pub fn [<add_callback_ $cb_fn_name>](
                         &self,
                         callback: extern "C" fn(
-                            cpu: &mut $crate::sys::CPUState,
-                            pc: $crate::sys::target_ulong,
                             $($cb_arg_name: $cb_arg_ty),*
                         )
                     )
@@ -81,8 +80,6 @@ macro_rules! plugin_import {
                         let add_cb = self.plugin.get::<
                             extern "C" fn(
                                 extern "C" fn(
-                                    &mut $crate::sys::CPUState,
-                                    $crate::sys::target_ulong,
                                     $($cb_arg_ty),*
                                 ) $(-> $cb_fn_ret)?
                             )
