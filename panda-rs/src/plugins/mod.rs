@@ -3,6 +3,7 @@ use std::ffi::CString;
 use libloading::Symbol;
 use crate::sys::panda_require;
 
+pub mod glib;
 pub mod osi;
 pub mod hooks2;
 pub mod syscalls2;
