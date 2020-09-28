@@ -6,3 +6,9 @@ edition = "2018"
 
 [features]
 libpanda = []
+x86_64 = []
+i386 = []
+arm = []
+ppc = []
+mips = []
+mipsel = []

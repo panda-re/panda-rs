@@ -34,14 +34,8 @@ fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
     // every 1000 basic blocks visited
     if NUM_BB.fetch_add(1, Ordering::SeqCst) % 1000 == 0 {
         println!("pc: {:X}", tb.pc);
-        unsafe {
-            let proc = OSI.get_current_process(cpu);
-            if proc.is_null() {
-                println!("no process");
-            } else {
-                println!("pid: {:X}", (*proc).pid);
-            }
-        }
+        let proc = OSI.get_current_process(cpu);
+        println!("pid: {:X}", (*proc).pid);
     }
 }
 

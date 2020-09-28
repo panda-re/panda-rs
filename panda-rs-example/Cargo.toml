@@ -13,7 +13,7 @@ required-features = ["bin"]
 crate-type = ["cdylib"]
 
 [dependencies]
-panda = { path = "../panda-rs" }
+panda-re = { path = "../panda-rs" }
 
 [features]
-bin = ["panda/libpanda"]
+bin = ["panda-re/libpanda"]

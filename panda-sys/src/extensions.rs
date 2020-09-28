@@ -1,7 +1,7 @@
 use std::mem::{size_of, MaybeUninit, transmute};
-use crate::bindings::{target_ulong, target_ptr_t, panda_physical_memory_read_external, panda_virtual_memory_read_external, panda_virtual_memory_write_external, CPUState};
+use crate::{target_ulong, target_ptr_t, panda_physical_memory_read_external, panda_virtual_memory_read_external, panda_virtual_memory_write_external, CPUState};
 
-const READ_CHUNK_SIZE: usize = 0x10;
+const READ_CHUNK_SIZE: target_ptr_t = 0x10;
 
 impl CPUState {
     pub fn mem_read(&mut self, addr: target_ulong, len: usize) -> Vec<u8> {
@@ -38,11 +38,11 @@ impl CPUState {
         }
     }
     
-    pub fn try_mem_read_phys(&mut self, addr: target_ulong, len: usize) -> Option<Vec<u8>> {
+    pub fn try_mem_read_phys(&mut self, addr: target_ptr_t, len: usize) -> Option<Vec<u8>> {
         let mut temp = vec![0; len];
 
         unsafe {
-            if panda_physical_memory_read_external(addr, temp.as_mut_ptr(), len as _) == 0 {
+            if panda_physical_memory_read_external(addr as _, temp.as_mut_ptr(), len as _) == 0 {
                 Some(temp)
             } else {
                 None
@@ -64,7 +64,7 @@ impl CPUState {
 
     pub fn mem_read_string(&mut self, mut addr: target_ptr_t) -> String {
         let mut buf = vec![];
-        let mut temp = [0; READ_CHUNK_SIZE];
+        let mut temp = [0; READ_CHUNK_SIZE as usize];
         loop {
             unsafe {
                 panda_virtual_memory_read_external(self, addr, temp.as_mut_ptr() as *mut i8, READ_CHUNK_SIZE as _);
@@ -80,7 +80,7 @@ impl CPUState {
                 None => {
                     // No null byte found yet
                     buf.extend_from_slice(&temp);
-                    addr += READ_CHUNK_SIZE as u64;
+                    addr += READ_CHUNK_SIZE;
                 }
             }
         }
