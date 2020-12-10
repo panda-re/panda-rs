@@ -220,11 +220,14 @@ pub const CONFIG_LINUX: u32 = 1;
 pub const CONFIG_SLIRP: u32 = 1;
 pub const CONFIG_SMBD_COMMAND: &'static [u8; 15usize] = b"/usr/sbin/smbd\0";
 pub const CONFIG_L2TPV3: u32 = 1;
+pub const CONFIG_LIBCAP: u32 = 1;
 pub const CONFIG_OSS: u32 = 1;
 pub const CONFIG_VNC: u32 = 1;
+pub const CONFIG_VNC_SASL: u32 = 1;
 pub const CONFIG_VNC_JPEG: u32 = 1;
 pub const CONFIG_VNC_PNG: u32 = 1;
 pub const CONFIG_FNMATCH: u32 = 1;
+pub const CONFIG_XFS: u32 = 1;
 pub const QEMU_VERSION: &'static [u8; 6usize] = b"2.9.1\0";
 pub const QEMU_VERSION_MAJOR: u32 = 2;
 pub const QEMU_VERSION_MINOR: u32 = 9;
@@ -256,14 +259,28 @@ pub const CONFIG_CLOCK_ADJTIME: u32 = 1;
 pub const CONFIG_SYNCFS: u32 = 1;
 pub const CONFIG_INOTIFY: u32 = 1;
 pub const CONFIG_INOTIFY1: u32 = 1;
+pub const CONFIG_BRLAPI: u32 = 1;
+pub const CONFIG_BLUEZ: u32 = 1;
 pub const CONFIG_HAS_GLIB_SUBPROCESS_TESTS: u32 = 1;
 pub const CONFIG_GTK: u32 = 1;
 pub const CONFIG_GTKABI: f64 = 3.0;
+pub const CONFIG_GTK_GL: u32 = 1;
 pub const CONFIG_TLS_PRIORITY: &'static [u8; 7usize] = b"NORMAL\0";
+pub const CONFIG_GNUTLS: u32 = 1;
+pub const CONFIG_GNUTLS_RND: u32 = 1;
+pub const CONFIG_NETTLE: u32 = 1;
+pub const CONFIG_NETTLE_VERSION_MAJOR: u32 = 3;
+pub const CONFIG_NETTLE_KDF: u32 = 1;
+pub const CONFIG_TASN1: u32 = 1;
 pub const HAVE_IFADDRS_H: u32 = 1;
 pub const HAVE_FSXATTR: u32 = 1;
+pub const CONFIG_VIRGL: u32 = 1;
 pub const CONFIG_LLVM: u32 = 1;
+pub const CONFIG_XEN_BACKEND: u32 = 1;
+pub const CONFIG_XEN_CTRL_INTERFACE_VERSION: u32 = 480;
+pub const CONFIG_LINUX_AIO: u32 = 1;
 pub const CONFIG_ATTR: u32 = 1;
+pub const CONFIG_VIRTFS: u32 = 1;
 pub const CONFIG_VHOST_SCSI: u32 = 1;
 pub const CONFIG_VHOST_VSOCK: u32 = 1;
 pub const CONFIG_IOVEC: u32 = 1;
@@ -274,7 +291,14 @@ pub const CONFIG_PROTOBUF: u32 = 1;
 pub const CONFIG_FDATASYNC: u32 = 1;
 pub const CONFIG_MADVISE: u32 = 1;
 pub const CONFIG_POSIX_MADVISE: u32 = 1;
+pub const CONFIG_SPICE: u32 = 1;
+pub const CONFIG_SMARTCARD: u32 = 1;
+pub const CONFIG_USB_LIBUSB: u32 = 1;
+pub const CONFIG_USB_REDIR: u32 = 1;
+pub const CONFIG_OPENGL: u32 = 1;
+pub const CONFIG_OPENGL_DMABUF: u32 = 1;
 pub const CONFIG_AVX2_OPT: u32 = 1;
+pub const CONFIG_SECCOMP: u32 = 1;
 pub const CONFIG_QOM_CAST_DEBUG: u32 = 1;
 pub const CONFIG_COROUTINE_POOL: u32 = 1;
 pub const CONFIG_OPEN_BY_HANDLE: u32 = 1;
@@ -288,20 +312,22 @@ pub const CONFIG_GETAUXVAL: u32 = 1;
 pub const CONFIG_TPM: u32 = 1;
 pub const CONFIG_TPM_PASSTHROUGH: u32 = 1;
 pub const CONFIG_TRACE_LOG: u32 = 1;
+pub const CONFIG_RDMA: u32 = 1;
 pub const CONFIG_RTNETLINK: u32 = 1;
 pub const CONFIG_REPLICATION: u32 = 1;
 pub const CONFIG_AF_VSOCK: u32 = 1;
 pub const CONFIG_SYSMACROS: u32 = 1;
-pub const CONFIG_CAPSTONE: u32 = 1;
 pub const CONFIG_THREAD_SETNAME_BYTHREAD: u32 = 1;
 pub const CONFIG_PTHREAD_SETNAME_NP: u32 = 1;
 pub const HOST_DSOSUF: &'static [u8; 4usize] = b".so\0";
+pub const CONFIG_NUMA: u32 = 1;
 pub const TARGET_ABI_MIPSO32: u32 = 1;
 pub const TARGET_MIPS: u32 = 1;
 pub const TARGET_NAME: &'static [u8; 7usize] = b"mipsel\0";
 pub const CONFIG_SOFTMMU: u32 = 1;
 pub const CONFIG_I386_DIS: u32 = 1;
 pub const CONFIG_MIPS_DIS: u32 = 1;
+pub const CONFIG_PYPERIPHERAL: u32 = 1;
 pub const true_: u32 = 1;
 pub const false_: u32 = 0;
 pub const __bool_true_false_are_defined: u32 = 1;
@@ -2443,7 +2469,6 @@ pub const MIPS_HFLAG_FRE: u32 = 33554432;
 pub const MIPS_HFLAG_ELPA: u32 = 67108864;
 pub const MIPS_HFLAG_ITC_CACHE: u32 = 134217728;
 pub const MMU_USER_IDX: u32 = 2;
-pub const RAM_ADDR_MAX: i32 = -1;
 pub const RAM_ADDR_FMT: &'static [u8; 4usize] = b"%lx\0";
 pub const DIRTY_MEMORY_VGA: u32 = 0;
 pub const DIRTY_MEMORY_CODE: u32 = 1;
@@ -2523,7 +2548,6 @@ pub const CPU_LOG_LLVM_IR: u32 = 1073741824;
 pub const CPU_LOG_LLVM_ASM: u32 = 2147483648;
 pub const CODE_GEN_ALIGN: u32 = 16;
 pub const CODE_GEN_AVG_BLOCK_SIZE: u32 = 400;
-pub const TCG_MAX_LABELS: u32 = 512;
 pub const CF_COUNT_MASK: u32 = 32767;
 pub const CF_LAST_IO: u32 = 32768;
 pub const CF_NOCACHE: u32 = 65536;
@@ -2666,7 +2690,6 @@ pub const PROTOBUF_C_VERSION: &'static [u8; 6usize] = b"1.3.3\0";
 pub const PROTOBUF_C_VERSION_NUMBER: u32 = 1003003;
 pub const PROTOBUF_C_MIN_COMPILER_VERSION: u32 = 1000000;
 pub type size_t = ::std::os::raw::c_ulong;
-pub type wchar_t = ::std::os::raw::c_int;
 pub type va_list = __builtin_va_list;
 pub type __gnuc_va_list = __builtin_va_list;
 pub type __u_char = ::std::os::raw::c_uchar;
@@ -3262,6 +3285,15 @@ extern "C" {
 }
 extern "C" {
     pub fn __overflow(arg1: *mut FILE, arg2: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
+pub type wchar_t = ::std::os::raw::c_int;
+#[repr(C)]
+#[repr(align(16))]
+#[derive(Debug, Copy, Clone)]
+pub struct max_align_t {
+    pub __clang_max_align_nonce1: ::std::os::raw::c_longlong,
+    pub __bindgen_padding_0: u64,
+    pub __clang_max_align_nonce2: u128,
 }
 pub type int_least8_t = __int_least8_t;
 pub type int_least16_t = __int_least16_t;
@@ -32143,7 +32175,7 @@ pub const device_endian_DEVICE_NATIVE_ENDIAN: device_endian = 0;
 pub const device_endian_DEVICE_BIG_ENDIAN: device_endian = 1;
 pub const device_endian_DEVICE_LITTLE_ENDIAN: device_endian = 2;
 pub type device_endian = u32;
-pub type ram_addr_t = usize;
+pub type ram_addr_t = u64;
 extern "C" {
     pub static mut ram_size: ram_addr_t;
 }
@@ -35135,55 +35167,7 @@ extern "C" {
     );
 }
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct TCGLLVMContext {
-    _unused: [u8; 0],
-}
-extern "C" {
-    pub static mut tcg_llvm_ctx: *mut TCGLLVMContext;
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct TCGLLVMRuntime {
-    pub helper_ret_addr: u64,
-    pub helper_call_addr: u64,
-    pub helper_regs: [u64; 3usize],
-    pub last_tb: *mut TranslationBlock,
-}
-extern "C" {
-    pub static mut tcg_llvm_runtime: TCGLLVMRuntime;
-}
-extern "C" {
-    pub fn tcg_llvm_initialize();
-}
-extern "C" {
-    pub fn tcg_llvm_destroy();
-}
-extern "C" {
-    pub fn tcg_llvm_tb_alloc(tb: *mut TranslationBlock);
-}
-extern "C" {
-    pub fn tcg_llvm_tb_free(tb: *mut TranslationBlock);
-}
-extern "C" {
-    pub fn tcg_llvm_get_func_name(tb: *mut TranslationBlock) -> *const ::std::os::raw::c_char;
-}
-extern "C" {
-    pub fn tcg_llvm_gen_code(l: *mut TCGLLVMContext, s: *mut TCGContext, tb: *mut TranslationBlock);
-}
-extern "C" {
-    pub fn tcg_llvm_qemu_tb_exec(env: *mut CPUMIPSState, tb: *mut TranslationBlock) -> usize;
-}
-extern "C" {
-    pub fn tcg_llvm_write_module(l: *mut TCGLLVMContext, path: *const ::std::os::raw::c_char);
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct Function {
-    _unused: [u8; 0],
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
+#[derive(Copy, Clone)]
 pub struct TranslationBlock {
     pub pc: target_ulong,
     pub cs_base: target_ulong,
@@ -35192,6 +35176,7 @@ pub struct TranslationBlock {
     pub icount: u16,
     pub cflags: u32,
     pub invalid: u16,
+    pub was_split: u8,
     pub tc_ptr: *mut ::std::os::raw::c_void,
     pub tc_search: *mut u8,
     pub orig_tb: *mut TranslationBlock,
@@ -35201,12 +35186,11 @@ pub struct TranslationBlock {
     pub jmp_insn_offset: [u16; 2usize],
     pub jmp_list_next: [usize; 2usize],
     pub jmp_list_first: usize,
-    pub tcg_llvm_context: *mut TCGLLVMContext,
-    pub llvm_function: *mut Function,
     pub llvm_tc_ptr: *mut u8,
     pub llvm_tc_end: *mut u8,
     pub llvm_tb_next: [*mut TranslationBlock; 2usize],
-    pub was_split: u8,
+    pub llvm_asm_ptr: *mut u8,
+    pub llvm_fn_name: [::std::os::raw::c_char; 64usize],
 }
 extern "C" {
     pub fn tb_free(tb: *mut TranslationBlock);
@@ -39342,6 +39326,9 @@ pub type Panda__Module = _Panda__Module;
 pub type Panda__LoadedLibs = _Panda__LoadedLibs;
 pub type Panda__DwarfCall = _Panda__DwarfCall;
 pub type Panda__SignalEvent = _Panda__SignalEvent;
+pub type Panda__StructData = _Panda__StructData;
+pub type Panda__NamedData = _Panda__NamedData;
+pub type Panda__Syscall = _Panda__Syscall;
 pub type Panda__SrcInfoPri = _Panda__SrcInfoPri;
 pub type Panda__AttackPointPri = _Panda__AttackPointPri;
 pub type Panda__TaintQueryPri = _Panda__TaintQueryPri;
@@ -39362,9 +39349,14 @@ pub type Panda__LogEntry = _Panda__LogEntry;
 #[derive(Debug, Copy, Clone)]
 pub struct _Panda__AsidInfo {
     pub base: ProtobufCMessage,
-    pub asid: u64,
-    pub name: *mut ::std::os::raw::c_char,
     pub pid: u32,
+    pub create_time: u64,
+    pub ppid: u32,
+    pub asid: u64,
+    pub n_names: size_t,
+    pub names: *mut *mut ::std::os::raw::c_char,
+    pub n_tids: size_t,
+    pub tids: *mut u32,
     pub start_instr: u64,
     pub end_instr: u64,
     pub has_count: protobuf_c_boolean,
@@ -39446,6 +39438,57 @@ pub struct _Panda__SignalEvent {
     pub dst_name: *mut ::std::os::raw::c_char,
     pub src_pid: i32,
     pub dst_pid: i32,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct _Panda__StructData {
+    pub base: ProtobufCMessage,
+    pub n_members: size_t,
+    pub members: *mut *mut Panda__NamedData,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct _Panda__NamedData {
+    pub base: ProtobufCMessage,
+    pub arg_name: *mut ::std::os::raw::c_char,
+    pub str_: *mut ::std::os::raw::c_char,
+    pub has_ptr: protobuf_c_boolean,
+    pub ptr: u64,
+    pub has_u64: protobuf_c_boolean,
+    pub u64_: u64,
+    pub has_u32: protobuf_c_boolean,
+    pub u32_: u32,
+    pub has_u16: protobuf_c_boolean,
+    pub u16_: u32,
+    pub has_i64: protobuf_c_boolean,
+    pub i64_: i64,
+    pub has_i32: protobuf_c_boolean,
+    pub i32_: i32,
+    pub has_i16: protobuf_c_boolean,
+    pub i16_: i32,
+    pub has_float_val: protobuf_c_boolean,
+    pub float_val: f32,
+    pub has_double_val: protobuf_c_boolean,
+    pub double_val: f64,
+    pub has_bool_val: protobuf_c_boolean,
+    pub bool_val: protobuf_c_boolean,
+    pub has_bytes_val: protobuf_c_boolean,
+    pub bytes_val: ProtobufCBinaryData,
+    pub struct_type: *mut ::std::os::raw::c_char,
+    pub struct_data: *mut Panda__StructData,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct _Panda__Syscall {
+    pub base: ProtobufCMessage,
+    pub pid: u32,
+    pub ppid: u32,
+    pub tid: u32,
+    pub create_time: u64,
+    pub retcode: u64,
+    pub call_name: *mut ::std::os::raw::c_char,
+    pub n_args: size_t,
+    pub args: *mut *mut Panda__NamedData,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -39602,6 +39645,7 @@ pub struct _Panda__LogEntry {
     pub dwarf_call: *mut Panda__DwarfCall,
     pub dwarf_ret: *mut Panda__DwarfCall,
     pub signal_event: *mut Panda__SignalEvent,
+    pub syscall: *mut Panda__Syscall,
     pub taint_query_pri: *mut Panda__TaintQueryPri,
     pub attack_point_pri: *mut Panda__AttackPointPri,
     pub pri_trace_src_info: *mut Panda__SrcInfoPri,
@@ -39898,6 +39942,90 @@ extern "C" {
 extern "C" {
     pub fn panda__signal_event__free_unpacked(
         message: *mut Panda__SignalEvent,
+        allocator: *mut ProtobufCAllocator,
+    );
+}
+extern "C" {
+    pub fn panda__struct_data__init(message: *mut Panda__StructData);
+}
+extern "C" {
+    pub fn panda__struct_data__get_packed_size(message: *const Panda__StructData) -> size_t;
+}
+extern "C" {
+    pub fn panda__struct_data__pack(message: *const Panda__StructData, out: *mut u8) -> size_t;
+}
+extern "C" {
+    pub fn panda__struct_data__pack_to_buffer(
+        message: *const Panda__StructData,
+        buffer: *mut ProtobufCBuffer,
+    ) -> size_t;
+}
+extern "C" {
+    pub fn panda__struct_data__unpack(
+        allocator: *mut ProtobufCAllocator,
+        len: size_t,
+        data: *const u8,
+    ) -> *mut Panda__StructData;
+}
+extern "C" {
+    pub fn panda__struct_data__free_unpacked(
+        message: *mut Panda__StructData,
+        allocator: *mut ProtobufCAllocator,
+    );
+}
+extern "C" {
+    pub fn panda__named_data__init(message: *mut Panda__NamedData);
+}
+extern "C" {
+    pub fn panda__named_data__get_packed_size(message: *const Panda__NamedData) -> size_t;
+}
+extern "C" {
+    pub fn panda__named_data__pack(message: *const Panda__NamedData, out: *mut u8) -> size_t;
+}
+extern "C" {
+    pub fn panda__named_data__pack_to_buffer(
+        message: *const Panda__NamedData,
+        buffer: *mut ProtobufCBuffer,
+    ) -> size_t;
+}
+extern "C" {
+    pub fn panda__named_data__unpack(
+        allocator: *mut ProtobufCAllocator,
+        len: size_t,
+        data: *const u8,
+    ) -> *mut Panda__NamedData;
+}
+extern "C" {
+    pub fn panda__named_data__free_unpacked(
+        message: *mut Panda__NamedData,
+        allocator: *mut ProtobufCAllocator,
+    );
+}
+extern "C" {
+    pub fn panda__syscall__init(message: *mut Panda__Syscall);
+}
+extern "C" {
+    pub fn panda__syscall__get_packed_size(message: *const Panda__Syscall) -> size_t;
+}
+extern "C" {
+    pub fn panda__syscall__pack(message: *const Panda__Syscall, out: *mut u8) -> size_t;
+}
+extern "C" {
+    pub fn panda__syscall__pack_to_buffer(
+        message: *const Panda__Syscall,
+        buffer: *mut ProtobufCBuffer,
+    ) -> size_t;
+}
+extern "C" {
+    pub fn panda__syscall__unpack(
+        allocator: *mut ProtobufCAllocator,
+        len: size_t,
+        data: *const u8,
+    ) -> *mut Panda__Syscall;
+}
+extern "C" {
+    pub fn panda__syscall__free_unpacked(
+        message: *mut Panda__Syscall,
         allocator: *mut ProtobufCAllocator,
     );
 }
@@ -40442,6 +40570,21 @@ pub type Panda__SignalEvent_Closure = ::std::option::Option<
         closure_data: *mut ::std::os::raw::c_void,
     ),
 >;
+pub type Panda__StructData_Closure = ::std::option::Option<
+    unsafe extern "C" fn(
+        message: *const Panda__StructData,
+        closure_data: *mut ::std::os::raw::c_void,
+    ),
+>;
+pub type Panda__NamedData_Closure = ::std::option::Option<
+    unsafe extern "C" fn(
+        message: *const Panda__NamedData,
+        closure_data: *mut ::std::os::raw::c_void,
+    ),
+>;
+pub type Panda__Syscall_Closure = ::std::option::Option<
+    unsafe extern "C" fn(message: *const Panda__Syscall, closure_data: *mut ::std::os::raw::c_void),
+>;
 pub type Panda__SrcInfoPri_Closure = ::std::option::Option<
     unsafe extern "C" fn(
         message: *const Panda__SrcInfoPri,
@@ -40564,6 +40707,15 @@ extern "C" {
 }
 extern "C" {
     pub static panda__signal_event__descriptor: ProtobufCMessageDescriptor;
+}
+extern "C" {
+    pub static panda__struct_data__descriptor: ProtobufCMessageDescriptor;
+}
+extern "C" {
+    pub static panda__named_data__descriptor: ProtobufCMessageDescriptor;
+}
+extern "C" {
+    pub static panda__syscall__descriptor: ProtobufCMessageDescriptor;
 }
 extern "C" {
     pub static panda__src_info_pri__descriptor: ProtobufCMessageDescriptor;
@@ -40769,6 +40921,17 @@ extern "C" {
         -> target_ulong;
 }
 extern "C" {
+    pub fn panda_setup_signal_handling(
+        f: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: ::std::os::raw::c_int,
+                arg2: *mut ::std::os::raw::c_void,
+                arg3: *mut ::std::os::raw::c_void,
+            ),
+        >,
+    );
+}
+extern "C" {
     pub fn map_memory(name: *mut ::std::os::raw::c_char, size: u64, address: u64);
 }
 extern "C" {
@@ -40782,6 +40945,15 @@ extern "C" {
 }
 extern "C" {
     pub fn garray_len(list: *mut GArray) -> ::std::os::raw::c_ulong;
+}
+extern "C" {
+    pub static mut panda_external_signal_handler: ::std::option::Option<
+        unsafe extern "C" fn(
+            arg1: ::std::os::raw::c_int,
+            arg2: *mut siginfo_t,
+            arg3: *mut ::std::os::raw::c_void,
+        ),
+    >;
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
 #[repr(C)]
