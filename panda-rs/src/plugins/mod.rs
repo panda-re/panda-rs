@@ -104,6 +104,7 @@ struct Plugin {
     lib: libloading::Library,
 }
 
+// TODO: make this work for other archs
 const PLUGIN_DIR: &str = "x86_64-softmmu/panda/plugins";
 
 impl Plugin {

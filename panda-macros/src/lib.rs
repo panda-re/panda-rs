@@ -199,6 +199,13 @@ impl syn::parse::Parse for Idents {
     }
 }
 
+fn get_cfg_attrs(func: &syn::ItemFn) -> Vec<syn::Attribute> {
+    func.attrs.iter()
+        .filter(|attr| attr.path.get_ident().map(|x| x.to_string() == "cfg").unwrap_or(false))
+        .map(|attr| attr.clone())
+        .collect()
+}
+
 macro_rules! define_callback_attributes {
     ($(
         $($doc:literal)*
@@ -222,8 +229,12 @@ macro_rules! define_callback_attributes {
                     let mut function = syn::parse_macro_input!(function as syn::ItemFn);
                     function.sig.abi = Some(syn::parse_quote!(extern "C"));
                     let func = &function.sig.ident;
+                    let cfgs = crate::get_cfg_attrs(&function);
 
                     quote!(
+                        #(
+                            #cfgs
+                         )*
                         const _: fn() = || {
                             use ::panda::sys::*;
                             fn assert_callback_arg_types(_ : extern "C" fn($($arg),*) $(-> $ret)?) {}
@@ -260,8 +271,12 @@ macro_rules! define_syscalls_callbacks {
                     let mut function = syn::parse_macro_input!(function as syn::ItemFn);
                     function.sig.abi = Some(syn::parse_quote!(extern "C"));
                     let func = &function.sig.ident;
+                    let cfgs = crate::get_cfg_attrs(&function);
 
                     quote!(
+                        #(
+                            #cfgs
+                         )*
                         ::panda::inventory::submit! {
                             #![crate = ::panda]
                             ::panda::PPPCallbackSetup(
@@ -314,8 +329,12 @@ macro_rules! define_hooks2_callbacks {
                     let mut function = syn::parse_macro_input!(function as syn::ItemFn);
                     function.sig.abi = Some(syn::parse_quote!(extern "C"));
                     let func = &function.sig.ident;
+                    let cfgs = crate::get_cfg_attrs(&function);
 
                     quote!(
+                        #(
+                            #cfgs
+                         )*
                         ::panda::inventory::submit! {
                             #![crate = ::panda]
                             ::panda::PPPCallbackSetup(
