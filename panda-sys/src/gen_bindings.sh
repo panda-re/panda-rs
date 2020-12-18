@@ -9,9 +9,9 @@ bindgen bindings.h -o bindings/mips.rs --no-layout-tests -- -I$PANDA_ROOT/panda/
 bindgen bindings.h -o bindings/mipsel.rs --no-layout-tests -- -I$PANDA_ROOT/panda/include -I$PANDA_ROOT/build -I$PANDA_ROOT/build/mipsel-softmmu -I$PANDA_ROOT/include -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I$PANDA_ROOT/target/mips -I$PANDA_ROOT/tcg/mips -I$PANDA_ROOT/tcg -DNEED_CPU_H -I$PANDA_ROOT -Ifake_headers
 
 # Remove double-declared constant
-sed '/pub const IPPORT_RESERVED: _bindgen_ty_19 = 1024;/d' bindings/x86_64.rs -i
-sed '/pub const IPPORT_RESERVED: _bindgen_ty_19 = 1024;/d' bindings/i386.rs -i
-sed '/pub const IPPORT_RESERVED: _bindgen_ty_19 = 1024;/d' bindings/arm.rs -i
-sed '/pub const IPPORT_RESERVED: _bindgen_ty_19 = 1024;/d' bindings/ppc.rs -i
-sed '/pub const IPPORT_RESERVED: _bindgen_ty_19 = 1024;/d' bindings/mips.rs -i
-sed '/pub const IPPORT_RESERVED: _bindgen_ty_19 = 1024;/d' bindings/mipsel.rs -i
+sed '/pub const IPPORT_RESERVED: .* = 1024;/d' bindings/x86_64.rs -i
+sed '/pub const IPPORT_RESERVED: .* = 1024;/d' bindings/i386.rs -i
+sed '/pub const IPPORT_RESERVED: .* = 1024;/d' bindings/arm.rs -i
+sed '/pub const IPPORT_RESERVED: .* = 1024;/d' bindings/ppc.rs -i
+sed '/pub const IPPORT_RESERVED: .* = 1024;/d' bindings/mips.rs -i
+sed '/pub const IPPORT_RESERVED: .* = 1024;/d' bindings/mipsel.rs -i
