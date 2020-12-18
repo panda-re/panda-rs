@@ -9,7 +9,7 @@
 //! against libpanda, for pypanda-style use.
 //!
 //! ### Callbacks
-//! panda-rs makes extensive use of callbacks for handling analyses on various events. To use
+//! `panda-rs` makes extensive use of callbacks for handling analyses on various events. To use
 //! callbacks, you simply apply the callback's attribute to any functions which should be called
 //! for the given callback. In order to use a callback in a PANDA plugin (not to be confused with
 //! an application that uses libpanda), one plugin must be marked `#[panda::init]`, otherwise the
@@ -31,6 +31,11 @@ pub use panda_macros as base_callbacks;
 mod library_mode;
 pub use library_mode::*;
 
+/// Safe wrappers for the PANDA API
+mod api;
+pub use api::*;
+
+/// Event-based callbacks, for both VM events (e.g. translation of a basic block) and PANDA events (e.g. plugin init)
 mod callbacks;
 pub use callbacks::*;
 
@@ -40,6 +45,8 @@ pub use inventory;
 /// Helpers for getting plugin arguments from panda
 pub mod panda_arg;
 pub use panda_arg::PandaArgs;
+
+pub mod enums;
 
 pub mod plugins;
 
