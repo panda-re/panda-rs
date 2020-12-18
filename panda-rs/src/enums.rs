@@ -1,3 +1,4 @@
+/// For fallible virt/phys memory R/W operations
 #[repr(i32)]
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum MemRWStatus {
@@ -8,7 +9,6 @@ pub enum MemRWStatus {
     MemTxDecodeError = panda_sys::MEMTX_DECODE_ERROR as i32,
 }
 
-// TODO: tried https://crates.io/crates/enum-primitive-derive, didn't for this. Better way then below?
 impl From<i32> for MemRWStatus {
     fn from(v: i32) -> Self {
         match v {
@@ -17,6 +17,25 @@ impl From<i32> for MemRWStatus {
             x if x == MemRWStatus::MemTxError as i32 => MemRWStatus::MemTxError,
             x if x == MemRWStatus::MemTxDecodeError as i32 => MemRWStatus::MemTxDecodeError,
             _ => MemRWStatus::Unknown, // This means there is a bug in the C side of things
+        }
+    }
+}
+
+/// For fallible generic C functions
+#[repr(i32)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd)]
+pub enum GenericRet {
+    Unknown = -2,
+    Error = -1,
+    Success = 0,
+}
+
+impl From<i32> for GenericRet {
+    fn from(v: i32) -> Self {
+        match v {
+            x if x == GenericRet::Error as i32 => GenericRet::Error,
+            x if x == GenericRet::Success as i32 => GenericRet::Success,
+            _ => GenericRet::Unknown, // This means there is a bug in the C side of things
         }
     }
 }
