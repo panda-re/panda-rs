@@ -1,10 +1,15 @@
 [package]
-name = "panda-macros"
-version = "0.1.0"
+name = "panda-re-macros"
+version = "0.3.0"
 authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>"]
 edition = "2018"
+description = "Macros needed for the `panda-re` library"
+license = "GPL-2.0"
+documentation = "https://docs.rs/panda-re"
+homepage = "https://panda-re.mit.edu"
 
 [lib]
+name = "panda_macros"
 proc-macro = true
 
 [dependencies]

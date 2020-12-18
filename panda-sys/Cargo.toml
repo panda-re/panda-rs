@@ -1,8 +1,15 @@
 [package]
-name = "panda-sys"
+name = "panda-re-sys"
 version = "0.1.0"
 authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>"]
 edition = "2018"
+description = "The official *-sys library for interfacing with PANDA (Platform for Architecture-Neutral Dynamic Analysis)"
+license = "GPL-2.0"
+documentation = "https://docs.rs/panda-re-sys"
+homepage = "https://panda-re.mit.edu"
+
+[lib]
+name = "panda_sys"
 
 [features]
 libpanda = []
