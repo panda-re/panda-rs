@@ -5,7 +5,7 @@ authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>"]
 edition = "2018"
 description = "Macros needed for the `panda-re` library"
 license = "GPL-2.0"
-documentation = "https://docs.rs/panda-re"
+documentation = "https://docs.rs/panda-re-macros"
 homepage = "https://panda-re.mit.edu"
 
 [lib]
