@@ -1,7 +1,7 @@
-//use crate::enums::GenericRet;
-//use std::ffi::CString;
-//use std::path::Path;
-//use llvm_ir::Module;
+use crate::enums::GenericRet;
+use std::ffi::CString;
+use std::path::Path;
+use llvm_ir::Module;
 
 /// Enable translating TCG -> LLVM and executing LLVM
 pub fn enable_llvm() {
@@ -38,12 +38,12 @@ pub fn disable_llvm_helpers() {
     }
 }
 
-/*
-// TODO: Fix and test
 /// Get current (last translated) LLVM module.
+/// This is wildly experimental.
 pub fn get_current_llvm_mod() -> Result<Module, String> {
 
     // Try three RAM-backed Linux dirs (for speed), fallback to OS-agnostic temp dir
+    let temp_path;
     let file_path = if Path::new("/dev/run").exists() {
         Path::new("/dev/run/curr_llvm.bc")
     } else if Path::new("/run/shm").exists() {
@@ -51,9 +51,8 @@ pub fn get_current_llvm_mod() -> Result<Module, String> {
     } else if Path::new("/dev/shm").exists() {
         Path::new("/dev/shm/curr_llvm.bc")
     } else {
-        let mut path_buf = std::env::temp_dir();
-        path_buf.push("curr_llvm.bc");
-        path_buf.as_path()
+        temp_path = std::env::temp_dir().as_path().join("curr_llvm.bc");
+        &temp_path
     };
 
     if let Some(path_str) = file_path.to_str() {
@@ -73,4 +72,3 @@ pub fn get_current_llvm_mod() -> Result<Module, String> {
         Err(format!("Failed to convert path \'{:?}\' to string!", file_path))
     }
 }
-*/
