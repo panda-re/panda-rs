@@ -6,7 +6,7 @@ Rust bindings for [PANDA](https://github.com/panda-re/panda) for use in either p
 
 Some resources for helping introduce you to PANDA and panda-rs:
 
-* [The release blog post]() !!TODO!!
+* [The release blog post](https://panda-re.mit.edu/blog/panda-rs/)
 * [The documentation](https://docs.rs/panda-re)
 * [Our collection of plugins](https://github.com/panda-re/panda-rs-plugins)
 * [The panda-rs example(s)](https://github.com/panda-re/panda-rs/tree/master/panda-rs/examples)
