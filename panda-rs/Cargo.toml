@@ -1,15 +1,19 @@
 [package]
 name = "panda-re"
-version = "0.1.0"
+version = "0.3.0"
 authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>"]
 edition = "2018"
+description = "The official library for interfacing with PANDA (Platform for Architecture-Neutral Dynamic Analysis)"
+license = "GPL-2.0"
+documentation = "https://docs.rs/panda-re"
+homepage = "https://panda-re.mit.edu"
 
 [lib]
 name = "panda"
 
 [dependencies]
-panda-sys = { path = "../panda-sys" }
-panda-macros = { path = "../panda-macros" }
+panda-re-sys = { version = "0.1", path = "../panda-sys" }
+panda-re-macros = { version = "0.3", path = "../panda-macros" }
 inventory = "0.1.8"
 dirs = "3.0.1"
 lazy_static = "1.4.0"
@@ -19,12 +23,12 @@ glib-sys = "0.10.0"
 llvm-ir = { version = "0.7.4", features = ["llvm-10"] }
 
 [features]
-libpanda = ["panda-sys/libpanda"]
-x86_64 = ["panda-sys/x86_64"]
-i386 = ["panda-sys/i386"]
-arm = ["panda-sys/arm"]
-ppc = ["panda-sys/ppc"]
-mips = ["panda-sys/mips"]
-mipsel = ["panda-sys/mipsel"]
+libpanda = ["panda-re-sys/libpanda"]
+x86_64 = ["panda-re-sys/x86_64"]
+i386 = ["panda-re-sys/i386"]
+arm = ["panda-re-sys/arm"]
+ppc = ["panda-re-sys/ppc"]
+mips = ["panda-re-sys/mips"]
+mipsel = ["panda-re-sys/mipsel"]
 
 default = ["x86_64"]
