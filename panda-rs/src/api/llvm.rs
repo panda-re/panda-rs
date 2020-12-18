@@ -1,7 +1,7 @@
-use crate::enums::GenericRet;
-use std::ffi::CString;
-use std::path::Path;
-use llvm_ir::Module;
+//use crate::enums::GenericRet;
+//use std::ffi::CString;
+//use std::path::Path;
+//use llvm_ir::Module;
 
 /// Enable translating TCG -> LLVM and executing LLVM
 pub fn enable_llvm() {
@@ -38,6 +38,7 @@ pub fn disable_llvm_helpers() {
     }
 }
 
+/*
 /// Get current (last translated) LLVM module.
 /// This is wildly experimental.
 pub fn get_current_llvm_mod() -> Result<Module, String> {
@@ -72,3 +73,4 @@ pub fn get_current_llvm_mod() -> Result<Module, String> {
         Err(format!("Failed to convert path \'{:?}\' to string!", file_path))
     }
 }
+*/

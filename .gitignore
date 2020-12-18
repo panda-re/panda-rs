@@ -13,3 +13,6 @@ Cargo.lock
 **/*.log
 test-rr-nondet.log
 test-rr-snp
+
+# Example artifacts
+_string_matches.txt
