@@ -1,12 +1,14 @@
 use crate::prelude::*;
+use crate::cpu_arch_state;
 
 use strum_macros::{EnumString, EnumIter};
+use strum::IntoEnumIterator;
 
 // Arch-specific mappings ----------------------------------------------------------------------------------------------
 
 // TODO: handle AX/AH/AL, etc via shifts?
 #[cfg(feature = "i386")]
-#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
 enum Reg {
     EAX = 0,
     ECX = 1,
@@ -20,7 +22,7 @@ enum Reg {
 
 // TODO: handle EAX/AX/AH/AL, etc via shifts?
 #[cfg(feature = "x86_64")]
-#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
 enum Reg {
     RAX = 0,
     RCX = 1,
@@ -41,7 +43,7 @@ enum Reg {
 }
 
 #[cfg(feature = "arm")]
-#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
 enum Reg {
     R0 = 0,
     R1 = 1,
@@ -61,13 +63,8 @@ enum Reg {
     IP = 15,
 }
 
-// TODO: reg map
-//#[cfg(feature = "aarch64")]
-//#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
-
-// TODO: reg map
-#[cfg(feature = "mips, mipsel")]
-#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
+#[cfg(any(feature = "mips", feature = "mipsel"))]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
 enum Reg {
     ZERO = 0,
     AT = 1,
@@ -104,6 +101,10 @@ enum Reg {
 }
 
 // TODO: reg map
+//#[cfg(feature = "aarch64")]
+//#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
+
+// TODO: reg map
 //#[cfg(feature = "ppc")]
 //#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
 
@@ -121,7 +122,7 @@ fn reg_sp() -> Reg {
     #[cfg(feature = "arm")]
     return Reg::SP;
 
-    #[cfg(feature = "mips")]
+    #[cfg(any(feature = "mips", feature = "mipsel"))]
     return Reg::SP;
 }
 
@@ -138,7 +139,7 @@ fn reg_ret_val() -> Reg {
     #[cfg(feature = "arm")]
     return Reg::SP;
 
-    #[cfg(feature = "mips")]
+    #[cfg(any(feature = "mips", feature = "mipsel"))]
     return Reg::V0;
 }
 
@@ -154,30 +155,55 @@ fn reg_ret_addr() -> Option<Reg> {
     #[cfg(feature = "arm")]
     return Some(Reg::LR);
 
-    #[cfg(feature = "mips")]
+    #[cfg(any(feature = "mips", feature = "mipsel"))]
     return Some(Reg::RA);
 }
 
 /// Read the current value of a register
+#[cfg(any(feature = "i386", feature = "x86_64", feature = "arm"))]
 fn get_reg(cpu: &CPUState, reg: Reg) -> target_ulong {
-    let mut val;
+    let cpu = cpu_arch_state!(cpu);
+    let val;
     unsafe {
-        if cfg!(feature = "mips") {
-            val = (*cpu.env_ptr).active_tc.gpr[reg];
-        } else {
-            val = (*cpu.env_ptr).regs[reg];
-        }
+        val = (*cpu).regs[reg as usize];
+    }
+    val
+}
+
+/// Read the current value of a register
+#[cfg(any(feature = "mips", feature = "mipsel"))]
+fn get_reg(cpu: &CPUState, reg: Reg) -> target_ulong {
+    let cpu = cpu_arch_state!(cpu);
+    let val;
+    unsafe {
+        val = (*cpu).active_tc.gpr[reg as usize];
     }
     val
 }
 
 /// Set the value for a register
+#[cfg(any(feature = "i386", feature = "x86_64", feature = "arm"))]
 fn set_reg(cpu: &CPUState, reg: Reg, val: target_ulong) {
+    let cpu = cpu_arch_state!(cpu);
     unsafe {
-        if cfg!(feature = "mips") {
-            (*cpu.env_ptr).active_tc.gpr[reg] = reg;
-        } else {
-            (*cpu.env_ptr).regs[reg] = val;
-        }
+        (*cpu).regs[reg as usize] = val;
+    }
+}
+
+/// Set the value for a register
+#[cfg(any(feature = "mips", feature = "mipsel"))]
+fn set_reg(cpu: &CPUState, reg: Reg, val: target_ulong) {
+    let cpu = cpu_arch_state!(cpu);
+    unsafe {
+        (*cpu).active_tc.gpr[reg as usize] = val;
+    }
+}
+
+// Printing ------------------------------------------------------------------------------------------------------------
+
+/// Print the contents of all registers
+fn dump_regs(cpu: &CPUState) {
+    for reg in Reg::iter() {
+        println!("{:?}: 0x{:016x}", reg, get_reg(cpu, reg));
     }
 }
