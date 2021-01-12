@@ -43,7 +43,7 @@ pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
 
                 #func_name(#args);
             }
-            
+
             #[no_mangle]
             unsafe extern "C" fn uninit_plugin(plugin: *mut ::panda::PluginHandle) {
                 for cb in ::panda::inventory::iter::<::panda::UninitCallback> {
@@ -157,14 +157,14 @@ pub fn derive_panda_args(input: TokenStream) -> TokenStream {
                 impl ::panda::PandaArgs for #ident {
                     fn from_panda_args() -> Self {
                         let name = ::std::ffi::CString::new(#name).unwrap();
-                        
+
                         unsafe {
                             let __args_ptr = ::panda::sys::panda_get_args(name.as_ptr());
 
                             #(
                                 #statements
                             )*
-                            
+
                             ::panda::sys::panda_free_args(__args_ptr);
 
                             Self {
