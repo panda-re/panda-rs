@@ -58,10 +58,19 @@ however, if we want to make this into an executable that calls into libpanda  we
 ```rust
 fn main() {
     Panda::new()
-        .generic("x86_64") // use a generic x86_64 linux QCOW (a VM image) 
+        .generic("x86_64") // use a generic x86_64 linux QCOW (a VM image)
         .replay("my_application_replay") // load a replay of the name "my_application_replay"
         .run();
 }
 ```
 
 and enable the `libpanda` feature of panda-rs.
+
+## Executing Examples
+
+Sample snippets in the `panda-rs/examples` directory can be run by name, e.g. `showcase.rs` is executed with:
+
+```
+cd panda-rs
+cargo run --example showcase --features=libpanda
+```
