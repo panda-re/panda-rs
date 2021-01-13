@@ -65,7 +65,7 @@ pub fn physical_memory_write(addr: target_ulong, data: &[u8]) -> MemRWStatus {
     let mut c_data = data.to_vec(); // Alloc b/c C API wants mut
     unsafe {
         panda_sys::panda_physical_memory_write_external(
-            addr,
+            addr as _,
             c_data.as_mut_ptr(),
             c_data.len() as i32,
         ).into()
