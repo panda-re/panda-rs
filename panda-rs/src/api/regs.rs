@@ -125,10 +125,49 @@ static RET_REGS: &'static [Reg] = &[Reg::V0, Reg::V1];
 //#[cfg(feature = "aarch64")]
 //#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
 
-// TODO: reg map
+// TODO: support floating point set as well? Separate QEMU bank.
 /// PPC named guest registers
-//#[cfg(feature = "ppc")]
-//#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
+#[cfg(feature = "ppc")]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
+pub enum Reg {
+    R0 = 0,
+    R1 = 1,
+    R2 = 2,
+    R3 = 3,
+    R4 = 4,
+    R5 = 5,
+    R6 = 6,
+    R7 = 7,
+    R8 = 8,
+    R9 = 9,
+    R10 = 10,
+    R11 = 11,
+    R12 = 12,
+    R13 = 13,
+    R14 = 14,
+    R15 = 15,
+    R16 = 16,
+    R17 = 17,
+    R18 = 18,
+    R19 = 19,
+    R20 = 20,
+    R21 = 21,
+    R22 = 22,
+    R23 = 23,
+    R24 = 24,
+    R25 = 25,
+    R26 = 26,
+    R27 = 27,
+    R28 = 28,
+    R29 = 29,
+    R30 = 30,
+    R31 = 31,
+    LR = 100, // Special case - separate bank in QEMU
+}
+
+/// MIPS return registers
+#[cfg(feature = "ppc")]
+static RET_REGS: &'static [Reg] = &[Reg::R3, Reg::R4];
 
 // Getters/setters -----------------------------------------------------------------------------------------------------
 
@@ -143,10 +182,13 @@ pub fn reg_sp() -> Reg {
 
     #[cfg(any(feature = "arm", feature = "mips", feature = "mipsel"))]
     return Reg::SP;
+
+    #[cfg(any(feature = "ppc"))]
+    return Reg::R1;
 }
 
 /// Get return value registers
-/// MIPS and ARM: Note that most C code will only use the first register, e.g. index 0 in returned `Vec`
+/// MIPS/ARM/PPC: Note that most C code will only use the first register, e.g. index 0 in returned `Vec`
 pub fn reg_ret_val() -> &'static [Reg] {
     return &RET_REGS;
 }
@@ -165,6 +207,9 @@ pub fn reg_ret_addr() -> Option<Reg> {
 
     #[cfg(any(feature = "mips", feature = "mipsel"))]
     return Some(Reg::RA);
+
+    #[cfg(feature = "ppc")]
+    return Some(Reg::LR);
 }
 
 /// Read the current value of a register
@@ -182,6 +227,16 @@ pub fn get_reg<T: Into<Reg>>(cpu: &CPUState, reg: T) -> target_ulong {
         val = (*cpu_arch).active_tc.gpr[reg.into() as usize];
     }
 
+    #[cfg(any(feature = "ppc"))]
+    unsafe {
+        let reg_enum = reg.into();
+        if reg_enum == Reg::LR {
+            val = (*cpu_arch).lr;
+        } else {
+            val = (*cpu_arch).gpr[reg_enum as usize];
+        }
+    }
+
     val
 }
 
@@ -197,6 +252,16 @@ pub fn set_reg<T: Into<Reg>>(cpu: &CPUState, reg: T, val: target_ulong) {
     #[cfg(any(feature = "mips", feature = "mipsel"))]
     unsafe {
         (*cpu_arch).active_tc.gpr[reg.into() as usize] = val;
+    }
+
+    #[cfg(any(feature = "ppc"))]
+    unsafe {
+        let reg_enum = reg.into();
+        if reg_enum == Reg::LR {
+            (*cpu_arch).lr = val;
+        } else {
+            (*cpu_arch).gpr[reg_enum as usize] = val;
+        }
     }
 }
 
