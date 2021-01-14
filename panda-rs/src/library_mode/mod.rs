@@ -87,10 +87,10 @@ impl Panda {
     pub fn args<I, S>(&mut self, args: I) -> &mut Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<String>,
+        S: AsRef<str>,
     {
         for arg in args {
-            self.arg(arg.into());
+            self.arg(arg.as_ref());
         }
 
         self

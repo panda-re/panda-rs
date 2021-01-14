@@ -20,7 +20,15 @@ jobs:
     - uses: BSFishy/pip-action@v1
       with:
         packages: pandare
-    - name: Build
+    - name: Build x86_64
       run: cd panda-rs && cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+    - name: Build i386
+      run: cargo build --verbose --no-default-features --features=i386
+    - name: Build ARM
+      run: cargo build --verbose --no-default-features --features=arm
+    - name: Build Mips
+      run: cargo build --verbose --no-default-features --features=mips
+    - name: Build Mips (Little Endian)
+      run: cargo build --verbose --no-default-features --features=mipsel
+    - name: Build PowerPC
+      run: cargo build --verbose --no-default-features --features=ppc
