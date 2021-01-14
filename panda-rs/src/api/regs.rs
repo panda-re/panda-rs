@@ -123,7 +123,7 @@ static RET_REGS: &'static [Reg] = &[Reg::V0, Reg::V1];
 // TODO: reg map
 /// AARCH64 named guest registers
 //#[cfg(feature = "aarch64")]
-//#[derive(Debug, PartialEq, Eq, EnumString, EnumIter)]
+//#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
 
 // TODO: support floating point set as well? Separate QEMU bank.
 /// PPC named guest registers
@@ -165,7 +165,7 @@ pub enum Reg {
     LR = 100, // Special case - separate bank in QEMU
 }
 
-/// MIPS return registers
+/// PPC return registers
 #[cfg(feature = "ppc")]
 static RET_REGS: &'static [Reg] = &[Reg::R3, Reg::R4];
 
@@ -202,14 +202,11 @@ pub fn reg_ret_addr() -> Option<Reg> {
     #[cfg(feature = "x86_64")]
     return None;
 
-    #[cfg(feature = "arm")]
+    #[cfg(any(feature = "arm", feature = "ppc"))]
     return Some(Reg::LR);
 
     #[cfg(any(feature = "mips", feature = "mipsel"))]
     return Some(Reg::RA);
-
-    #[cfg(feature = "ppc")]
-    return Some(Reg::LR);
 }
 
 /// Read the current value of a register
