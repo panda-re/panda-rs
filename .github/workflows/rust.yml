@@ -1,0 +1,34 @@
+name: Rust
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+    - uses: BSFishy/pip-action@v1
+      with:
+        packages: pandare
+    - name: Build x86_64
+      run: cd panda-rs && cargo build --verbose
+    - name: Build i386
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=i386
+    - name: Build ARM
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=arm
+    - name: Build Mips
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=mips
+    - name: Build Mips (Little Endian)
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=mipsel
+    - name: Build PowerPC
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=ppc

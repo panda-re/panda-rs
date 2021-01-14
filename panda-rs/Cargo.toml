@@ -11,6 +11,10 @@ homepage = "https://panda-re.mit.edu"
 [lib]
 name = "panda"
 
+[[example]]
+name = "showcase"
+required-features = ["libpanda"]
+
 [dependencies]
 panda-re-sys = { version = "0.1", path = "../panda-sys" }
 panda-re-macros = { version = "0.3", path = "../panda-macros" }
