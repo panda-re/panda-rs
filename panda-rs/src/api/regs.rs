@@ -1,7 +1,8 @@
+use std::string::ToString;
 use crate::prelude::*;
 use crate::{cpu_arch_state, CPUArchPtr};
 
-use strum_macros::{EnumString, EnumIter};
+use strum_macros::{EnumString, EnumIter, ToString};
 use strum::IntoEnumIterator;
 
 // Arch-specific mappings ----------------------------------------------------------------------------------------------
@@ -9,7 +10,7 @@ use strum::IntoEnumIterator;
 // TODO: handle AX/AH/AL, etc via shifts? Tricky b/c enum val used to index QEMU array
 /// x86 named guest registers
 #[cfg(feature = "i386")]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter, ToString)]
 pub enum Reg {
     EAX = 0,
     ECX = 1,
@@ -28,7 +29,7 @@ static RET_REGS: &'static [Reg] = &[Reg::EAX];
 // TODO: handle EAX/AX/AH/AL, etc via shifts? Tricky b/c enum val used to index QEMU array
 /// x64 named guest registers
 #[cfg(feature = "x86_64")]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter, ToString)]
 pub enum Reg {
     RAX = 0,
     RCX = 1,
@@ -54,7 +55,7 @@ static RET_REGS: &'static [Reg] = &[Reg::RAX];
 
 /// ARM named guest registers
 #[cfg(feature = "arm")]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter, ToString)]
 pub enum Reg {
     R0 = 0,
     R1 = 1,
@@ -80,7 +81,7 @@ static RET_REGS: &'static [Reg] = &[Reg::R0, Reg::R1, Reg::R2, Reg::R3];
 
 /// MIPS named guest registers
 #[cfg(any(feature = "mips", feature = "mipsel"))]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter, ToString)]
 pub enum Reg {
     ZERO = 0,
     AT = 1,
@@ -128,7 +129,7 @@ static RET_REGS: &'static [Reg] = &[Reg::V0, Reg::V1];
 // TODO: support floating point set as well? Separate QEMU bank.
 /// PPC named guest registers
 #[cfg(feature = "ppc")]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter, ToString)]
 pub enum Reg {
     R0 = 0,
     R1 = 1,
