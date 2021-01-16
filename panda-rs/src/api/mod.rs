@@ -6,3 +6,9 @@ pub use mem::*;
 
 mod misc;
 pub use misc::*;
+
+mod regs;
+pub use regs::*;
+
+mod utils;
+pub use utils::*;
