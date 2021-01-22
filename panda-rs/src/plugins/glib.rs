@@ -13,6 +13,10 @@ impl<T: Sized> GBox<T> {
             Self(ptr as *mut T)
         }
     }
+
+    pub fn as_ptr(&self) -> *const T {
+        self.0
+    }
 }
 
 impl<T> Deref for GBox<T> {

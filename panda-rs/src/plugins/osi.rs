@@ -22,6 +22,7 @@ plugin_import!{
         fn get_process(cpu: *mut CPUState, h: *const OsiProcHandle) -> GBox<OsiProc>;
         fn get_process_pid(cpu: *mut CPUState, h: *const OsiProcHandle) -> target_pid_t;
         fn get_process_ppid(cpu: *mut CPUState, h: *const OsiProcHandle) -> target_pid_t;
+        fn in_shared_object(cpu: *mut CPUState, h: *const OsiProc) -> bool;
     };
 }
 
