@@ -11,24 +11,24 @@ fn init(_: &mut PluginHandle) {
     // No specialized init needed
 }
 
-// Dump registers every 1000 basic blocks
-#[panda::before_block_exec]
-fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
-    if panda::in_kernel(cpu) {
+// Print every 1000 basic blocks
+#[panda::after_block_exec]
+fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock, exit_code: u8) {
+    if (u32::from(exit_code) > panda_sys::TB_EXIT_IDX1) || (panda::in_kernel(cpu)) {
         return;
     }
 
     let curr_proc = OSI.get_current_process(cpu);
     let curr_proc_name_c_str = unsafe { CStr::from_ptr((*curr_proc).name) };
-    let curr_bb = NUM_BB.fetch_add(1, Ordering::SeqCst);
 
+    let curr_bb = NUM_BB.fetch_add(1, Ordering::SeqCst);
     if  (curr_bb % 1000 == 0) && (curr_bb != 0) {
-        println!("\nRegister state for process {:?} @ 0x{:016x}, {} basic blocks into execution:",
+        println!("{:?} @ 0x{:016x}, {} BBs in - in shared lib? {}",
             curr_proc_name_c_str,
             tb.pc,
             NUM_BB.load(Ordering::SeqCst) - 1,
+            OSI.in_shared_object(cpu, curr_proc.as_ptr()),
         );
-        panda::dump_regs(cpu);
     }
 }
 
