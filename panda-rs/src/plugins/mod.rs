@@ -16,7 +16,16 @@ macro_rules! plugin_import {
             $(
                 #[$meta:meta]
              )*
-            fn $fn_name:ident(
+            fn $fn_name:ident
+                $(
+                    <
+                        $(
+                            $lifetimes:lifetime
+                        ),*
+                        $(,)?
+                    >
+                )?
+            (
                 $(
                     $arg_name:ident : $arg_ty:ty
                  ),*
@@ -56,7 +65,7 @@ macro_rules! plugin_import {
                 $(
                     #[$meta]
                  )*
-                pub fn $fn_name(&self $(, $arg_name : $arg_ty )*) $(-> $fn_ret)? {
+                pub fn $fn_name $(< $($lifetimes),* >)? (&self $(, $arg_name : $arg_ty )*) $(-> $fn_ret)? {
                     unsafe {
                         self.plugin.get::<unsafe extern "C" fn($($arg_ty),*) $(-> $fn_ret)?>(
                             stringify!($fn_name)
