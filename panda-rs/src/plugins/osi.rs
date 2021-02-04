@@ -1,5 +1,5 @@
 use crate::sys::{target_ptr_t, target_pid_t, target_ulong, CPUState};
-use crate::plugins::glib::GBox;
+use crate::plugins::glib::{GBox, GBoxedSlice};
 use crate::plugin_import;
 
 use std::ffi::CStr;
@@ -11,9 +11,9 @@ plugin_import!{
     static OSI: Osi = extern "osi" {
         fn get_process_handles(cpu: *mut CPUState) -> *mut GArray;
         fn get_current_thread(cpu: *mut CPUState) -> GBox<OsiThread>;
-        fn get_modules(cpu: *mut CPUState) -> *mut GArray;
-        fn get_mappings(cpu: *mut CPUState, p: *mut OsiProc) -> *mut GArray;
-        fn get_processes(cpu: *mut CPUState) -> *mut GArray;
+        fn get_modules(cpu: *mut CPUState) -> GBoxedSlice<OsiModule>;
+        fn get_mappings(cpu: *mut CPUState, p: *mut OsiProc) -> GBoxedSlice<OsiModule>;
+        fn get_processes(cpu: *mut CPUState) -> GBoxedSlice<OsiProc>;
         fn get_current_process(cpu: *mut CPUState) -> GBox<OsiProc>;
         fn get_one_module(osimodules: *mut GArray, idx: ::std::os::raw::c_uint) -> *mut OsiModule;
         fn get_one_proc(osiprocs: *mut GArray, idx: ::std::os::raw::c_uint) -> *mut OsiProc;
