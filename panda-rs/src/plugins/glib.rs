@@ -44,22 +44,35 @@ impl<T> Drop for GBox<T> {
 }
 
 #[repr(transparent)]
-pub struct GBoxedSlice<T>(*mut GArray, PhantomData<T>);
+pub struct GBoxedSlice<T>(pub *mut GArray, PhantomData<T>);
+
+impl<T> GBoxedSlice<T> {
+    pub fn is_null(&self) -> bool {
+        self.0.is_null()
+    }
+}
 
 impl<T> Deref for GBoxedSlice<T> {
     type Target = [T];
     
     fn deref(&self) -> &Self::Target {
-        let g_array = unsafe { &*self.0 };
+        if self.0.is_null() {
+            panic!("Invalid GBoxedSlice: null");
+        } else {
+            let g_array = unsafe { &*self.0 };
 
-        unsafe {
-            std::slice::from_raw_parts(g_array.data as _, g_array.len as usize)
+            unsafe {
+                std::slice::from_raw_parts(g_array.data as _, g_array.len as usize)
+            }
         }
     }
 }
 
 impl<T> DerefMut for GBoxedSlice<T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
+        if self.0.is_null() {
+            panic!("Invalid GBoxedSlice: null");
+        }
         let g_array = unsafe { &mut *self.0 };
 
         unsafe {
@@ -70,8 +83,10 @@ impl<T> DerefMut for GBoxedSlice<T> {
 
 impl<T> Drop for GBoxedSlice<T> {
     fn drop(&mut self) {
-        unsafe {
-            g_array_free(self.0, true as _);
+        if !self.0.is_null() {
+            unsafe {
+                g_array_free(self.0, true as _);
+            }
         }
     }
 }
