@@ -7,6 +7,7 @@ pub mod glib;
 pub mod osi;
 pub mod hooks2;
 pub mod syscalls2;
+pub mod proc_start_linux;
 
 #[macro_export]
 macro_rules! plugin_import {
