@@ -1,14 +1,7 @@
-mod llvm;
-pub use llvm::*;
-
-mod mem;
-pub use mem::*;
-
-mod misc;
-pub use misc::*;
-
-mod regs;
-pub use regs::*;
+pub mod llvm;
+pub mod mem;
+pub mod misc;
+pub mod regs;
 
 mod utils;
 pub use utils::*;
