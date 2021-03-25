@@ -35,6 +35,9 @@ pub use library_mode::*;
 mod api;
 pub use api::*;
 
+mod error;
+pub use error::*;
+
 /// Event-based callbacks, for both VM events (e.g. translation of a basic block) and PANDA events (e.g. plugin init)
 mod callbacks;
 pub use callbacks::*;
@@ -47,7 +50,6 @@ pub mod panda_arg;
 pub use panda_arg::PandaArgs;
 
 pub mod enums;
-
 pub mod plugins;
 
 pub mod prelude {
