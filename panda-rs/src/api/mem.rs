@@ -1,6 +1,9 @@
-use crate::prelude::*;
 use crate::enums::MemRWStatus;
+use crate::{sys, Error};
+use crate::prelude::*;
+
 use std::os::raw::c_char;
+use std::ffi::CString;
 
 // Public API ----------------------------------------------------------------------------------------------------------
 
@@ -80,6 +83,26 @@ pub fn virt_to_phys(cpu: &mut CPUState, addr: target_ulong) -> target_ulong {
             addr,
         )
     }
+}
+
+pub const PAGE_SIZE: target_ulong = 1024;
+
+/// Map RAM into the system at a given physical address
+pub fn map_memory(name: &str, size: target_ulong, addr: target_ptr_t) -> Result<(), Error> {
+    let name = CString::new(name)?;
+
+    if size % PAGE_SIZE != 0 {
+        Err(Error::UnalignedPageSize)
+    } else {
+        unsafe {
+            sys::map_memory(name.as_ptr() as _, size, addr);
+        }
+
+        drop(name);
+
+        Ok(())
+    }
+
 }
 
 // Private API ---------------------------------------------------------------------------------------------------------
