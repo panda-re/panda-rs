@@ -15,6 +15,10 @@ name = "panda"
 name = "showcase"
 required-features = ["libpanda"]
 
+[[example]]
+name = "unicorn"
+required-features = ["libpanda"]
+
 [dependencies]
 panda-re-sys = { version = "0.1", path = "../panda-sys" }
 panda-re-macros = { version = "0.3", path = "../panda-macros" }
