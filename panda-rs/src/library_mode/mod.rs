@@ -207,11 +207,10 @@ impl Panda {
                 .as_ref()
                 .map(|generic| qcows::get_supported_image(generic));
 
-        let qcow_path = self.qcow.clone().unwrap_or_else(||{
+        let qcow_path = self.qcow.clone().map(Some).unwrap_or_else(||{
             self.generic_qcow
                 .as_ref()
                 .map(|generic| qcows::get_generic_path(generic).display().to_string())
-                .expect("Either a qcow or a generic image must be specified.")
         });
         
         let arch = self.arch
@@ -235,8 +234,11 @@ impl Panda {
                 + "/pc-bios",
             "-m".into(),
             mem,
-            qcow_path,
         ];
+
+        if let Some(qcow) = qcow_path {
+            args.push(qcow)
+        }
 
         if let Some(generic) = generic_info {
             args.push("-os".into());
@@ -283,7 +285,11 @@ impl Panda {
             panda_init(args_ptrs.len() as i32, transmute(args_ptrs.as_ptr()), empty);
 
             for cb in inventory::iter::<Callback> {
-                sys::panda_register_callback(self as *mut _ as _, cb.cb_type, ::core::mem::transmute(cb.fn_pointer));
+                sys::panda_register_callback(
+                    self as *mut _ as _,
+                    cb.cb_type,
+                    ::core::mem::transmute(cb.fn_pointer)
+                );
             }
             
             for cb in inventory::iter::<PPPCallbackSetup> {
