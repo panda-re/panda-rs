@@ -8,6 +8,9 @@ license = "GPL-2.0"
 documentation = "https://docs.rs/panda-re-sys"
 homepage = "https://panda-re.mit.edu"
 
+[package.metadata.docs.rs]
+features = ["x86_64"]
+
 [lib]
 name = "panda_sys"
 

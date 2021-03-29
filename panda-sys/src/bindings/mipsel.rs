@@ -114,6 +114,7 @@ impl<T> ::std::fmt::Debug for __IncompleteArrayField<T> {
 pub const _STDIO_H: u32 = 1;
 pub const _FEATURES_H: u32 = 1;
 pub const _DEFAULT_SOURCE: u32 = 1;
+pub const __GLIBC_USE_ISOC2X: u32 = 0;
 pub const __USE_ISOC11: u32 = 1;
 pub const __USE_ISOC99: u32 = 1;
 pub const __USE_ISOC95: u32 = 1;
@@ -131,94 +132,51 @@ pub const __USE_MISC: u32 = 1;
 pub const __USE_ATFILE: u32 = 1;
 pub const __USE_FORTIFY_LEVEL: u32 = 0;
 pub const __GLIBC_USE_DEPRECATED_GETS: u32 = 0;
+pub const __GLIBC_USE_DEPRECATED_SCANF: u32 = 0;
 pub const _STDC_PREDEF_H: u32 = 1;
 pub const __STDC_IEC_559__: u32 = 1;
 pub const __STDC_IEC_559_COMPLEX__: u32 = 1;
 pub const __STDC_ISO_10646__: u32 = 201706;
-pub const __STDC_NO_THREADS__: u32 = 1;
 pub const __GNU_LIBRARY__: u32 = 6;
 pub const __GLIBC__: u32 = 2;
-pub const __GLIBC_MINOR__: u32 = 27;
+pub const __GLIBC_MINOR__: u32 = 31;
 pub const _SYS_CDEFS_H: u32 = 1;
 pub const __glibc_c99_flexarr_available: u32 = 1;
 pub const __WORDSIZE: u32 = 64;
 pub const __WORDSIZE_TIME64_COMPAT32: u32 = 1;
 pub const __SYSCALL_WORDSIZE: u32 = 64;
+pub const __LONG_DOUBLE_USES_FLOAT128: u32 = 0;
 pub const __HAVE_GENERIC_SELECTION: u32 = 1;
 pub const __GLIBC_USE_LIB_EXT2: u32 = 0;
 pub const __GLIBC_USE_IEC_60559_BFP_EXT: u32 = 0;
+pub const __GLIBC_USE_IEC_60559_BFP_EXT_C2X: u32 = 0;
 pub const __GLIBC_USE_IEC_60559_FUNCS_EXT: u32 = 0;
+pub const __GLIBC_USE_IEC_60559_FUNCS_EXT_C2X: u32 = 0;
 pub const __GLIBC_USE_IEC_60559_TYPES_EXT: u32 = 0;
+pub const __GNUC_VA_LIST: u32 = 1;
 pub const _BITS_TYPES_H: u32 = 1;
+pub const __TIMESIZE: u32 = 64;
 pub const _BITS_TYPESIZES_H: u32 = 1;
 pub const __OFF_T_MATCHES_OFF64_T: u32 = 1;
 pub const __INO_T_MATCHES_INO64_T: u32 = 1;
 pub const __RLIM_T_MATCHES_RLIM64_T: u32 = 1;
+pub const __STATFS_MATCHES_STATFS64: u32 = 1;
 pub const __FD_SETSIZE: u32 = 1024;
+pub const _BITS_TIME64_H: u32 = 1;
+pub const _____fpos_t_defined: u32 = 1;
+pub const ____mbstate_t_defined: u32 = 1;
+pub const _____fpos64_t_defined: u32 = 1;
 pub const ____FILE_defined: u32 = 1;
 pub const __FILE_defined: u32 = 1;
-pub const _BITS_LIBIO_H: u32 = 1;
-pub const _BITS_G_CONFIG_H: u32 = 1;
-pub const ____mbstate_t_defined: u32 = 1;
-pub const _G_HAVE_MMAP: u32 = 1;
-pub const _G_HAVE_MREMAP: u32 = 1;
-pub const _G_IO_IO_FILE_VERSION: u32 = 131073;
-pub const _G_BUFSIZ: u32 = 8192;
-pub const _IO_BUFSIZ: u32 = 8192;
-pub const __GNUC_VA_LIST: u32 = 1;
-pub const _IO_UNIFIED_JUMPTABLES: u32 = 1;
-pub const EOF: i32 = -1;
-pub const _IOS_INPUT: u32 = 1;
-pub const _IOS_OUTPUT: u32 = 2;
-pub const _IOS_ATEND: u32 = 4;
-pub const _IOS_APPEND: u32 = 8;
-pub const _IOS_TRUNC: u32 = 16;
-pub const _IOS_NOCREATE: u32 = 32;
-pub const _IOS_NOREPLACE: u32 = 64;
-pub const _IOS_BIN: u32 = 128;
-pub const _IO_MAGIC: u32 = 4222418944;
-pub const _OLD_STDIO_MAGIC: u32 = 4206624768;
-pub const _IO_MAGIC_MASK: u32 = 4294901760;
-pub const _IO_USER_BUF: u32 = 1;
-pub const _IO_UNBUFFERED: u32 = 2;
-pub const _IO_NO_READS: u32 = 4;
-pub const _IO_NO_WRITES: u32 = 8;
+pub const __struct_FILE_defined: u32 = 1;
 pub const _IO_EOF_SEEN: u32 = 16;
 pub const _IO_ERR_SEEN: u32 = 32;
-pub const _IO_DELETE_DONT_CLOSE: u32 = 64;
-pub const _IO_LINKED: u32 = 128;
-pub const _IO_IN_BACKUP: u32 = 256;
-pub const _IO_LINE_BUF: u32 = 512;
-pub const _IO_TIED_PUT_GET: u32 = 1024;
-pub const _IO_CURRENTLY_PUTTING: u32 = 2048;
-pub const _IO_IS_APPENDING: u32 = 4096;
-pub const _IO_IS_FILEBUF: u32 = 8192;
-pub const _IO_BAD_SEEN: u32 = 16384;
 pub const _IO_USER_LOCK: u32 = 32768;
-pub const _IO_FLAGS2_MMAP: u32 = 1;
-pub const _IO_FLAGS2_NOTCANCEL: u32 = 2;
-pub const _IO_FLAGS2_USER_WBUF: u32 = 8;
-pub const _IO_SKIPWS: u32 = 1;
-pub const _IO_LEFT: u32 = 2;
-pub const _IO_RIGHT: u32 = 4;
-pub const _IO_INTERNAL: u32 = 8;
-pub const _IO_DEC: u32 = 16;
-pub const _IO_OCT: u32 = 32;
-pub const _IO_HEX: u32 = 64;
-pub const _IO_SHOWBASE: u32 = 128;
-pub const _IO_SHOWPOINT: u32 = 256;
-pub const _IO_UPPERCASE: u32 = 512;
-pub const _IO_SHOWPOS: u32 = 1024;
-pub const _IO_SCIENTIFIC: u32 = 2048;
-pub const _IO_FIXED: u32 = 4096;
-pub const _IO_UNITBUF: u32 = 8192;
-pub const _IO_STDIO: u32 = 16384;
-pub const _IO_DONT_CLOSE: u32 = 32768;
-pub const _IO_BOOLALPHA: u32 = 65536;
 pub const _IOFBF: u32 = 0;
 pub const _IOLBF: u32 = 1;
 pub const _IONBF: u32 = 2;
 pub const BUFSIZ: u32 = 8192;
+pub const EOF: i32 = -1;
 pub const SEEK_SET: u32 = 0;
 pub const SEEK_CUR: u32 = 1;
 pub const SEEK_END: u32 = 2;
@@ -240,22 +198,22 @@ pub const PANDA_LOG_WARNING: u32 = 2;
 pub const PANDA_LOG_INFO: u32 = 3;
 pub const PANDA_LOG_DEBUG: u32 = 4;
 pub const PANDA_LOG_LEVEL: u32 = 2;
-pub const CONFIG_QEMU_CONFDIR: &'static [u8; 48usize] =
-    b"/home/tballo/proj/panda/build/install/etc/panda\0";
-pub const CONFIG_QEMU_DATADIR: &'static [u8; 50usize] =
-    b"/home/tballo/proj/panda/build/install/share/panda\0";
-pub const CONFIG_QEMU_DOCDIR: &'static [u8; 53usize] =
-    b"/home/tballo/proj/panda/build/install/share/doc/qemu\0";
-pub const CONFIG_QEMU_MODDIR: &'static [u8; 48usize] =
-    b"/home/tballo/proj/panda/build/install/lib/panda\0";
-pub const CONFIG_PANDA_PLUGINDIR: &'static [u8; 48usize] =
-    b"/home/tballo/proj/panda/build/install/lib/panda\0";
-pub const CONFIG_QEMU_LOCALSTATEDIR: &'static [u8; 42usize] =
-    b"/home/tballo/proj/panda/build/install/var\0";
-pub const CONFIG_QEMU_HELPERDIR: &'static [u8; 46usize] =
-    b"/home/tballo/proj/panda/build/install/libexec\0";
-pub const CONFIG_QEMU_LOCALEDIR: &'static [u8; 51usize] =
-    b"/home/tballo/proj/panda/build/install/share/locale\0";
+pub const CONFIG_QEMU_CONFDIR: &'static [u8; 49usize] =
+    b"/home/jam/dev/work/panda/build/install/etc/panda\0";
+pub const CONFIG_QEMU_DATADIR: &'static [u8; 51usize] =
+    b"/home/jam/dev/work/panda/build/install/share/panda\0";
+pub const CONFIG_QEMU_DOCDIR: &'static [u8; 54usize] =
+    b"/home/jam/dev/work/panda/build/install/share/doc/qemu\0";
+pub const CONFIG_QEMU_MODDIR: &'static [u8; 49usize] =
+    b"/home/jam/dev/work/panda/build/install/lib/panda\0";
+pub const CONFIG_PANDA_PLUGINDIR: &'static [u8; 49usize] =
+    b"/home/jam/dev/work/panda/build/install/lib/panda\0";
+pub const CONFIG_QEMU_LOCALSTATEDIR: &'static [u8; 43usize] =
+    b"/home/jam/dev/work/panda/build/install/var\0";
+pub const CONFIG_QEMU_HELPERDIR: &'static [u8; 47usize] =
+    b"/home/jam/dev/work/panda/build/install/libexec\0";
+pub const CONFIG_QEMU_LOCALEDIR: &'static [u8; 52usize] =
+    b"/home/jam/dev/work/panda/build/install/share/locale\0";
 pub const HOST_X86_64: u32 = 1;
 pub const CONFIG_POSIX: u32 = 1;
 pub const CONFIG_LINUX: u32 = 1;
@@ -275,7 +233,7 @@ pub const QEMU_VERSION_MAJOR: u32 = 2;
 pub const QEMU_VERSION_MINOR: u32 = 9;
 pub const QEMU_VERSION_MICRO: u32 = 1;
 pub const CONFIG_SDL: u32 = 1;
-pub const CONFIG_SDLABI: f64 = 1.2;
+pub const CONFIG_SDLABI: f64 = 2.0;
 pub const CONFIG_CURSES: u32 = 1;
 pub const CONFIG_UTIMENSAT: u32 = 1;
 pub const CONFIG_PIPE2: u32 = 1;
@@ -334,8 +292,11 @@ pub const CONFIG_SPICE: u32 = 1;
 pub const CONFIG_SMARTCARD: u32 = 1;
 pub const CONFIG_USB_LIBUSB: u32 = 1;
 pub const CONFIG_USB_REDIR: u32 = 1;
+pub const CONFIG_OPENGL: u32 = 1;
+pub const CONFIG_OPENGL_DMABUF: u32 = 1;
 pub const CONFIG_AVX2_OPT: u32 = 1;
 pub const CONFIG_LZO: u32 = 1;
+pub const CONFIG_BZIP2: u32 = 1;
 pub const CONFIG_SECCOMP: u32 = 1;
 pub const CONFIG_QOM_CAST_DEBUG: u32 = 1;
 pub const CONFIG_COROUTINE_POOL: u32 = 1;
@@ -410,7 +371,6 @@ pub const SIG_ATOMIC_MAX: u32 = 2147483647;
 pub const SIZE_MAX: i32 = -1;
 pub const WINT_MIN: u32 = 0;
 pub const WINT_MAX: u32 = 4294967295;
-pub const _SYS_SYSMACROS_H_OUTER: u32 = 1;
 pub const _SYS_SYSMACROS_H: u32 = 1;
 pub const _BITS_SYSMACROS_H: u32 = 1;
 pub const _SYS_TYPES_H: u32 = 1;
@@ -420,9 +380,11 @@ pub const __time_t_defined: u32 = 1;
 pub const __timer_t_defined: u32 = 1;
 pub const __BIT_TYPES_DEFINED__: u32 = 1;
 pub const _ENDIAN_H: u32 = 1;
+pub const _BITS_ENDIAN_H: u32 = 1;
 pub const __LITTLE_ENDIAN: u32 = 1234;
 pub const __BIG_ENDIAN: u32 = 4321;
 pub const __PDP_ENDIAN: u32 = 3412;
+pub const _BITS_ENDIANNESS_H: u32 = 1;
 pub const __BYTE_ORDER: u32 = 1234;
 pub const __FLOAT_WORD_ORDER: u32 = 1234;
 pub const LITTLE_ENDIAN: u32 = 1234;
@@ -449,10 +411,7 @@ pub const __SIZEOF_PTHREAD_COND_T: u32 = 48;
 pub const __SIZEOF_PTHREAD_CONDATTR_T: u32 = 4;
 pub const __SIZEOF_PTHREAD_RWLOCKATTR_T: u32 = 8;
 pub const __SIZEOF_PTHREAD_BARRIERATTR_T: u32 = 4;
-pub const __PTHREAD_MUTEX_LOCK_ELISION: u32 = 1;
-pub const __PTHREAD_MUTEX_NUSERS_AFTER_KIND: u32 = 0;
-pub const __PTHREAD_MUTEX_USE_UNION: u32 = 0;
-pub const __PTHREAD_RWLOCK_INT_FLAGS_SHARED: u32 = 1;
+pub const _THREAD_MUTEX_INTERNAL_H: u32 = 1;
 pub const __PTHREAD_MUTEX_HAVE_PREV: u32 = 1;
 pub const __have_pthread_attr_t: u32 = 1;
 pub const _STDLIB_H: u32 = 1;
@@ -745,7 +704,6 @@ pub const _XOPEN_XPG2: u32 = 1;
 pub const _XOPEN_XPG3: u32 = 1;
 pub const _XOPEN_XPG4: u32 = 1;
 pub const _XOPEN_UNIX: u32 = 1;
-pub const _XOPEN_CRYPT: u32 = 1;
 pub const _XOPEN_ENH_I18N: u32 = 1;
 pub const _XOPEN_LEGACY: u32 = 1;
 pub const _BITS_POSIX_OPT_H: u32 = 1;
@@ -1178,6 +1136,7 @@ pub const __sigevent_t_defined: u32 = 1;
 pub const __SIGEV_MAX_SIZE: u32 = 64;
 pub const _BITS_SIGEVENT_CONSTS_H: u32 = 1;
 pub const NSIG: u32 = 33;
+pub const _BITS_SIGACTION_H: u32 = 1;
 pub const SA_NOCLDSTOP: u32 = 1;
 pub const SA_NOCLDWAIT: u32 = 2;
 pub const SA_SIGINFO: u32 = 4;
@@ -1220,6 +1179,8 @@ pub const MAP_POPULATE: u32 = 32768;
 pub const MAP_NONBLOCK: u32 = 65536;
 pub const MAP_STACK: u32 = 131072;
 pub const MAP_HUGETLB: u32 = 262144;
+pub const MAP_SYNC: u32 = 524288;
+pub const MAP_FIXED_NOREPLACE: u32 = 1048576;
 pub const PROT_READ: u32 = 1;
 pub const PROT_WRITE: u32 = 2;
 pub const PROT_EXEC: u32 = 4;
@@ -1228,6 +1189,7 @@ pub const PROT_GROWSDOWN: u32 = 16777216;
 pub const PROT_GROWSUP: u32 = 33554432;
 pub const MAP_SHARED: u32 = 1;
 pub const MAP_PRIVATE: u32 = 2;
+pub const MAP_SHARED_VALIDATE: u32 = 3;
 pub const MAP_TYPE: u32 = 15;
 pub const MAP_FIXED: u32 = 16;
 pub const MAP_FILE: u32 = 0;
@@ -1255,6 +1217,8 @@ pub const MADV_DONTDUMP: u32 = 16;
 pub const MADV_DODUMP: u32 = 17;
 pub const MADV_WIPEONFORK: u32 = 18;
 pub const MADV_KEEPONFORK: u32 = 19;
+pub const MADV_COLD: u32 = 20;
+pub const MADV_PAGEOUT: u32 = 21;
 pub const MADV_HWPOISON: u32 = 100;
 pub const POSIX_MADV_NORMAL: u32 = 0;
 pub const POSIX_MADV_RANDOM: u32 = 1;
@@ -1313,7 +1277,8 @@ pub const PF_VSOCK: u32 = 40;
 pub const PF_KCM: u32 = 41;
 pub const PF_QIPCRTR: u32 = 42;
 pub const PF_SMC: u32 = 43;
-pub const PF_MAX: u32 = 44;
+pub const PF_XDP: u32 = 44;
+pub const PF_MAX: u32 = 45;
 pub const AF_UNSPEC: u32 = 0;
 pub const AF_LOCAL: u32 = 1;
 pub const AF_UNIX: u32 = 1;
@@ -1361,7 +1326,8 @@ pub const AF_VSOCK: u32 = 40;
 pub const AF_KCM: u32 = 41;
 pub const AF_QIPCRTR: u32 = 42;
 pub const AF_SMC: u32 = 43;
-pub const AF_MAX: u32 = 44;
+pub const AF_XDP: u32 = 44;
+pub const AF_MAX: u32 = 45;
 pub const SOL_RAW: u32 = 255;
 pub const SOL_DECNET: u32 = 261;
 pub const SOL_X25: u32 = 262;
@@ -1385,16 +1351,18 @@ pub const SOL_ALG: u32 = 279;
 pub const SOL_NFC: u32 = 280;
 pub const SOL_KCM: u32 = 281;
 pub const SOL_TLS: u32 = 282;
-pub const SOMAXCONN: u32 = 128;
+pub const SOL_XDP: u32 = 283;
+pub const SOMAXCONN: u32 = 4096;
 pub const _BITS_SOCKADDR_H: u32 = 1;
 pub const _SS_SIZE: u32 = 128;
+pub const __BITS_PER_LONG: u32 = 64;
 pub const FIOSETOWN: u32 = 35073;
 pub const SIOCSPGRP: u32 = 35074;
 pub const FIOGETOWN: u32 = 35075;
 pub const SIOCGPGRP: u32 = 35076;
 pub const SIOCATMARK: u32 = 35077;
-pub const SIOCGSTAMP: u32 = 35078;
-pub const SIOCGSTAMPNS: u32 = 35079;
+pub const SIOCGSTAMP_OLD: u32 = 35078;
+pub const SIOCGSTAMPNS_OLD: u32 = 35079;
 pub const SOL_SOCKET: u32 = 1;
 pub const SO_DEBUG: u32 = 1;
 pub const SO_REUSEADDR: u32 = 2;
@@ -1417,8 +1385,8 @@ pub const SO_PASSCRED: u32 = 16;
 pub const SO_PEERCRED: u32 = 17;
 pub const SO_RCVLOWAT: u32 = 18;
 pub const SO_SNDLOWAT: u32 = 19;
-pub const SO_RCVTIMEO: u32 = 20;
-pub const SO_SNDTIMEO: u32 = 21;
+pub const SO_RCVTIMEO_OLD: u32 = 20;
+pub const SO_SNDTIMEO_OLD: u32 = 21;
 pub const SO_SECURITY_AUTHENTICATION: u32 = 22;
 pub const SO_SECURITY_ENCRYPTION_TRANSPORT: u32 = 23;
 pub const SO_SECURITY_ENCRYPTION_NETWORK: u32 = 24;
@@ -1427,16 +1395,10 @@ pub const SO_ATTACH_FILTER: u32 = 26;
 pub const SO_DETACH_FILTER: u32 = 27;
 pub const SO_GET_FILTER: u32 = 26;
 pub const SO_PEERNAME: u32 = 28;
-pub const SO_TIMESTAMP: u32 = 29;
-pub const SCM_TIMESTAMP: u32 = 29;
 pub const SO_ACCEPTCONN: u32 = 30;
 pub const SO_PEERSEC: u32 = 31;
 pub const SO_PASSSEC: u32 = 34;
-pub const SO_TIMESTAMPNS: u32 = 35;
-pub const SCM_TIMESTAMPNS: u32 = 35;
 pub const SO_MARK: u32 = 36;
-pub const SO_TIMESTAMPING: u32 = 37;
-pub const SCM_TIMESTAMPING: u32 = 37;
 pub const SO_PROTOCOL: u32 = 38;
 pub const SO_DOMAIN: u32 = 39;
 pub const SO_RXQ_OVFL: u32 = 40;
@@ -1462,6 +1424,26 @@ pub const SO_COOKIE: u32 = 57;
 pub const SCM_TIMESTAMPING_PKTINFO: u32 = 58;
 pub const SO_PEERGROUPS: u32 = 59;
 pub const SO_ZEROCOPY: u32 = 60;
+pub const SO_TXTIME: u32 = 61;
+pub const SCM_TXTIME: u32 = 61;
+pub const SO_BINDTOIFINDEX: u32 = 62;
+pub const SO_TIMESTAMP_OLD: u32 = 29;
+pub const SO_TIMESTAMPNS_OLD: u32 = 35;
+pub const SO_TIMESTAMPING_OLD: u32 = 37;
+pub const SO_TIMESTAMP_NEW: u32 = 63;
+pub const SO_TIMESTAMPNS_NEW: u32 = 64;
+pub const SO_TIMESTAMPING_NEW: u32 = 65;
+pub const SO_RCVTIMEO_NEW: u32 = 66;
+pub const SO_SNDTIMEO_NEW: u32 = 67;
+pub const SO_DETACH_REUSEPORT_BPF: u32 = 68;
+pub const SO_TIMESTAMP: u32 = 29;
+pub const SO_TIMESTAMPNS: u32 = 35;
+pub const SO_TIMESTAMPING: u32 = 37;
+pub const SO_RCVTIMEO: u32 = 20;
+pub const SO_SNDTIMEO: u32 = 21;
+pub const SCM_TIMESTAMP: u32 = 29;
+pub const SCM_TIMESTAMPNS: u32 = 35;
+pub const SCM_TIMESTAMPING: u32 = 37;
 pub const __osockaddr_defined: u32 = 1;
 pub const _NETINET_IN_H: u32 = 1;
 pub const __USE_KERNEL_IPV6_DEFS: u32 = 0;
@@ -1546,6 +1528,8 @@ pub const IPV6_RECVERR: u32 = 25;
 pub const IPV6_V6ONLY: u32 = 26;
 pub const IPV6_JOIN_ANYCAST: u32 = 27;
 pub const IPV6_LEAVE_ANYCAST: u32 = 28;
+pub const IPV6_MULTICAST_ALL: u32 = 29;
+pub const IPV6_ROUTER_ALERT_ISOLATE: u32 = 30;
 pub const IPV6_IPSEC_POLICY: u32 = 34;
 pub const IPV6_XFRM_POLICY: u32 = 35;
 pub const IPV6_HDRINCL: u32 = 36;
@@ -1573,6 +1557,7 @@ pub const IPV6_RECVORIGDSTADDR: u32 = 74;
 pub const IPV6_TRANSPARENT: u32 = 75;
 pub const IPV6_UNICAST_IF: u32 = 76;
 pub const IPV6_RECVFRAGSIZE: u32 = 77;
+pub const IPV6_FREEBIND: u32 = 78;
 pub const IPV6_ADD_MEMBERSHIP: u32 = 20;
 pub const IPV6_DROP_MEMBERSHIP: u32 = 21;
 pub const IPV6_RXHOPOPTS: u32 = 54;
@@ -1635,6 +1620,15 @@ pub const TCP_REPAIR_WINDOW: u32 = 29;
 pub const TCP_FASTOPEN_CONNECT: u32 = 30;
 pub const TCP_ULP: u32 = 31;
 pub const TCP_MD5SIG_EXT: u32 = 32;
+pub const TCP_FASTOPEN_KEY: u32 = 33;
+pub const TCP_FASTOPEN_NO_COOKIE: u32 = 34;
+pub const TCP_ZEROCOPY_RECEIVE: u32 = 35;
+pub const TCP_INQ: u32 = 36;
+pub const TCP_CM_INQ: u32 = 36;
+pub const TCP_TX_DELAY: u32 = 37;
+pub const TCP_REPAIR_ON: u32 = 1;
+pub const TCP_REPAIR_OFF: u32 = 0;
+pub const TCP_REPAIR_OFF_NO_WP: i32 = -1;
 pub const TH_FIN: u32 = 1;
 pub const TH_SYN: u32 = 2;
 pub const TH_RST: u32 = 4;
@@ -1716,8 +1710,6 @@ pub const NI_NOFQDN: u32 = 4;
 pub const NI_NAMEREQD: u32 = 8;
 pub const NI_DGRAM: u32 = 16;
 pub const _SYS_UN_H: u32 = 1;
-pub const G_GNUC_FUNCTION: &'static [u8; 1usize] = b"\0";
-pub const G_GNUC_PRETTY_FUNCTION: &'static [u8; 1usize] = b"\0";
 pub const G_ANALYZER_ANALYZING: u32 = 0;
 pub const FALSE: u32 = 0;
 pub const G_GINT16_MODIFIER: &'static [u8; 2usize] = b"h\0";
@@ -1745,13 +1737,13 @@ pub const G_GINTPTR_MODIFIER: &'static [u8; 2usize] = b"l\0";
 pub const G_GINTPTR_FORMAT: &'static [u8; 3usize] = b"li\0";
 pub const G_GUINTPTR_FORMAT: &'static [u8; 3usize] = b"lu\0";
 pub const GLIB_MAJOR_VERSION: u32 = 2;
-pub const GLIB_MINOR_VERSION: u32 = 56;
-pub const GLIB_MICRO_VERSION: u32 = 4;
+pub const GLIB_MINOR_VERSION: u32 = 64;
+pub const GLIB_MICRO_VERSION: u32 = 6;
 pub const G_VA_COPY_AS_ARRAY: u32 = 1;
 pub const G_HAVE_ISO_VARARGS: u32 = 1;
-pub const G_HAVE_GNUC_VARARGS: u32 = 1;
 pub const G_HAVE_GROWING_STACK: u32 = 0;
 pub const G_HAVE_GNUC_VISIBILITY: u32 = 1;
+pub const G_HAVE_GNUC_VARARGS: u32 = 1;
 pub const G_MODULE_SUFFIX: &'static [u8; 3usize] = b"so\0";
 pub const G_PID_FORMAT: &'static [u8; 2usize] = b"i\0";
 pub const GLIB_SYSDEF_AF_UNIX: u32 = 1;
@@ -1794,7 +1786,6 @@ pub const G_PRIORITY_LOW: u32 = 300;
 pub const G_SOURCE_REMOVE: u32 = 0;
 pub const G_UNICHAR_MAX_DECOMPOSITION_LENGTH: u32 = 18;
 pub const G_KEY_FILE_DESKTOP_GROUP: &'static [u8; 14usize] = b"Desktop Entry\0";
-pub const G_KEY_FILE_DESKTOP_ACTION_GROUP_PREFIX: &'static [u8; 15usize] = b"Desktop Action\0";
 pub const G_KEY_FILE_DESKTOP_KEY_TYPE: &'static [u8; 5usize] = b"Type\0";
 pub const G_KEY_FILE_DESKTOP_KEY_VERSION: &'static [u8; 8usize] = b"Version\0";
 pub const G_KEY_FILE_DESKTOP_KEY_NAME: &'static [u8; 5usize] = b"Name\0";
@@ -1816,10 +1807,6 @@ pub const G_KEY_FILE_DESKTOP_KEY_STARTUP_WM_CLASS: &'static [u8; 15usize] = b"St
 pub const G_KEY_FILE_DESKTOP_KEY_URL: &'static [u8; 4usize] = b"URL\0";
 pub const G_KEY_FILE_DESKTOP_KEY_DBUS_ACTIVATABLE: &'static [u8; 16usize] = b"DBusActivatable\0";
 pub const G_KEY_FILE_DESKTOP_KEY_ACTIONS: &'static [u8; 8usize] = b"Actions\0";
-pub const G_KEY_FILE_DESKTOP_KEY_GETTEXT_DOMAIN: &'static [u8; 23usize] =
-    b"X-GNOME-Gettext-Domain\0";
-pub const G_KEY_FILE_DESKTOP_KEY_FULLNAME: &'static [u8; 17usize] = b"X-GNOME-FullName\0";
-pub const G_KEY_FILE_DESKTOP_KEY_KEYWORDS: &'static [u8; 9usize] = b"Keywords\0";
 pub const G_KEY_FILE_DESKTOP_TYPE_APPLICATION: &'static [u8; 12usize] = b"Application\0";
 pub const G_KEY_FILE_DESKTOP_TYPE_LINK: &'static [u8; 5usize] = b"Link\0";
 pub const G_KEY_FILE_DESKTOP_TYPE_DIRECTORY: &'static [u8; 10usize] = b"Directory\0";
@@ -1840,6 +1827,7 @@ pub const G_CSET_LATINS: [u8; 33usize] = [
 ];
 pub const G_STR_DELIMITERS: &'static [u8; 8usize] = b"_-|> <.\0";
 pub const G_ASCII_DTOSTR_BUF_SIZE: u32 = 39;
+pub const G_TEST_OPTION_ISOLATE_DIRS: &'static [u8; 13usize] = b"isolate_dirs\0";
 pub const G_USEC_PER_SEC: u32 = 1000000;
 pub const G_URI_RESERVED_CHARS_GENERIC_DELIMITERS: &'static [u8; 8usize] = b":/?#[]@\0";
 pub const G_URI_RESERVED_CHARS_SUBCOMPONENT_DELIMITERS: &'static [u8; 12usize] = b"!$&'()*+,;=\0";
@@ -1857,6 +1845,7 @@ pub const _BITS_SCHED_H: u32 = 1;
 pub const SCHED_OTHER: u32 = 0;
 pub const SCHED_FIFO: u32 = 1;
 pub const SCHED_RR: u32 = 2;
+pub const _BITS_TYPES_STRUCT_SCHED_PARAM: u32 = 1;
 pub const _BITS_CPU_SET_H: u32 = 1;
 pub const __CPU_SETSIZE: u32 = 1024;
 pub const PTHREAD_ONCE_INIT: u32 = 0;
@@ -2695,10 +2684,12 @@ pub const Z_NULL: u32 = 0;
 pub const PROTOBUF_C__SERVICE_DESCRIPTOR_MAGIC: u32 = 336960451;
 pub const PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC: u32 = 682290937;
 pub const PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC: u32 = 289609135;
-pub const PROTOBUF_C_VERSION: &'static [u8; 6usize] = b"1.2.1\0";
-pub const PROTOBUF_C_VERSION_NUMBER: u32 = 1002001;
+pub const PROTOBUF_C_VERSION: &'static [u8; 6usize] = b"1.3.3\0";
+pub const PROTOBUF_C_VERSION_NUMBER: u32 = 1003003;
 pub const PROTOBUF_C_MIN_COMPILER_VERSION: u32 = 1000000;
 pub type size_t = ::std::os::raw::c_ulong;
+pub type va_list = __builtin_va_list;
+pub type __gnuc_va_list = __builtin_va_list;
 pub type __u_char = ::std::os::raw::c_uchar;
 pub type __u_short = ::std::os::raw::c_ushort;
 pub type __u_int = ::std::os::raw::c_uint;
@@ -2711,6 +2702,14 @@ pub type __int32_t = ::std::os::raw::c_int;
 pub type __uint32_t = ::std::os::raw::c_uint;
 pub type __int64_t = ::std::os::raw::c_long;
 pub type __uint64_t = ::std::os::raw::c_ulong;
+pub type __int_least8_t = __int8_t;
+pub type __uint_least8_t = __uint8_t;
+pub type __int_least16_t = __int16_t;
+pub type __uint_least16_t = __uint16_t;
+pub type __int_least32_t = __int32_t;
+pub type __uint_least32_t = __uint32_t;
+pub type __int_least64_t = __int64_t;
+pub type __uint_least64_t = __uint64_t;
 pub type __quad_t = ::std::os::raw::c_long;
 pub type __u_quad_t = ::std::os::raw::c_ulong;
 pub type __intmax_t = ::std::os::raw::c_long;
@@ -2757,8 +2756,6 @@ pub type __caddr_t = *mut ::std::os::raw::c_char;
 pub type __intptr_t = ::std::os::raw::c_long;
 pub type __socklen_t = ::std::os::raw::c_uint;
 pub type __sig_atomic_t = ::std::os::raw::c_int;
-pub type __FILE = _IO_FILE;
-pub type FILE = _IO_FILE;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct __mbstate_t {
@@ -2778,32 +2775,32 @@ pub struct _G_fpos_t {
     pub __pos: __off_t,
     pub __state: __mbstate_t,
 }
+pub type __fpos_t = _G_fpos_t;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct _G_fpos64_t {
     pub __pos: __off64_t,
     pub __state: __mbstate_t,
 }
-pub type va_list = __builtin_va_list;
-pub type __gnuc_va_list = __builtin_va_list;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct _IO_jump_t {
-    _unused: [u8; 0],
-}
-pub type _IO_lock_t = ::std::os::raw::c_void;
+pub type __fpos64_t = _G_fpos64_t;
+pub type __FILE = _IO_FILE;
+pub type FILE = _IO_FILE;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _IO_marker {
-    pub _next: *mut _IO_marker,
-    pub _sbuf: *mut _IO_FILE,
-    pub _pos: ::std::os::raw::c_int,
+    _unused: [u8; 0],
 }
-pub const __codecvt_result___codecvt_ok: __codecvt_result = 0;
-pub const __codecvt_result___codecvt_partial: __codecvt_result = 1;
-pub const __codecvt_result___codecvt_error: __codecvt_result = 2;
-pub const __codecvt_result___codecvt_noconv: __codecvt_result = 3;
-pub type __codecvt_result = ::std::os::raw::c_uint;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct _IO_codecvt {
+    _unused: [u8; 0],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct _IO_wide_data {
+    _unused: [u8; 0],
+}
+pub type _IO_lock_t = ::std::os::raw::c_void;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _IO_FILE {
@@ -2829,140 +2826,25 @@ pub struct _IO_FILE {
     pub _shortbuf: [::std::os::raw::c_char; 1usize],
     pub _lock: *mut _IO_lock_t,
     pub _offset: __off64_t,
-    pub __pad1: *mut ::std::os::raw::c_void,
-    pub __pad2: *mut ::std::os::raw::c_void,
-    pub __pad3: *mut ::std::os::raw::c_void,
-    pub __pad4: *mut ::std::os::raw::c_void,
+    pub _codecvt: *mut _IO_codecvt,
+    pub _wide_data: *mut _IO_wide_data,
+    pub _freeres_list: *mut _IO_FILE,
+    pub _freeres_buf: *mut ::std::os::raw::c_void,
     pub __pad5: size_t,
     pub _mode: ::std::os::raw::c_int,
     pub _unused2: [::std::os::raw::c_char; 20usize],
 }
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct _IO_FILE_plus {
-    _unused: [u8; 0],
-}
-extern "C" {
-    pub static mut _IO_2_1_stdin_: _IO_FILE_plus;
-}
-extern "C" {
-    pub static mut _IO_2_1_stdout_: _IO_FILE_plus;
-}
-extern "C" {
-    pub static mut _IO_2_1_stderr_: _IO_FILE_plus;
-}
-pub type __io_read_fn = ::std::option::Option<
-    unsafe extern "C" fn(
-        __cookie: *mut ::std::os::raw::c_void,
-        __buf: *mut ::std::os::raw::c_char,
-        __nbytes: size_t,
-    ) -> __ssize_t,
->;
-pub type __io_write_fn = ::std::option::Option<
-    unsafe extern "C" fn(
-        __cookie: *mut ::std::os::raw::c_void,
-        __buf: *const ::std::os::raw::c_char,
-        __n: size_t,
-    ) -> __ssize_t,
->;
-pub type __io_seek_fn = ::std::option::Option<
-    unsafe extern "C" fn(
-        __cookie: *mut ::std::os::raw::c_void,
-        __pos: *mut __off64_t,
-        __w: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int,
->;
-pub type __io_close_fn = ::std::option::Option<
-    unsafe extern "C" fn(__cookie: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_int,
->;
-extern "C" {
-    pub fn __underflow(arg1: *mut _IO_FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn __uflow(arg1: *mut _IO_FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn __overflow(arg1: *mut _IO_FILE, arg2: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _IO_getc(__fp: *mut _IO_FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _IO_putc(__c: ::std::os::raw::c_int, __fp: *mut _IO_FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _IO_feof(__fp: *mut _IO_FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _IO_ferror(__fp: *mut _IO_FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _IO_peekc_locked(__fp: *mut _IO_FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _IO_flockfile(arg1: *mut _IO_FILE);
-}
-extern "C" {
-    pub fn _IO_funlockfile(arg1: *mut _IO_FILE);
-}
-extern "C" {
-    pub fn _IO_ftrylockfile(arg1: *mut _IO_FILE) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _IO_vfscanf(
-        arg1: *mut _IO_FILE,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: *mut __va_list_tag,
-        arg4: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _IO_vfprintf(
-        arg1: *mut _IO_FILE,
-        arg2: *const ::std::os::raw::c_char,
-        arg3: *mut __va_list_tag,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn _IO_padn(arg1: *mut _IO_FILE, arg2: ::std::os::raw::c_int, arg3: __ssize_t)
-        -> __ssize_t;
-}
-extern "C" {
-    pub fn _IO_sgetn(
-        arg1: *mut _IO_FILE,
-        arg2: *mut ::std::os::raw::c_void,
-        arg3: size_t,
-    ) -> size_t;
-}
-extern "C" {
-    pub fn _IO_seekoff(
-        arg1: *mut _IO_FILE,
-        arg2: __off64_t,
-        arg3: ::std::os::raw::c_int,
-        arg4: ::std::os::raw::c_int,
-    ) -> __off64_t;
-}
-extern "C" {
-    pub fn _IO_seekpos(
-        arg1: *mut _IO_FILE,
-        arg2: __off64_t,
-        arg3: ::std::os::raw::c_int,
-    ) -> __off64_t;
-}
-extern "C" {
-    pub fn _IO_free_backup_area(arg1: *mut _IO_FILE);
-}
 pub type off_t = __off_t;
 pub type ssize_t = __ssize_t;
-pub type fpos_t = _G_fpos_t;
+pub type fpos_t = __fpos_t;
 extern "C" {
-    pub static mut stdin: *mut _IO_FILE;
+    pub static mut stdin: *mut FILE;
 }
 extern "C" {
-    pub static mut stdout: *mut _IO_FILE;
+    pub static mut stdout: *mut FILE;
 }
 extern "C" {
-    pub static mut stderr: *mut _IO_FILE;
+    pub static mut stderr: *mut FILE;
 }
 extern "C" {
     pub fn remove(__filename: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
@@ -3396,6 +3278,12 @@ extern "C" {
 extern "C" {
     pub fn funlockfile(__stream: *mut FILE);
 }
+extern "C" {
+    pub fn __uflow(arg1: *mut FILE) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn __overflow(arg1: *mut FILE, arg2: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+}
 pub type wchar_t = ::std::os::raw::c_int;
 #[repr(C)]
 #[repr(align(16))]
@@ -3405,14 +3293,14 @@ pub struct max_align_t {
     pub __bindgen_padding_0: u64,
     pub __clang_max_align_nonce2: u128,
 }
-pub type int_least8_t = ::std::os::raw::c_schar;
-pub type int_least16_t = ::std::os::raw::c_short;
-pub type int_least32_t = ::std::os::raw::c_int;
-pub type int_least64_t = ::std::os::raw::c_long;
-pub type uint_least8_t = ::std::os::raw::c_uchar;
-pub type uint_least16_t = ::std::os::raw::c_ushort;
-pub type uint_least32_t = ::std::os::raw::c_uint;
-pub type uint_least64_t = ::std::os::raw::c_ulong;
+pub type int_least8_t = __int_least8_t;
+pub type int_least16_t = __int_least16_t;
+pub type int_least32_t = __int_least32_t;
+pub type int_least64_t = __int_least64_t;
+pub type uint_least8_t = __uint_least8_t;
+pub type uint_least16_t = __uint_least16_t;
+pub type uint_least32_t = __uint_least32_t;
+pub type uint_least64_t = __uint_least64_t;
 pub type int_fast8_t = ::std::os::raw::c_schar;
 pub type int_fast16_t = ::std::os::raw::c_long;
 pub type int_fast32_t = ::std::os::raw::c_long;
@@ -3461,10 +3349,10 @@ pub type timer_t = __timer_t;
 pub type ulong = ::std::os::raw::c_ulong;
 pub type ushort = ::std::os::raw::c_ushort;
 pub type uint = ::std::os::raw::c_uint;
-pub type u_int8_t = ::std::os::raw::c_uchar;
-pub type u_int16_t = ::std::os::raw::c_ushort;
-pub type u_int32_t = ::std::os::raw::c_uint;
-pub type u_int64_t = ::std::os::raw::c_ulong;
+pub type u_int8_t = __uint8_t;
+pub type u_int16_t = __uint16_t;
+pub type u_int32_t = __uint32_t;
+pub type u_int64_t = __uint64_t;
 pub type register_t = ::std::os::raw::c_long;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -3517,6 +3405,31 @@ pub type fsblkcnt_t = __fsblkcnt_t;
 pub type fsfilcnt_t = __fsfilcnt_t;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
+pub struct __pthread_internal_list {
+    pub __prev: *mut __pthread_internal_list,
+    pub __next: *mut __pthread_internal_list,
+}
+pub type __pthread_list_t = __pthread_internal_list;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct __pthread_internal_slist {
+    pub __next: *mut __pthread_internal_slist,
+}
+pub type __pthread_slist_t = __pthread_internal_slist;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct __pthread_mutex_s {
+    pub __lock: ::std::os::raw::c_int,
+    pub __count: ::std::os::raw::c_uint,
+    pub __owner: ::std::os::raw::c_int,
+    pub __nusers: ::std::os::raw::c_uint,
+    pub __kind: ::std::os::raw::c_int,
+    pub __spins: ::std::os::raw::c_short,
+    pub __elision: ::std::os::raw::c_short,
+    pub __list: __pthread_list_t,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct __pthread_rwlock_arch_t {
     pub __readers: ::std::os::raw::c_uint,
     pub __writers: ::std::os::raw::c_uint,
@@ -3530,25 +3443,6 @@ pub struct __pthread_rwlock_arch_t {
     pub __pad1: [::std::os::raw::c_uchar; 7usize],
     pub __pad2: ::std::os::raw::c_ulong,
     pub __flags: ::std::os::raw::c_uint,
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct __pthread_internal_list {
-    pub __prev: *mut __pthread_internal_list,
-    pub __next: *mut __pthread_internal_list,
-}
-pub type __pthread_list_t = __pthread_internal_list;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct __pthread_mutex_s {
-    pub __lock: ::std::os::raw::c_int,
-    pub __count: ::std::os::raw::c_uint,
-    pub __owner: ::std::os::raw::c_int,
-    pub __nusers: ::std::os::raw::c_uint,
-    pub __kind: ::std::os::raw::c_int,
-    pub __spins: ::std::os::raw::c_short,
-    pub __elision: ::std::os::raw::c_short,
-    pub __list: __pthread_list_t,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -3926,6 +3820,13 @@ extern "C" {
     pub fn realloc(
         __ptr: *mut ::std::os::raw::c_void,
         __size: ::std::os::raw::c_ulong,
+    ) -> *mut ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn reallocarray(
+        __ptr: *mut ::std::os::raw::c_void,
+        __nmemb: size_t,
+        __size: size_t,
     ) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
@@ -5335,6 +5236,12 @@ extern "C" {
     pub fn fdatasync(__fildes: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn crypt(
+        __key: *const ::std::os::raw::c_char,
+        __salt: *const ::std::os::raw::c_char,
+    ) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
     pub fn getentropy(
         __buffer: *mut ::std::os::raw::c_void,
         __length: size_t,
@@ -5440,9 +5347,6 @@ extern "C" {
 }
 extern "C" {
     pub static mut timezone: ::std::os::raw::c_long;
-}
-extern "C" {
-    pub fn stime(__when: *const time_t) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn timegm(__tp: *mut tm) -> time_t;
@@ -5843,9 +5747,11 @@ pub struct timezone {
     pub tz_minuteswest: ::std::os::raw::c_int,
     pub tz_dsttime: ::std::os::raw::c_int,
 }
-pub type __timezone_ptr_t = *mut timezone;
 extern "C" {
-    pub fn gettimeofday(__tv: *mut timeval, __tz: __timezone_ptr_t) -> ::std::os::raw::c_int;
+    pub fn gettimeofday(
+        __tv: *mut timeval,
+        __tz: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn settimeofday(__tv: *const timeval, __tz: *const timezone) -> ::std::os::raw::c_int;
@@ -6037,6 +5943,7 @@ pub struct siginfo_t__bindgen_ty_1__bindgen_ty_7 {
     pub _arch: ::std::os::raw::c_uint,
 }
 pub const SI_ASYNCNL: ::std::os::raw::c_int = -60;
+pub const SI_DETHREAD: ::std::os::raw::c_int = -7;
 pub const SI_TKILL: ::std::os::raw::c_int = -6;
 pub const SI_SIGIO: ::std::os::raw::c_int = -5;
 pub const SI_ASYNCIO: ::std::os::raw::c_int = -4;
@@ -6054,6 +5961,7 @@ pub const ILL_PRVOPC: ::std::os::raw::c_uint = 5;
 pub const ILL_PRVREG: ::std::os::raw::c_uint = 6;
 pub const ILL_COPROC: ::std::os::raw::c_uint = 7;
 pub const ILL_BADSTK: ::std::os::raw::c_uint = 8;
+pub const ILL_BADIADDR: ::std::os::raw::c_uint = 9;
 pub type _bindgen_ty_6 = ::std::os::raw::c_uint;
 pub const FPE_INTDIV: ::std::os::raw::c_uint = 1;
 pub const FPE_INTOVF: ::std::os::raw::c_uint = 2;
@@ -6063,11 +5971,16 @@ pub const FPE_FLTUND: ::std::os::raw::c_uint = 5;
 pub const FPE_FLTRES: ::std::os::raw::c_uint = 6;
 pub const FPE_FLTINV: ::std::os::raw::c_uint = 7;
 pub const FPE_FLTSUB: ::std::os::raw::c_uint = 8;
+pub const FPE_FLTUNK: ::std::os::raw::c_uint = 14;
+pub const FPE_CONDTRAP: ::std::os::raw::c_uint = 15;
 pub type _bindgen_ty_7 = ::std::os::raw::c_uint;
 pub const SEGV_MAPERR: ::std::os::raw::c_uint = 1;
 pub const SEGV_ACCERR: ::std::os::raw::c_uint = 2;
 pub const SEGV_BNDERR: ::std::os::raw::c_uint = 3;
 pub const SEGV_PKUERR: ::std::os::raw::c_uint = 4;
+pub const SEGV_ACCADI: ::std::os::raw::c_uint = 5;
+pub const SEGV_ADIDERR: ::std::os::raw::c_uint = 6;
+pub const SEGV_ADIPERR: ::std::os::raw::c_uint = 7;
 pub type _bindgen_ty_8 = ::std::os::raw::c_uint;
 pub const BUS_ADRALN: ::std::os::raw::c_uint = 1;
 pub const BUS_ADRERR: ::std::os::raw::c_uint = 2;
@@ -6403,6 +6316,7 @@ pub struct ucontext_t {
     pub uc_mcontext: mcontext_t,
     pub uc_sigmask: sigset_t,
     pub __fpregs_mem: _libc_fpstate,
+    pub __ssp: [::std::os::raw::c_ulonglong; 4usize],
 }
 extern "C" {
     pub fn siginterrupt(
@@ -6628,6 +6542,48 @@ extern "C" {
 }
 pub const SCM_RIGHTS: ::std::os::raw::c_uint = 1;
 pub type _bindgen_ty_15 = ::std::os::raw::c_uint;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct __kernel_fd_set {
+    pub fds_bits: [::std::os::raw::c_ulong; 16usize],
+}
+pub type __kernel_sighandler_t =
+    ::std::option::Option<unsafe extern "C" fn(arg1: ::std::os::raw::c_int)>;
+pub type __kernel_key_t = ::std::os::raw::c_int;
+pub type __kernel_mqd_t = ::std::os::raw::c_int;
+pub type __kernel_old_uid_t = ::std::os::raw::c_ushort;
+pub type __kernel_old_gid_t = ::std::os::raw::c_ushort;
+pub type __kernel_old_dev_t = ::std::os::raw::c_ulong;
+pub type __kernel_long_t = ::std::os::raw::c_long;
+pub type __kernel_ulong_t = ::std::os::raw::c_ulong;
+pub type __kernel_ino_t = __kernel_ulong_t;
+pub type __kernel_mode_t = ::std::os::raw::c_uint;
+pub type __kernel_pid_t = ::std::os::raw::c_int;
+pub type __kernel_ipc_pid_t = ::std::os::raw::c_int;
+pub type __kernel_uid_t = ::std::os::raw::c_uint;
+pub type __kernel_gid_t = ::std::os::raw::c_uint;
+pub type __kernel_suseconds_t = __kernel_long_t;
+pub type __kernel_daddr_t = ::std::os::raw::c_int;
+pub type __kernel_uid32_t = ::std::os::raw::c_uint;
+pub type __kernel_gid32_t = ::std::os::raw::c_uint;
+pub type __kernel_size_t = __kernel_ulong_t;
+pub type __kernel_ssize_t = __kernel_long_t;
+pub type __kernel_ptrdiff_t = __kernel_long_t;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct __kernel_fsid_t {
+    pub val: [::std::os::raw::c_int; 2usize],
+}
+pub type __kernel_off_t = __kernel_long_t;
+pub type __kernel_loff_t = ::std::os::raw::c_longlong;
+pub type __kernel_time_t = __kernel_long_t;
+pub type __kernel_time64_t = ::std::os::raw::c_longlong;
+pub type __kernel_clock_t = __kernel_long_t;
+pub type __kernel_timer_t = ::std::os::raw::c_int;
+pub type __kernel_clockid_t = ::std::os::raw::c_int;
+pub type __kernel_caddr_t = *mut ::std::os::raw::c_char;
+pub type __kernel_uid16_t = ::std::os::raw::c_ushort;
+pub type __kernel_gid16_t = ::std::os::raw::c_ushort;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct linger {
@@ -7342,6 +7298,13 @@ pub struct tcp_repair_window {
     pub rcv_wnd: u32,
     pub rcv_wup: u32,
 }
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct tcp_zerocopy_receive {
+    pub address: u64,
+    pub length: u32,
+    pub recv_skip_hint: u32,
+}
 extern "C" {
     pub fn inet_addr(__cp: *const ::std::os::raw::c_char) -> in_addr_t;
 }
@@ -7962,6 +7925,18 @@ pub type GHashFunc = ::std::option::Option<unsafe extern "C" fn(key: gconstpoint
 pub type GHFunc = ::std::option::Option<
     unsafe extern "C" fn(key: gpointer, value: gpointer, user_data: gpointer),
 >;
+#[doc = " GCopyFunc:"]
+#[doc = " @src: (not nullable): A pointer to the data which should be copied"]
+#[doc = " @data: Additional data"]
+#[doc = ""]
+#[doc = " A function of this signature is used to copy the node data"]
+#[doc = " when doing a deep-copy of a tree."]
+#[doc = ""]
+#[doc = " Returns: (not nullable): A pointer to the copy"]
+#[doc = ""]
+#[doc = " Since: 2.4"]
+pub type GCopyFunc =
+    ::std::option::Option<unsafe extern "C" fn(src: gconstpointer, data: gpointer) -> gpointer>;
 #[doc = " GFreeFunc:"]
 #[doc = " @data: a data pointer"]
 #[doc = ""]
@@ -8146,6 +8121,8 @@ pub struct _GTimeVal {
     pub tv_sec: glong,
     pub tv_usec: glong,
 }
+pub type grefcount = gint;
+pub type gatomicrefcount = gint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _GBytes {
@@ -8181,12 +8158,18 @@ extern "C" {
     ) -> *mut GArray;
 }
 extern "C" {
+    pub fn g_array_steal(array: *mut GArray, len: *mut gsize) -> gpointer;
+}
+extern "C" {
     pub fn g_array_sized_new(
         zero_terminated: gboolean,
         clear_: gboolean,
         element_size: guint,
         reserved_size: guint,
     ) -> *mut GArray;
+}
+extern "C" {
+    pub fn g_array_copy(array: *mut GArray) -> *mut GArray;
 }
 extern "C" {
     pub fn g_array_free(array: *mut GArray, free_segment: gboolean) -> *mut gchar;
@@ -8238,6 +8221,14 @@ extern "C" {
     );
 }
 extern "C" {
+    pub fn g_array_binary_search(
+        array: *mut GArray,
+        target: gconstpointer,
+        compare_func: GCompareFunc,
+        out_match_index: *mut guint,
+    ) -> gboolean;
+}
+extern "C" {
     pub fn g_array_set_clear_func(array: *mut GArray, clear_func: GDestroyNotify);
 }
 extern "C" {
@@ -8245,6 +8236,16 @@ extern "C" {
 }
 extern "C" {
     pub fn g_ptr_array_new_with_free_func(element_free_func: GDestroyNotify) -> *mut GPtrArray;
+}
+extern "C" {
+    pub fn g_ptr_array_steal(array: *mut GPtrArray, len: *mut gsize) -> *mut gpointer;
+}
+extern "C" {
+    pub fn g_ptr_array_copy(
+        array: *mut GPtrArray,
+        func: GCopyFunc,
+        user_data: gpointer,
+    ) -> *mut GPtrArray;
 }
 extern "C" {
     pub fn g_ptr_array_sized_new(reserved_size: guint) -> *mut GPtrArray;
@@ -8277,6 +8278,12 @@ extern "C" {
     pub fn g_ptr_array_remove_index_fast(array: *mut GPtrArray, index_: guint) -> gpointer;
 }
 extern "C" {
+    pub fn g_ptr_array_steal_index(array: *mut GPtrArray, index_: guint) -> gpointer;
+}
+extern "C" {
+    pub fn g_ptr_array_steal_index_fast(array: *mut GPtrArray, index_: guint) -> gpointer;
+}
+extern "C" {
     pub fn g_ptr_array_remove(array: *mut GPtrArray, data: gpointer) -> gboolean;
 }
 extern "C" {
@@ -8291,6 +8298,17 @@ extern "C" {
 }
 extern "C" {
     pub fn g_ptr_array_add(array: *mut GPtrArray, data: gpointer);
+}
+extern "C" {
+    pub fn g_ptr_array_extend(
+        array_to_extend: *mut GPtrArray,
+        array: *mut GPtrArray,
+        func: GCopyFunc,
+        user_data: gpointer,
+    );
+}
+extern "C" {
+    pub fn g_ptr_array_extend_and_steal(array_to_extend: *mut GPtrArray, array: *mut GPtrArray);
 }
 extern "C" {
     pub fn g_ptr_array_insert(array: *mut GPtrArray, index_: gint, data: gpointer);
@@ -8328,6 +8346,9 @@ extern "C" {
 }
 extern "C" {
     pub fn g_byte_array_new_take(data: *mut guint8, len: gsize) -> *mut GByteArray;
+}
+extern "C" {
+    pub fn g_byte_array_steal(array: *mut GByteArray, len: *mut gsize) -> *mut guint8;
 }
 extern "C" {
     pub fn g_byte_array_sized_new(reserved_size: guint) -> *mut GByteArray;
@@ -8561,6 +8582,9 @@ extern "C" {
 }
 extern "C" {
     pub fn g_set_application_name(application_name: *const gchar);
+}
+extern "C" {
+    pub fn g_get_os_info(key_name: *const gchar) -> *mut gchar;
 }
 extern "C" {
     pub fn g_reload_user_special_dirs_cache();
@@ -8867,6 +8891,21 @@ extern "C" {
 #[doc = " Opaque type. See g_mutex_locker_new() for details."]
 #[doc = " Since: 2.44"]
 pub type GMutexLocker = ::std::os::raw::c_void;
+#[doc = " GRecMutexLocker:"]
+#[doc = ""]
+#[doc = " Opaque type. See g_rec_mutex_locker_new() for details."]
+#[doc = " Since: 2.60"]
+pub type GRecMutexLocker = ::std::os::raw::c_void;
+#[doc = " GRWLockWriterLocker:"]
+#[doc = ""]
+#[doc = " Opaque type. See g_rw_lock_writer_locker_new() for details."]
+#[doc = " Since: 2.62"]
+pub type GRWLockWriterLocker = ::std::os::raw::c_void;
+#[doc = " GRWLockReaderLocker:"]
+#[doc = ""]
+#[doc = " Opaque type. See g_rw_lock_reader_locker_new() for details."]
+#[doc = " Since: 2.62"]
+pub type GRWLockReaderLocker = ::std::os::raw::c_void;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _GAsyncQueue {
@@ -9404,7 +9443,13 @@ extern "C" {
     pub fn g_get_codeset() -> *mut gchar;
 }
 extern "C" {
+    pub fn g_get_console_charset(charset: *mut *const ::std::os::raw::c_char) -> gboolean;
+}
+extern "C" {
     pub fn g_get_language_names() -> *const *const gchar;
+}
+extern "C" {
+    pub fn g_get_language_names_with_category(category_name: *const gchar) -> *const *const gchar;
 }
 extern "C" {
     pub fn g_get_locale_variants(locale: *const gchar) -> *mut *mut gchar;
@@ -9630,7 +9675,7 @@ extern "C" {
     pub fn g_filename_display_name(filename: *const gchar) -> *mut gchar;
 }
 extern "C" {
-    pub fn g_get_filename_charsets(charsets: *mut *mut *const gchar) -> gboolean;
+    pub fn g_get_filename_charsets(filename_charsets: *mut *mut *const gchar) -> gboolean;
 }
 extern "C" {
     pub fn g_filename_display_basename(filename: *const gchar) -> *mut gchar;
@@ -10060,6 +10105,9 @@ extern "C" {
     pub fn g_time_zone_new_local() -> *mut GTimeZone;
 }
 extern "C" {
+    pub fn g_time_zone_new_offset(seconds: gint32) -> *mut GTimeZone;
+}
+extern "C" {
     pub fn g_time_zone_ref(tz: *mut GTimeZone) -> *mut GTimeZone;
 }
 extern "C" {
@@ -10083,6 +10131,9 @@ extern "C" {
 }
 extern "C" {
     pub fn g_time_zone_is_dst(tz: *mut GTimeZone, interval: gint) -> gboolean;
+}
+extern "C" {
+    pub fn g_time_zone_get_identifier(tz: *mut GTimeZone) -> *const gchar;
 }
 #[doc = " GTimeSpan:"]
 #[doc = ""]
@@ -10267,6 +10318,9 @@ extern "C" {
     pub fn g_date_time_get_utc_offset(datetime: *mut GDateTime) -> GTimeSpan;
 }
 extern "C" {
+    pub fn g_date_time_get_timezone(datetime: *mut GDateTime) -> *mut GTimeZone;
+}
+extern "C" {
     pub fn g_date_time_get_timezone_abbreviation(datetime: *mut GDateTime) -> *const gchar;
 }
 extern "C" {
@@ -10283,6 +10337,9 @@ extern "C" {
 }
 extern "C" {
     pub fn g_date_time_format(datetime: *mut GDateTime, format: *const gchar) -> *mut gchar;
+}
+extern "C" {
+    pub fn g_date_time_format_iso8601(datetime: *mut GDateTime) -> *mut gchar;
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -10532,6 +10589,10 @@ extern "C" {
     pub fn g_path_get_dirname(file_name: *const gchar) -> *mut gchar;
 }
 extern "C" {
+    pub fn g_canonicalize_filename(filename: *const gchar, relative_to: *const gchar)
+        -> *mut gchar;
+}
+extern "C" {
     pub fn g_strip_context(msgid: *const gchar, msgval: *const gchar) -> *const gchar;
 }
 extern "C" {
@@ -10664,18 +10725,6 @@ pub type GNodeTraverseFunc =
     ::std::option::Option<unsafe extern "C" fn(node: *mut GNode, data: gpointer) -> gboolean>;
 pub type GNodeForeachFunc =
     ::std::option::Option<unsafe extern "C" fn(node: *mut GNode, data: gpointer)>;
-#[doc = " GCopyFunc:"]
-#[doc = " @src: (not nullable): A pointer to the data which should be copied"]
-#[doc = " @data: Additional data"]
-#[doc = ""]
-#[doc = " A function of this signature is used to copy the node data"]
-#[doc = " when doing a deep-copy of a tree."]
-#[doc = ""]
-#[doc = " Returns: (not nullable): A pointer to the copy"]
-#[doc = ""]
-#[doc = " Since: 2.4"]
-pub type GCopyFunc =
-    ::std::option::Option<unsafe extern "C" fn(src: gconstpointer, data: gpointer) -> gpointer>;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _GNode {
@@ -10838,6 +10887,13 @@ extern "C" {
     ) -> *mut GList;
 }
 extern "C" {
+    pub fn g_list_insert_before_link(
+        list: *mut GList,
+        sibling: *mut GList,
+        link_: *mut GList,
+    ) -> *mut GList;
+}
+extern "C" {
     pub fn g_list_concat(list1: *mut GList, list2: *mut GList) -> *mut GList;
 }
 extern "C" {
@@ -10908,6 +10964,9 @@ extern "C" {
 extern "C" {
     pub fn g_list_nth_data(list: *mut GList, n: guint) -> gpointer;
 }
+extern "C" {
+    pub fn g_clear_list(list_ptr: *mut *mut GList, destroy: GDestroyNotify);
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _GHashTable {
@@ -10967,6 +11026,14 @@ extern "C" {
 }
 extern "C" {
     pub fn g_hash_table_steal(hash_table: *mut GHashTable, key: gconstpointer) -> gboolean;
+}
+extern "C" {
+    pub fn g_hash_table_steal_extended(
+        hash_table: *mut GHashTable,
+        lookup_key: gconstpointer,
+        stolen_key: *mut gpointer,
+        stolen_value: *mut gpointer,
+    ) -> gboolean;
 }
 extern "C" {
     pub fn g_hash_table_steal_all(hash_table: *mut GHashTable);
@@ -11503,6 +11570,9 @@ extern "C" {
 extern "C" {
     pub fn g_slist_nth_data(list: *mut GSList, n: guint) -> gpointer;
 }
+extern "C" {
+    pub fn g_clear_slist(slist_ptr: *mut *mut GSList, destroy: GDestroyNotify);
+}
 pub const GIOCondition_G_IO_IN: GIOCondition = 1;
 pub const GIOCondition_G_IO_OUT: GIOCondition = 4;
 pub const GIOCondition_G_IO_PRI: GIOCondition = 2;
@@ -11610,6 +11680,10 @@ pub type GSourceFuncs = _GSourceFuncs;
 #[doc = " Specifies the type of function passed to g_timeout_add(),"]
 #[doc = " g_timeout_add_full(), g_idle_add(), and g_idle_add_full()."]
 #[doc = ""]
+#[doc = " When calling g_source_set_callback(), you may need to cast a function of a"]
+#[doc = " different type to this type. Use G_SOURCE_FUNC() to avoid warnings about"]
+#[doc = " incompatible function types."]
+#[doc = ""]
 #[doc = " Returns: %FALSE if the source should be removed. #G_SOURCE_CONTINUE and"]
 #[doc = " #G_SOURCE_REMOVE are more memorable names for the return value."]
 pub type GSourceFunc = ::std::option::Option<unsafe extern "C" fn(user_data: gpointer) -> gboolean>;
@@ -11624,6 +11698,14 @@ pub type GSourceFunc = ::std::option::Option<unsafe extern "C" fn(user_data: gpo
 #[doc = " for g_spawn_check_exit_status()."]
 pub type GChildWatchFunc =
     ::std::option::Option<unsafe extern "C" fn(pid: GPid, status: gint, user_data: gpointer)>;
+#[doc = " GSourceDisposeFunc:"]
+#[doc = " @source: #GSource that is currently being disposed"]
+#[doc = ""]
+#[doc = " Dispose function for @source. See g_source_set_dispose_function() for"]
+#[doc = " details."]
+#[doc = ""]
+#[doc = " Since: 2.64"]
+pub type GSourceDisposeFunc = ::std::option::Option<unsafe extern "C" fn(source: *mut GSource)>;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _GSource {
@@ -11787,6 +11869,12 @@ extern "C" {
 extern "C" {
     pub fn g_main_context_ref_thread_default() -> *mut GMainContext;
 }
+#[doc = " GMainContextPusher:"]
+#[doc = ""]
+#[doc = " Opaque type. See g_main_context_pusher_new() for details."]
+#[doc = ""]
+#[doc = " Since: 2.64"]
+pub type GMainContextPusher = ::std::os::raw::c_void;
 extern "C" {
     pub fn g_main_loop_new(context: *mut GMainContext, is_running: gboolean) -> *mut GMainLoop;
 }
@@ -11810,6 +11898,9 @@ extern "C" {
 }
 extern "C" {
     pub fn g_source_new(source_funcs: *mut GSourceFuncs, struct_size: guint) -> *mut GSource;
+}
+extern "C" {
+    pub fn g_source_set_dispose_function(source: *mut GSource, dispose: GSourceDisposeFunc);
 }
 extern "C" {
     pub fn g_source_ref(source: *mut GSource) -> *mut GSource;
@@ -12375,6 +12466,17 @@ pub const GUnicodeScript_G_UNICODE_SCRIPT_MASARAM_GONDI: GUnicodeScript = 138;
 pub const GUnicodeScript_G_UNICODE_SCRIPT_NUSHU: GUnicodeScript = 139;
 pub const GUnicodeScript_G_UNICODE_SCRIPT_SOYOMBO: GUnicodeScript = 140;
 pub const GUnicodeScript_G_UNICODE_SCRIPT_ZANABAZAR_SQUARE: GUnicodeScript = 141;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_DOGRA: GUnicodeScript = 142;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_GUNJALA_GONDI: GUnicodeScript = 143;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_HANIFI_ROHINGYA: GUnicodeScript = 144;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_MAKASAR: GUnicodeScript = 145;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_MEDEFAIDRIN: GUnicodeScript = 146;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_OLD_SOGDIAN: GUnicodeScript = 147;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_SOGDIAN: GUnicodeScript = 148;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_ELYMAIC: GUnicodeScript = 149;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_NANDINAGARI: GUnicodeScript = 150;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_NYIAKENG_PUACHUE_HMONG: GUnicodeScript = 151;
+pub const GUnicodeScript_G_UNICODE_SCRIPT_WANCHO: GUnicodeScript = 152;
 #[doc = " GUnicodeScript:"]
 #[doc = " @G_UNICODE_SCRIPT_INVALID_CODE:"]
 #[doc = "                               a value never returned from g_unichar_get_script()"]
@@ -12531,6 +12633,17 @@ pub const GUnicodeScript_G_UNICODE_SCRIPT_ZANABAZAR_SQUARE: GUnicodeScript = 141
 #[doc = " @G_UNICODE_SCRIPT_NUSHU:                Nushu. Since: 2.54"]
 #[doc = " @G_UNICODE_SCRIPT_SOYOMBO:              Soyombo. Since: 2.54"]
 #[doc = " @G_UNICODE_SCRIPT_ZANABAZAR_SQUARE:     Zanabazar Square. Since: 2.54"]
+#[doc = " @G_UNICODE_SCRIPT_DOGRA:                Dogra. Since: 2.58"]
+#[doc = " @G_UNICODE_SCRIPT_GUNJALA_GONDI:        Gunjala Gondi. Since: 2.58"]
+#[doc = " @G_UNICODE_SCRIPT_HANIFI_ROHINGYA:      Hanifi Rohingya. Since: 2.58"]
+#[doc = " @G_UNICODE_SCRIPT_MAKASAR:              Makasar. Since: 2.58"]
+#[doc = " @G_UNICODE_SCRIPT_MEDEFAIDRIN:          Medefaidrin. Since: 2.58"]
+#[doc = " @G_UNICODE_SCRIPT_OLD_SOGDIAN:          Old Sogdian. Since: 2.58"]
+#[doc = " @G_UNICODE_SCRIPT_SOGDIAN:              Sogdian. Since: 2.58"]
+#[doc = " @G_UNICODE_SCRIPT_ELYMAIC:              Elym. Since: 2.62"]
+#[doc = " @G_UNICODE_SCRIPT_NANDINAGARI:          Nand. Since: 2.62"]
+#[doc = " @G_UNICODE_SCRIPT_NYIAKENG_PUACHUE_HMONG: Rohg. Since: 2.62"]
+#[doc = " @G_UNICODE_SCRIPT_WANCHO:               Wcho. Since: 2.62"]
 #[doc = ""]
 #[doc = " The #GUnicodeScript enumeration identifies different writing"]
 #[doc = " systems. The values correspond to the names as defined in the"]
@@ -12761,6 +12874,13 @@ extern "C" {
 extern "C" {
     pub fn g_utf8_validate(str_: *const gchar, max_len: gssize, end: *mut *const gchar)
         -> gboolean;
+}
+extern "C" {
+    pub fn g_utf8_validate_len(
+        str_: *const gchar,
+        max_len: gsize,
+        end: *mut *const gchar,
+    ) -> gboolean;
 }
 extern "C" {
     pub fn g_utf8_strup(str_: *const gchar, len: gssize) -> *mut gchar;
@@ -14202,7 +14322,7 @@ extern "C" {
     pub fn g_variant_new_boolean(value: gboolean) -> *mut GVariant;
 }
 extern "C" {
-    pub fn g_variant_new_byte(value: guchar) -> *mut GVariant;
+    pub fn g_variant_new_byte(value: guint8) -> *mut GVariant;
 }
 extern "C" {
     pub fn g_variant_new_int16(value: gint16) -> *mut GVariant;
@@ -14279,7 +14399,7 @@ extern "C" {
     pub fn g_variant_get_boolean(value: *mut GVariant) -> gboolean;
 }
 extern "C" {
-    pub fn g_variant_get_byte(value: *mut GVariant) -> guchar;
+    pub fn g_variant_get_byte(value: *mut GVariant) -> guint8;
 }
 extern "C" {
     pub fn g_variant_get_int16(value: *mut GVariant) -> gint16;
@@ -14533,6 +14653,7 @@ pub const GVariantParseError_G_VARIANT_PARSE_ERROR_UNKNOWN_KEYWORD: GVariantPars
 pub const GVariantParseError_G_VARIANT_PARSE_ERROR_UNTERMINATED_STRING_CONSTANT:
     GVariantParseError = 16;
 pub const GVariantParseError_G_VARIANT_PARSE_ERROR_VALUE_EXPECTED: GVariantParseError = 17;
+pub const GVariantParseError_G_VARIANT_PARSE_ERROR_RECURSION: GVariantParseError = 18;
 pub type GVariantParseError = ::std::os::raw::c_uint;
 extern "C" {
     pub fn g_variant_parser_get_error_quark() -> GQuark;
@@ -15040,11 +15161,12 @@ pub const GOptionArg_G_OPTION_ARG_DOUBLE: GOptionArg = 7;
 pub const GOptionArg_G_OPTION_ARG_INT64: GOptionArg = 8;
 #[doc = " GOptionArg:"]
 #[doc = " @G_OPTION_ARG_NONE: No extra argument. This is useful for simple flags."]
-#[doc = " @G_OPTION_ARG_STRING: The option takes a string argument."]
+#[doc = " @G_OPTION_ARG_STRING: The option takes a UTF-8 string argument."]
 #[doc = " @G_OPTION_ARG_INT: The option takes an integer argument."]
 #[doc = " @G_OPTION_ARG_CALLBACK: The option provides a callback (of type"]
 #[doc = "     #GOptionArgFunc) to parse the extra argument."]
-#[doc = " @G_OPTION_ARG_FILENAME: The option takes a filename as argument."]
+#[doc = " @G_OPTION_ARG_FILENAME: The option takes a filename as argument, which will"]
+#[doc = "be in the GLib filename encoding rather than UTF-8."]
 #[doc = " @G_OPTION_ARG_STRING_ARRAY: The option takes a string argument, multiple"]
 #[doc = "     uses of the option are collected into an array of strings."]
 #[doc = " @G_OPTION_ARG_FILENAME_ARRAY: The option takes a filename as argument,"]
@@ -15397,6 +15519,9 @@ extern "C" {
     pub fn g_queue_is_empty(queue: *mut GQueue) -> gboolean;
 }
 extern "C" {
+    pub fn g_queue_clear_full(queue: *mut GQueue, free_func: GDestroyNotify);
+}
+extern "C" {
     pub fn g_queue_get_length(queue: *mut GQueue) -> guint;
 }
 extern "C" {
@@ -15461,7 +15586,13 @@ extern "C" {
     pub fn g_queue_insert_before(queue: *mut GQueue, sibling: *mut GList, data: gpointer);
 }
 extern "C" {
+    pub fn g_queue_insert_before_link(queue: *mut GQueue, sibling: *mut GList, link_: *mut GList);
+}
+extern "C" {
     pub fn g_queue_insert_after(queue: *mut GQueue, sibling: *mut GList, data: gpointer);
+}
+extern "C" {
+    pub fn g_queue_insert_after_link(queue: *mut GQueue, sibling: *mut GList, link_: *mut GList);
 }
 extern "C" {
     pub fn g_queue_insert_sorted(
@@ -15561,6 +15692,107 @@ extern "C" {
 extern "C" {
     pub fn g_random_double_range(begin: gdouble, end: gdouble) -> gdouble;
 }
+extern "C" {
+    pub fn g_rc_box_alloc(block_size: gsize) -> gpointer;
+}
+extern "C" {
+    pub fn g_rc_box_alloc0(block_size: gsize) -> gpointer;
+}
+extern "C" {
+    pub fn g_rc_box_dup(block_size: gsize, mem_block: gconstpointer) -> gpointer;
+}
+extern "C" {
+    pub fn g_rc_box_acquire(mem_block: gpointer) -> gpointer;
+}
+extern "C" {
+    pub fn g_rc_box_release(mem_block: gpointer);
+}
+extern "C" {
+    pub fn g_rc_box_release_full(mem_block: gpointer, clear_func: GDestroyNotify);
+}
+extern "C" {
+    pub fn g_rc_box_get_size(mem_block: gpointer) -> gsize;
+}
+extern "C" {
+    pub fn g_atomic_rc_box_alloc(block_size: gsize) -> gpointer;
+}
+extern "C" {
+    pub fn g_atomic_rc_box_alloc0(block_size: gsize) -> gpointer;
+}
+extern "C" {
+    pub fn g_atomic_rc_box_dup(block_size: gsize, mem_block: gconstpointer) -> gpointer;
+}
+extern "C" {
+    pub fn g_atomic_rc_box_acquire(mem_block: gpointer) -> gpointer;
+}
+extern "C" {
+    pub fn g_atomic_rc_box_release(mem_block: gpointer);
+}
+extern "C" {
+    pub fn g_atomic_rc_box_release_full(mem_block: gpointer, clear_func: GDestroyNotify);
+}
+extern "C" {
+    pub fn g_atomic_rc_box_get_size(mem_block: gpointer) -> gsize;
+}
+extern "C" {
+    pub fn g_ref_count_init(rc: *mut grefcount);
+}
+extern "C" {
+    pub fn g_ref_count_inc(rc: *mut grefcount);
+}
+extern "C" {
+    pub fn g_ref_count_dec(rc: *mut grefcount) -> gboolean;
+}
+extern "C" {
+    pub fn g_ref_count_compare(rc: *mut grefcount, val: gint) -> gboolean;
+}
+extern "C" {
+    pub fn g_atomic_ref_count_init(arc: *mut gatomicrefcount);
+}
+extern "C" {
+    pub fn g_atomic_ref_count_inc(arc: *mut gatomicrefcount);
+}
+extern "C" {
+    pub fn g_atomic_ref_count_dec(arc: *mut gatomicrefcount) -> gboolean;
+}
+extern "C" {
+    pub fn g_atomic_ref_count_compare(arc: *mut gatomicrefcount, val: gint) -> gboolean;
+}
+extern "C" {
+    pub fn g_ref_string_new(str_: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn g_ref_string_new_len(
+        str_: *const ::std::os::raw::c_char,
+        len: gssize,
+    ) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn g_ref_string_new_intern(
+        str_: *const ::std::os::raw::c_char,
+    ) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn g_ref_string_acquire(str_: *mut ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn g_ref_string_release(str_: *mut ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn g_ref_string_length(str_: *mut ::std::os::raw::c_char) -> gsize;
+}
+#[doc = " GRefString:"]
+#[doc = ""]
+#[doc = " A typedef for a reference-counted string. A pointer to a #GRefString can be"]
+#[doc = " treated like a standard `char*` array by all code, but can additionally have"]
+#[doc = " `g_ref_string_*()` methods called on it. `g_ref_string_*()` methods cannot be"]
+#[doc = " called on `char*` arrays not allocated using g_ref_string_new()."]
+#[doc = ""]
+#[doc = " If using #GRefString with autocleanups, g_autoptr() must be used rather than"]
+#[doc = " g_autofree(), so that the reference counting metadata is also freed."]
+#[doc = ""]
+#[doc = " Since: 2.58"]
+pub type GRefString = ::std::os::raw::c_char;
 pub const GRegexError_G_REGEX_ERROR_COMPILE: GRegexError = 0;
 pub const GRegexError_G_REGEX_ERROR_OPTIMIZE: GRegexError = 1;
 pub const GRegexError_G_REGEX_ERROR_REPLACE: GRegexError = 2;
@@ -16978,7 +17210,7 @@ pub const GSpawnError_G_SPAWN_ERROR_FAILED: GSpawnError = 19;
 #[doc = " @G_SPAWN_ERROR_ACCES: execv() returned `EACCES`"]
 #[doc = " @G_SPAWN_ERROR_PERM: execv() returned `EPERM`"]
 #[doc = " @G_SPAWN_ERROR_TOO_BIG: execv() returned `E2BIG`"]
-#[doc = " @G_SPAWN_ERROR_2BIG: deprecated alias for %G_SPAWN_ERROR_TOO_BIG"]
+#[doc = " @G_SPAWN_ERROR_2BIG: deprecated alias for %G_SPAWN_ERROR_TOO_BIG (deprecated since GLib 2.32)"]
 #[doc = " @G_SPAWN_ERROR_NOEXEC: execv() returned `ENOEXEC`"]
 #[doc = " @G_SPAWN_ERROR_NAMETOOLONG: execv() returned `ENAMETOOLONG`"]
 #[doc = " @G_SPAWN_ERROR_NOENT: execv() returned `ENOENT`"]
@@ -17098,6 +17330,21 @@ extern "C" {
         standard_input: *mut gint,
         standard_output: *mut gint,
         standard_error: *mut gint,
+        error: *mut *mut GError,
+    ) -> gboolean;
+}
+extern "C" {
+    pub fn g_spawn_async_with_fds(
+        working_directory: *const gchar,
+        argv: *mut *mut gchar,
+        envp: *mut *mut gchar,
+        flags: GSpawnFlags,
+        child_setup: GSpawnChildSetupFunc,
+        user_data: gpointer,
+        child_pid: *mut GPid,
+        stdin_fd: gint,
+        stdout_fd: gint,
+        stderr_fd: gint,
         error: *mut *mut GError,
     ) -> gboolean;
 }
@@ -17351,6 +17598,9 @@ extern "C" {
 extern "C" {
     pub fn g_strv_contains(strv: *const *const gchar, str_: *const gchar) -> gboolean;
 }
+extern "C" {
+    pub fn g_strv_equal(strv1: *const *const gchar, strv2: *const *const gchar) -> gboolean;
+}
 pub const GNumberParserError_G_NUMBER_PARSER_ERROR_INVALID: GNumberParserError = 0;
 pub const GNumberParserError_G_NUMBER_PARSER_ERROR_OUT_OF_BOUNDS: GNumberParserError = 1;
 #[doc = " GNumberParserError:"]
@@ -17505,6 +17755,9 @@ extern "C" {
     pub fn g_test_bug(bug_uri_snippet: *const ::std::os::raw::c_char);
 }
 extern "C" {
+    pub fn g_test_summary(summary: *const ::std::os::raw::c_char);
+}
+extern "C" {
     pub fn g_test_timer_start();
 }
 extern "C" {
@@ -17522,6 +17775,25 @@ extern "C" {
 pub const GTestTrapFlags_G_TEST_TRAP_SILENCE_STDOUT: GTestTrapFlags = 128;
 pub const GTestTrapFlags_G_TEST_TRAP_SILENCE_STDERR: GTestTrapFlags = 256;
 pub const GTestTrapFlags_G_TEST_TRAP_INHERIT_STDIN: GTestTrapFlags = 512;
+#[doc = " GTestTrapFlags:"]
+#[doc = " @G_TEST_TRAP_SILENCE_STDOUT: Redirect stdout of the test child to"]
+#[doc = "     `/dev/null` so it cannot be observed on the console during test"]
+#[doc = "     runs. The actual output is still captured though to allow later"]
+#[doc = "     tests with g_test_trap_assert_stdout()."]
+#[doc = " @G_TEST_TRAP_SILENCE_STDERR: Redirect stderr of the test child to"]
+#[doc = "     `/dev/null` so it cannot be observed on the console during test"]
+#[doc = "     runs. The actual output is still captured though to allow later"]
+#[doc = "     tests with g_test_trap_assert_stderr()."]
+#[doc = " @G_TEST_TRAP_INHERIT_STDIN: If this flag is given, stdin of the"]
+#[doc = "     child process is shared with stdin of its parent process."]
+#[doc = "     It is redirected to `/dev/null` otherwise."]
+#[doc = ""]
+#[doc = " Test traps are guards around forked tests."]
+#[doc = " These flags determine what traps to set."]
+#[doc = ""]
+#[doc = " Deprecated: 2.38: #GTestTrapFlags is used only with g_test_trap_fork(),"]
+#[doc = " which is deprecated. g_test_trap_subprocess() uses"]
+#[doc = " #GTestSubprocessFlags."]
 pub type GTestTrapFlags = ::std::os::raw::c_uint;
 extern "C" {
     pub fn g_test_trap_fork(usec_timeout: guint64, test_trap_flags: GTestTrapFlags) -> gboolean;
@@ -17877,6 +18149,9 @@ extern "C" {
 }
 extern "C" {
     pub fn g_timer_elapsed(timer: *mut GTimer, microseconds: *mut gulong) -> gdouble;
+}
+extern "C" {
+    pub fn g_timer_is_active(timer: *mut GTimer) -> gboolean;
 }
 extern "C" {
     pub fn g_usleep(microseconds: gulong);
@@ -19122,132 +19397,199 @@ extern "C" {
 pub type GAsyncQueue_autoptr = *mut GAsyncQueue;
 pub type GAsyncQueue_listautoptr = *mut GList;
 pub type GAsyncQueue_slistautoptr = *mut GSList;
+pub type GAsyncQueue_queueautoptr = *mut GQueue;
 pub type GBookmarkFile_autoptr = *mut GBookmarkFile;
 pub type GBookmarkFile_listautoptr = *mut GList;
 pub type GBookmarkFile_slistautoptr = *mut GSList;
+pub type GBookmarkFile_queueautoptr = *mut GQueue;
 pub type GBytes_autoptr = *mut GBytes;
 pub type GBytes_listautoptr = *mut GList;
 pub type GBytes_slistautoptr = *mut GSList;
+pub type GBytes_queueautoptr = *mut GQueue;
 pub type GChecksum_autoptr = *mut GChecksum;
 pub type GChecksum_listautoptr = *mut GList;
 pub type GChecksum_slistautoptr = *mut GSList;
+pub type GChecksum_queueautoptr = *mut GQueue;
 pub type GDateTime_autoptr = *mut GDateTime;
 pub type GDateTime_listautoptr = *mut GList;
 pub type GDateTime_slistautoptr = *mut GSList;
+pub type GDateTime_queueautoptr = *mut GQueue;
+pub type GDate_autoptr = *mut GDate;
+pub type GDate_listautoptr = *mut GList;
+pub type GDate_slistautoptr = *mut GSList;
+pub type GDate_queueautoptr = *mut GQueue;
 pub type GDir_autoptr = *mut GDir;
 pub type GDir_listautoptr = *mut GList;
 pub type GDir_slistautoptr = *mut GSList;
+pub type GDir_queueautoptr = *mut GQueue;
 pub type GError_autoptr = *mut GError;
 pub type GError_listautoptr = *mut GList;
 pub type GError_slistautoptr = *mut GSList;
+pub type GError_queueautoptr = *mut GQueue;
 pub type GHashTable_autoptr = *mut GHashTable;
 pub type GHashTable_listautoptr = *mut GList;
 pub type GHashTable_slistautoptr = *mut GSList;
+pub type GHashTable_queueautoptr = *mut GQueue;
 pub type GHmac_autoptr = *mut GHmac;
 pub type GHmac_listautoptr = *mut GList;
 pub type GHmac_slistautoptr = *mut GSList;
+pub type GHmac_queueautoptr = *mut GQueue;
 pub type GIOChannel_autoptr = *mut GIOChannel;
 pub type GIOChannel_listautoptr = *mut GList;
 pub type GIOChannel_slistautoptr = *mut GSList;
+pub type GIOChannel_queueautoptr = *mut GQueue;
 pub type GKeyFile_autoptr = *mut GKeyFile;
 pub type GKeyFile_listautoptr = *mut GList;
 pub type GKeyFile_slistautoptr = *mut GSList;
+pub type GKeyFile_queueautoptr = *mut GQueue;
 pub type GList_autoptr = *mut GList;
 pub type GList_listautoptr = *mut GList;
 pub type GList_slistautoptr = *mut GSList;
+pub type GList_queueautoptr = *mut GQueue;
 pub type GArray_autoptr = *mut GArray;
 pub type GArray_listautoptr = *mut GList;
 pub type GArray_slistautoptr = *mut GSList;
+pub type GArray_queueautoptr = *mut GQueue;
 pub type GPtrArray_autoptr = *mut GPtrArray;
 pub type GPtrArray_listautoptr = *mut GList;
 pub type GPtrArray_slistautoptr = *mut GSList;
+pub type GPtrArray_queueautoptr = *mut GQueue;
 pub type GByteArray_autoptr = *mut GByteArray;
 pub type GByteArray_listautoptr = *mut GList;
 pub type GByteArray_slistautoptr = *mut GSList;
+pub type GByteArray_queueautoptr = *mut GQueue;
 pub type GMainContext_autoptr = *mut GMainContext;
 pub type GMainContext_listautoptr = *mut GList;
 pub type GMainContext_slistautoptr = *mut GSList;
+pub type GMainContext_queueautoptr = *mut GQueue;
+pub type GMainContextPusher_autoptr = *mut GMainContextPusher;
+pub type GMainContextPusher_listautoptr = *mut GList;
+pub type GMainContextPusher_slistautoptr = *mut GSList;
+pub type GMainContextPusher_queueautoptr = *mut GQueue;
 pub type GMainLoop_autoptr = *mut GMainLoop;
 pub type GMainLoop_listautoptr = *mut GList;
 pub type GMainLoop_slistautoptr = *mut GSList;
+pub type GMainLoop_queueautoptr = *mut GQueue;
 pub type GSource_autoptr = *mut GSource;
 pub type GSource_listautoptr = *mut GList;
 pub type GSource_slistautoptr = *mut GSList;
+pub type GSource_queueautoptr = *mut GQueue;
 pub type GMappedFile_autoptr = *mut GMappedFile;
 pub type GMappedFile_listautoptr = *mut GList;
 pub type GMappedFile_slistautoptr = *mut GSList;
+pub type GMappedFile_queueautoptr = *mut GQueue;
 pub type GMarkupParseContext_autoptr = *mut GMarkupParseContext;
 pub type GMarkupParseContext_listautoptr = *mut GList;
 pub type GMarkupParseContext_slistautoptr = *mut GSList;
+pub type GMarkupParseContext_queueautoptr = *mut GQueue;
 pub type GNode_autoptr = *mut GNode;
 pub type GNode_listautoptr = *mut GList;
 pub type GNode_slistautoptr = *mut GSList;
+pub type GNode_queueautoptr = *mut GQueue;
 pub type GOptionContext_autoptr = *mut GOptionContext;
 pub type GOptionContext_listautoptr = *mut GList;
 pub type GOptionContext_slistautoptr = *mut GSList;
+pub type GOptionContext_queueautoptr = *mut GQueue;
 pub type GOptionGroup_autoptr = *mut GOptionGroup;
 pub type GOptionGroup_listautoptr = *mut GList;
 pub type GOptionGroup_slistautoptr = *mut GSList;
+pub type GOptionGroup_queueautoptr = *mut GQueue;
 pub type GPatternSpec_autoptr = *mut GPatternSpec;
 pub type GPatternSpec_listautoptr = *mut GList;
 pub type GPatternSpec_slistautoptr = *mut GSList;
+pub type GPatternSpec_queueautoptr = *mut GQueue;
 pub type GQueue_autoptr = *mut GQueue;
 pub type GQueue_listautoptr = *mut GList;
 pub type GQueue_slistautoptr = *mut GSList;
+pub type GQueue_queueautoptr = *mut GQueue;
 pub type GRand_autoptr = *mut GRand;
 pub type GRand_listautoptr = *mut GList;
 pub type GRand_slistautoptr = *mut GSList;
+pub type GRand_queueautoptr = *mut GQueue;
 pub type GRegex_autoptr = *mut GRegex;
 pub type GRegex_listautoptr = *mut GList;
 pub type GRegex_slistautoptr = *mut GSList;
+pub type GRegex_queueautoptr = *mut GQueue;
 pub type GMatchInfo_autoptr = *mut GMatchInfo;
 pub type GMatchInfo_listautoptr = *mut GList;
 pub type GMatchInfo_slistautoptr = *mut GSList;
+pub type GMatchInfo_queueautoptr = *mut GQueue;
 pub type GScanner_autoptr = *mut GScanner;
 pub type GScanner_listautoptr = *mut GList;
 pub type GScanner_slistautoptr = *mut GSList;
+pub type GScanner_queueautoptr = *mut GQueue;
 pub type GSequence_autoptr = *mut GSequence;
 pub type GSequence_listautoptr = *mut GList;
 pub type GSequence_slistautoptr = *mut GSList;
+pub type GSequence_queueautoptr = *mut GQueue;
 pub type GSList_autoptr = *mut GSList;
 pub type GSList_listautoptr = *mut GList;
 pub type GSList_slistautoptr = *mut GSList;
+pub type GSList_queueautoptr = *mut GQueue;
 pub type GString_autoptr = *mut GString;
 pub type GString_listautoptr = *mut GList;
 pub type GString_slistautoptr = *mut GSList;
+pub type GString_queueautoptr = *mut GQueue;
 pub type GStringChunk_autoptr = *mut GStringChunk;
 pub type GStringChunk_listautoptr = *mut GList;
 pub type GStringChunk_slistautoptr = *mut GSList;
+pub type GStringChunk_queueautoptr = *mut GQueue;
 pub type GThread_autoptr = *mut GThread;
 pub type GThread_listautoptr = *mut GList;
 pub type GThread_slistautoptr = *mut GSList;
+pub type GThread_queueautoptr = *mut GQueue;
 pub type GMutexLocker_autoptr = *mut GMutexLocker;
 pub type GMutexLocker_listautoptr = *mut GList;
 pub type GMutexLocker_slistautoptr = *mut GSList;
+pub type GMutexLocker_queueautoptr = *mut GQueue;
+pub type GRecMutexLocker_autoptr = *mut GRecMutexLocker;
+pub type GRecMutexLocker_listautoptr = *mut GList;
+pub type GRecMutexLocker_slistautoptr = *mut GSList;
+pub type GRecMutexLocker_queueautoptr = *mut GQueue;
+pub type GRWLockWriterLocker_autoptr = *mut GRWLockWriterLocker;
+pub type GRWLockWriterLocker_listautoptr = *mut GList;
+pub type GRWLockWriterLocker_slistautoptr = *mut GSList;
+pub type GRWLockWriterLocker_queueautoptr = *mut GQueue;
+pub type GRWLockReaderLocker_autoptr = *mut GRWLockReaderLocker;
+pub type GRWLockReaderLocker_listautoptr = *mut GList;
+pub type GRWLockReaderLocker_slistautoptr = *mut GSList;
+pub type GRWLockReaderLocker_queueautoptr = *mut GQueue;
 pub type GTimer_autoptr = *mut GTimer;
 pub type GTimer_listautoptr = *mut GList;
 pub type GTimer_slistautoptr = *mut GSList;
+pub type GTimer_queueautoptr = *mut GQueue;
 pub type GTimeZone_autoptr = *mut GTimeZone;
 pub type GTimeZone_listautoptr = *mut GList;
 pub type GTimeZone_slistautoptr = *mut GSList;
+pub type GTimeZone_queueautoptr = *mut GQueue;
 pub type GTree_autoptr = *mut GTree;
 pub type GTree_listautoptr = *mut GList;
 pub type GTree_slistautoptr = *mut GSList;
+pub type GTree_queueautoptr = *mut GQueue;
 pub type GVariant_autoptr = *mut GVariant;
 pub type GVariant_listautoptr = *mut GList;
 pub type GVariant_slistautoptr = *mut GSList;
+pub type GVariant_queueautoptr = *mut GQueue;
 pub type GVariantBuilder_autoptr = *mut GVariantBuilder;
 pub type GVariantBuilder_listautoptr = *mut GList;
 pub type GVariantBuilder_slistautoptr = *mut GSList;
+pub type GVariantBuilder_queueautoptr = *mut GQueue;
 pub type GVariantIter_autoptr = *mut GVariantIter;
 pub type GVariantIter_listautoptr = *mut GList;
 pub type GVariantIter_slistautoptr = *mut GSList;
+pub type GVariantIter_queueautoptr = *mut GQueue;
 pub type GVariantDict_autoptr = *mut GVariantDict;
 pub type GVariantDict_listautoptr = *mut GList;
 pub type GVariantDict_slistautoptr = *mut GSList;
+pub type GVariantDict_queueautoptr = *mut GQueue;
 pub type GVariantType_autoptr = *mut GVariantType;
 pub type GVariantType_listautoptr = *mut GList;
 pub type GVariantType_slistautoptr = *mut GSList;
+pub type GVariantType_queueautoptr = *mut GQueue;
+pub type GRefString_autoptr = *mut GRefString;
+pub type GRefString_listautoptr = *mut GList;
+pub type GRefString_slistautoptr = *mut GSList;
+pub type GRefString_queueautoptr = *mut GQueue;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct AdapterInfo {
@@ -31240,11 +31582,11 @@ pub struct CPUTLBEntry__bindgen_ty_1__bindgen_ty_1 {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct qemu_build_bug_on__3 {
+pub struct qemu_build_bug_on__2 {
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
     pub __bindgen_padding_0: u8,
 }
-impl qemu_build_bug_on__3 {
+impl qemu_build_bug_on__2 {
     #[inline]
     pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
         let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
@@ -35565,6 +35907,20 @@ impl TCGOp {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__13 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__13 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct qemu_build_bug_on__14 {
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
     pub __bindgen_padding_0: u8,
@@ -35598,20 +35954,6 @@ pub struct qemu_build_bug_on__16 {
     pub __bindgen_padding_0: u8,
 }
 impl qemu_build_bug_on__16 {
-    #[inline]
-    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
-        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
-            Default::default();
-        __bindgen_bitfield_unit
-    }
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct qemu_build_bug_on__17 {
-    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
-    pub __bindgen_padding_0: u8,
-}
-impl qemu_build_bug_on__17 {
     #[inline]
     pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
         let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
@@ -38681,6 +39023,9 @@ extern "C" {
         va: *mut __va_list_tag,
     ) -> ::std::os::raw::c_int;
 }
+extern "C" {
+    pub static mut protobuf_c_empty_string: [::std::os::raw::c_char; 0usize];
+}
 pub const ProtobufCFieldFlag_PROTOBUF_C_FIELD_FLAG_PACKED: ProtobufCFieldFlag = 1;
 pub const ProtobufCFieldFlag_PROTOBUF_C_FIELD_FLAG_DEPRECATED: ProtobufCFieldFlag = 2;
 pub const ProtobufCFieldFlag_PROTOBUF_C_FIELD_FLAG_ONEOF: ProtobufCFieldFlag = 4;
@@ -38688,6 +39033,7 @@ pub type ProtobufCFieldFlag = ::std::os::raw::c_uint;
 pub const ProtobufCLabel_PROTOBUF_C_LABEL_REQUIRED: ProtobufCLabel = 0;
 pub const ProtobufCLabel_PROTOBUF_C_LABEL_OPTIONAL: ProtobufCLabel = 1;
 pub const ProtobufCLabel_PROTOBUF_C_LABEL_REPEATED: ProtobufCLabel = 2;
+pub const ProtobufCLabel_PROTOBUF_C_LABEL_NONE: ProtobufCLabel = 3;
 pub type ProtobufCLabel = ::std::os::raw::c_uint;
 pub const ProtobufCType_PROTOBUF_C_TYPE_INT32: ProtobufCType = 0;
 pub const ProtobufCType_PROTOBUF_C_TYPE_SINT32: ProtobufCType = 1;
