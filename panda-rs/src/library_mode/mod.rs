@@ -281,9 +281,6 @@ impl Panda {
         let x = &mut 0i8;
         let empty = &mut (x as *mut c_char);
         unsafe {
-            panda_set_library_mode(true);
-            panda_init(args_ptrs.len() as i32, transmute(args_ptrs.as_ptr()), empty);
-
             for cb in inventory::iter::<Callback> {
                 sys::panda_register_callback(
                     self as *mut _ as _,
@@ -291,6 +288,9 @@ impl Panda {
                     ::core::mem::transmute(cb.fn_pointer)
                 );
             }
+
+            panda_set_library_mode(true);
+            panda_init(args_ptrs.len() as i32, transmute(args_ptrs.as_ptr()), empty);
             
             for cb in inventory::iter::<PPPCallbackSetup> {
                 cb.0();
