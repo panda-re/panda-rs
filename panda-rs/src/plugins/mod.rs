@@ -126,7 +126,7 @@ impl Plugin {
         }
         let path = 
             Path::new(&std::env::var("PANDA_PATH").unwrap())
-                .join(PLUGIN_DIR)
+                .join(&std::env::var("PANDA_PLUGIN_DIR").unwrap_or(PLUGIN_DIR.to_owned()))
                 .join(&format!("panda_{}.so", name));
         Self {
             lib: libloading::Library::new(
