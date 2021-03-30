@@ -262,6 +262,47 @@ pub fn set_reg<T: Into<Reg>>(cpu: &CPUState, reg: T, val: target_ulong) {
     }
 }
 
+pub fn get_pc(cpu: &CPUState) -> target_ulong {
+    let cpu_arch = cpu_arch_state!(cpu);
+    let val;
+
+    #[cfg(any(feature = "x86_64", feature = "i386"))]
+    unsafe {
+        val = (*cpu_arch).eip;
+    }
+
+    #[cfg(feature = "arm")]
+    unsafe {
+        val = (*cpu_arch).regs[15];
+    }
+
+    #[cfg(feature = "ppc")]
+    unsafe {
+        todo!();
+    }
+
+    val
+}
+
+pub fn set_pc(cpu: &mut CPUState, pc: target_ulong) {
+    let cpu_arch = cpu_arch_state!(cpu);
+
+    #[cfg(any(feature = "x86_64", feature = "i386"))]
+    unsafe {
+        (*cpu_arch).eip = pc;
+    }
+
+    #[cfg(feature = "arm")]
+    unsafe {
+        (*cpu_arch).regs[15] = pc;
+    }
+
+    #[cfg(feature = "ppc")]
+    unsafe {
+        todo!();
+    }
+}
+
 // Printing ------------------------------------------------------------------------------------------------------------
 
 /// Print the contents of all registers
