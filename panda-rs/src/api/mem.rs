@@ -95,7 +95,7 @@ pub fn map_memory(name: &str, size: target_ulong, addr: target_ptr_t) -> Result<
         Err(Error::UnalignedPageSize)
     } else {
         unsafe {
-            sys::map_memory(name.as_ptr() as _, size, addr);
+            sys::map_memory(name.as_ptr() as _, size as _, addr as _);
         }
 
         drop(name);
