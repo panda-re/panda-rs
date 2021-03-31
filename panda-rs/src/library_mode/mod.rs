@@ -41,6 +41,7 @@ pub struct Panda {
     arch: Option<Arch>,
     extra_args: Vec<String>,
     replay: Option<String>,
+    configurable: bool,
 }
 
 impl Panda {
@@ -107,7 +108,22 @@ impl Panda {
     /// ```
     pub fn arch(&mut self, arch: Arch) -> &mut Self {
         self.arch = Some(arch);
-        
+
+        self
+    }
+
+    /// Set the machine to PANDA's configurable machine
+    ///
+    /// ### Example
+    /// ```rust
+    /// # use panda::{prelude::*, Arch};
+    /// Panda::new()
+    ///     .configurable()
+    ///     .run();
+    /// ```
+    pub fn configurable(&mut self) -> &mut Self {
+        self.configurable = true;
+
         self
     }
 
@@ -243,6 +259,11 @@ impl Panda {
         if let Some(generic) = generic_info {
             args.push("-os".into());
             args.push(generic.os.into());
+        }
+
+        if self.configurable {
+            args.push("-M".into());
+            args.push("configurable".into());
         }
 
         if !self.graphics {

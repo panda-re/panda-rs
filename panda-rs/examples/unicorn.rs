@@ -53,6 +53,6 @@ fn insn_exec(cpu: &mut CPUState, pc: target_ptr_t) {
 fn main() {
     Panda::new()
         .arch(panda::Arch::x86_64)
-        .args(&["-M", "configurable"])
+        .configurable()
         .run();
 }
