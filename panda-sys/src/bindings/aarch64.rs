@@ -320,12 +320,15 @@ pub const CONFIG_THREAD_SETNAME_BYTHREAD: u32 = 1;
 pub const CONFIG_PTHREAD_SETNAME_NP: u32 = 1;
 pub const HOST_DSOSUF: &'static [u8; 4usize] = b".so\0";
 pub const CONFIG_NUMA: u32 = 1;
-pub const TARGET_ABI_MIPSO32: u32 = 1;
-pub const TARGET_MIPS: u32 = 1;
-pub const TARGET_NAME: &'static [u8; 7usize] = b"mipsel\0";
+pub const TARGET_AARCH64: u32 = 1;
+pub const TARGET_NAME: &'static [u8; 8usize] = b"aarch64\0";
+pub const TARGET_ARM: u32 = 1;
 pub const CONFIG_SOFTMMU: u32 = 1;
+pub const TARGET_SUPPORTS_MTTCG: u32 = 1;
 pub const CONFIG_I386_DIS: u32 = 1;
-pub const CONFIG_MIPS_DIS: u32 = 1;
+pub const CONFIG_ARM_DIS: u32 = 1;
+pub const CONFIG_ARM_A64_DIS: u32 = 1;
+pub const CONFIG_PYPERIPHERAL: u32 = 1;
 pub const true_: u32 = 1;
 pub const false_: u32 = 0;
 pub const __bool_true_false_are_defined: u32 = 1;
@@ -1874,6 +1877,51 @@ pub const QEMU_COPYRIGHT: &'static [u8; 72usize] =
     b"Copyright (c) 2003-2017 Fabrice Bellard and the QEMU Project developers\0";
 pub const QEMU_FILE_TYPE_BIOS: u32 = 0;
 pub const QEMU_FILE_TYPE_KEYMAP: u32 = 1;
+pub const CP_REG_SIZE_SHIFT: u32 = 52;
+pub const CP_REG_SIZE_MASK: u64 = 67553994410557440;
+pub const CP_REG_SIZE_U32: u64 = 9007199254740992;
+pub const CP_REG_SIZE_U64: u64 = 13510798882111488;
+pub const CP_REG_ARM: u64 = 4611686018427387904;
+pub const CP_REG_ARCH_MASK: i64 = -72057594037927936;
+pub const QEMU_PSCI_0_1_FN_BASE: u32 = 2512501342;
+pub const QEMU_PSCI_0_2_FN_BASE: u32 = 2214592512;
+pub const QEMU_PSCI_0_2_64BIT: u32 = 1073741824;
+pub const QEMU_PSCI_0_2_FN64_BASE: u32 = 3288334336;
+pub const QEMU_PSCI_0_2_RET_TOS_MIGRATION_NOT_REQUIRED: u32 = 2;
+pub const QEMU_PSCI_0_2_RET_VERSION_0_2: u32 = 2;
+pub const QEMU_PSCI_RET_SUCCESS: u32 = 0;
+pub const QEMU_PSCI_RET_NOT_SUPPORTED: i32 = -1;
+pub const QEMU_PSCI_RET_INVALID_PARAMS: i32 = -2;
+pub const QEMU_PSCI_RET_DENIED: i32 = -3;
+pub const QEMU_PSCI_RET_ALREADY_ON: i32 = -4;
+pub const QEMU_PSCI_RET_ON_PENDING: i32 = -5;
+pub const QEMU_PSCI_RET_INTERNAL_FAILURE: i32 = -6;
+pub const QEMU_PSCI_RET_NOT_PRESENT: i32 = -7;
+pub const QEMU_PSCI_RET_DISABLED: i32 = -8;
+pub const QEMU_KVM_ARM_TARGET_CORTEX_A15: u32 = 0;
+pub const QEMU_KVM_ARM_TARGET_CORTEX_A7: u32 = 1;
+pub const QEMU_KVM_ARM_TARGET_AEM_V8: u32 = 0;
+pub const QEMU_KVM_ARM_TARGET_FOUNDATION_V8: u32 = 1;
+pub const QEMU_KVM_ARM_TARGET_CORTEX_A57: u32 = 2;
+pub const QEMU_KVM_ARM_TARGET_XGENE_POTENZA: u32 = 3;
+pub const QEMU_KVM_ARM_TARGET_CORTEX_A53: u32 = 4;
+pub const CP_REG_ARM64: u64 = 6917529027641081856;
+pub const CP_REG_ARM_COPROC_MASK: u32 = 268369920;
+pub const CP_REG_ARM_COPROC_SHIFT: u32 = 16;
+pub const CP_REG_ARM64_SYSREG: u32 = 1245184;
+pub const CP_REG_ARM64_SYSREG_OP0_MASK: u32 = 49152;
+pub const CP_REG_ARM64_SYSREG_OP0_SHIFT: u32 = 14;
+pub const CP_REG_ARM64_SYSREG_OP1_MASK: u32 = 14336;
+pub const CP_REG_ARM64_SYSREG_OP1_SHIFT: u32 = 11;
+pub const CP_REG_ARM64_SYSREG_CRN_MASK: u32 = 1920;
+pub const CP_REG_ARM64_SYSREG_CRN_SHIFT: u32 = 7;
+pub const CP_REG_ARM64_SYSREG_CRM_MASK: u32 = 120;
+pub const CP_REG_ARM64_SYSREG_CRM_SHIFT: u32 = 3;
+pub const CP_REG_ARM64_SYSREG_OP2_MASK: u32 = 7;
+pub const CP_REG_ARM64_SYSREG_OP2_SHIFT: u32 = 0;
+pub const CP_REG_ARM64_SYSREG_CP: u32 = 19;
+pub const TARGET_LONG_BITS: u32 = 64;
+pub const TCG_GUEST_DEFAULT_MO: u32 = 0;
 pub const TYPE_OBJECT: &'static [u8; 7usize] = b"object\0";
 pub const OBJECT_CLASS_CAST_CACHE: u32 = 4;
 pub const TYPE_INTERFACE: &'static [u8; 10usize] = b"interface\0";
@@ -2054,418 +2102,366 @@ pub const GDB_RSTEP: u32 = 2;
 pub const GDB_RCONT: u32 = 4;
 pub const GDB_RCONT_BREAK: u32 = 8;
 pub const UNASSIGNED_CPU_INDEX: i32 = -1;
-pub const TYPE_MIPS_CPU: &'static [u8; 9usize] = b"mips-cpu\0";
-pub const TARGET_PAGE_BITS: u32 = 12;
-pub const MIPS_TLB_MAX: u32 = 128;
-pub const TARGET_LONG_BITS: u32 = 32;
-pub const TARGET_PHYS_ADDR_SPACE_BITS: u32 = 40;
-pub const TARGET_VIRT_ADDR_SPACE_BITS: u32 = 32;
-pub const ISA_MIPS1: u32 = 1;
-pub const ISA_MIPS2: u32 = 2;
-pub const ISA_MIPS3: u32 = 4;
-pub const ISA_MIPS4: u32 = 8;
-pub const ISA_MIPS5: u32 = 16;
-pub const ISA_MIPS32: u32 = 32;
-pub const ISA_MIPS32R2: u32 = 64;
-pub const ISA_MIPS64: u32 = 128;
-pub const ISA_MIPS64R2: u32 = 256;
-pub const ISA_MIPS32R3: u32 = 512;
-pub const ISA_MIPS64R3: u32 = 1024;
-pub const ISA_MIPS32R5: u32 = 2048;
-pub const ISA_MIPS64R5: u32 = 4096;
-pub const ISA_MIPS32R6: u32 = 8192;
-pub const ISA_MIPS64R6: u32 = 16384;
-pub const ASE_MIPS16: u32 = 65536;
-pub const ASE_MIPS3D: u32 = 131072;
-pub const ASE_MDMX: u32 = 262144;
-pub const ASE_DSP: u32 = 524288;
-pub const ASE_DSPR2: u32 = 1048576;
-pub const ASE_MT: u32 = 2097152;
-pub const ASE_SMARTMIPS: u32 = 4194304;
-pub const ASE_MICROMIPS: u32 = 8388608;
-pub const ASE_MSA: u32 = 16777216;
-pub const INSN_LOONGSON2E: u32 = 536870912;
-pub const INSN_LOONGSON2F: u32 = 1073741824;
-pub const INSN_VR54XX: u32 = 2147483648;
-pub const CPU_MIPS1: u32 = 1;
-pub const CPU_MIPS2: u32 = 3;
-pub const CPU_MIPS3: u32 = 7;
-pub const CPU_MIPS4: u32 = 15;
-pub const CPU_VR54XX: u32 = 2147483663;
-pub const CPU_LOONGSON2E: u32 = 536870919;
-pub const CPU_LOONGSON2F: u32 = 1073741831;
-pub const CPU_MIPS5: u32 = 31;
-pub const CPU_MIPS32: u32 = 35;
-pub const CPU_MIPS64: u32 = 191;
-pub const CPU_MIPS32R2: u32 = 99;
-pub const CPU_MIPS64R2: u32 = 511;
-pub const CPU_MIPS32R3: u32 = 611;
-pub const CPU_MIPS64R3: u32 = 2047;
-pub const CPU_MIPS32R5: u32 = 2659;
-pub const CPU_MIPS64R5: u32 = 8191;
-pub const CPU_MIPS32R6: u32 = 10851;
-pub const CPU_MIPS64R6: u32 = 32767;
-pub const TCG_TARGET_REG_BITS: u32 = 32;
+pub const TYPE_ARM_CPU: &'static [u8; 8usize] = b"arm-cpu\0";
+pub const TYPE_AARCH64_CPU: &'static [u8; 12usize] = b"aarch64-cpu\0";
+pub const ARM_AFF0_SHIFT: u32 = 0;
+pub const ARM_AFF0_MASK: u32 = 255;
+pub const ARM_AFF1_SHIFT: u32 = 8;
+pub const ARM_AFF1_MASK: u32 = 65280;
+pub const ARM_AFF2_SHIFT: u32 = 16;
+pub const ARM_AFF2_MASK: u32 = 16711680;
+pub const ARM_AFF3_SHIFT: u32 = 32;
+pub const ARM_AFF3_MASK: u64 = 1095216660480;
+pub const ARM_DEFAULT_CPUS_PER_CLUSTER: u32 = 8;
+pub const ARM32_AFFINITY_MASK: u32 = 16777215;
+pub const ARM64_AFFINITY_MASK: u64 = 1095233437695;
+pub const ARM64_AFFINITY_INVALID: i64 = -1095233437696;
 pub const TCG_TARGET_INSN_UNIT_SIZE: u32 = 4;
-pub const TCG_TARGET_TLB_DISPLACEMENT_BITS: u32 = 16;
+pub const TCG_TARGET_TLB_DISPLACEMENT_BITS: u32 = 24;
 pub const TCG_TARGET_NB_REGS: u32 = 32;
 pub const TCG_TARGET_STACK_ALIGN: u32 = 16;
-pub const TCG_TARGET_CALL_STACK_OFFSET: u32 = 16;
 pub const TCG_TARGET_CALL_ALIGN_ARGS: u32 = 1;
-pub const use_mips32r6_instructions: u32 = 0;
+pub const TCG_TARGET_CALL_STACK_OFFSET: u32 = 0;
 pub const TCG_TARGET_HAS_div_i32: u32 = 1;
 pub const TCG_TARGET_HAS_rem_i32: u32 = 1;
-pub const TCG_TARGET_HAS_not_i32: u32 = 1;
-pub const TCG_TARGET_HAS_nor_i32: u32 = 1;
-pub const TCG_TARGET_HAS_andc_i32: u32 = 0;
-pub const TCG_TARGET_HAS_orc_i32: u32 = 0;
-pub const TCG_TARGET_HAS_eqv_i32: u32 = 0;
-pub const TCG_TARGET_HAS_nand_i32: u32 = 0;
-pub const TCG_TARGET_HAS_muluh_i32: u32 = 1;
-pub const TCG_TARGET_HAS_mulsh_i32: u32 = 1;
+pub const TCG_TARGET_HAS_ext8s_i32: u32 = 1;
+pub const TCG_TARGET_HAS_ext16s_i32: u32 = 1;
+pub const TCG_TARGET_HAS_ext8u_i32: u32 = 1;
+pub const TCG_TARGET_HAS_ext16u_i32: u32 = 1;
+pub const TCG_TARGET_HAS_bswap16_i32: u32 = 1;
 pub const TCG_TARGET_HAS_bswap32_i32: u32 = 1;
-pub const TCG_TARGET_HAS_sextract_i32: u32 = 0;
-pub const TCG_TARGET_HAS_ctz_i32: u32 = 0;
+pub const TCG_TARGET_HAS_not_i32: u32 = 1;
+pub const TCG_TARGET_HAS_neg_i32: u32 = 1;
+pub const TCG_TARGET_HAS_rot_i32: u32 = 1;
+pub const TCG_TARGET_HAS_andc_i32: u32 = 1;
+pub const TCG_TARGET_HAS_orc_i32: u32 = 1;
+pub const TCG_TARGET_HAS_eqv_i32: u32 = 1;
+pub const TCG_TARGET_HAS_nand_i32: u32 = 0;
+pub const TCG_TARGET_HAS_nor_i32: u32 = 0;
+pub const TCG_TARGET_HAS_clz_i32: u32 = 1;
+pub const TCG_TARGET_HAS_ctz_i32: u32 = 1;
 pub const TCG_TARGET_HAS_ctpop_i32: u32 = 0;
-pub const TCG_TARGET_HAS_neg_i32: u32 = 0;
-pub const TCG_TARGET_HAS_ext8u_i32: u32 = 0;
-pub const TCG_TARGET_HAS_ext16u_i32: u32 = 0;
-pub const ICACHE: u32 = 0;
-pub const TARGET_LONG_SIZE: u32 = 4;
-pub const TARGET_FMT_lx: &'static [u8; 5usize] = b"%08x\0";
-pub const TARGET_FMT_ld: &'static [u8; 3usize] = b"%d\0";
-pub const TARGET_FMT_lu: &'static [u8; 3usize] = b"%u\0";
+pub const TCG_TARGET_HAS_deposit_i32: u32 = 1;
+pub const TCG_TARGET_HAS_extract_i32: u32 = 1;
+pub const TCG_TARGET_HAS_sextract_i32: u32 = 1;
+pub const TCG_TARGET_HAS_movcond_i32: u32 = 1;
+pub const TCG_TARGET_HAS_add2_i32: u32 = 1;
+pub const TCG_TARGET_HAS_sub2_i32: u32 = 1;
+pub const TCG_TARGET_HAS_mulu2_i32: u32 = 0;
+pub const TCG_TARGET_HAS_muls2_i32: u32 = 0;
+pub const TCG_TARGET_HAS_muluh_i32: u32 = 0;
+pub const TCG_TARGET_HAS_mulsh_i32: u32 = 0;
+pub const TCG_TARGET_HAS_extrl_i64_i32: u32 = 0;
+pub const TCG_TARGET_HAS_extrh_i64_i32: u32 = 0;
+pub const TCG_TARGET_HAS_div_i64: u32 = 1;
+pub const TCG_TARGET_HAS_rem_i64: u32 = 1;
+pub const TCG_TARGET_HAS_ext8s_i64: u32 = 1;
+pub const TCG_TARGET_HAS_ext16s_i64: u32 = 1;
+pub const TCG_TARGET_HAS_ext32s_i64: u32 = 1;
+pub const TCG_TARGET_HAS_ext8u_i64: u32 = 1;
+pub const TCG_TARGET_HAS_ext16u_i64: u32 = 1;
+pub const TCG_TARGET_HAS_ext32u_i64: u32 = 1;
+pub const TCG_TARGET_HAS_bswap16_i64: u32 = 1;
+pub const TCG_TARGET_HAS_bswap32_i64: u32 = 1;
+pub const TCG_TARGET_HAS_bswap64_i64: u32 = 1;
+pub const TCG_TARGET_HAS_not_i64: u32 = 1;
+pub const TCG_TARGET_HAS_neg_i64: u32 = 1;
+pub const TCG_TARGET_HAS_rot_i64: u32 = 1;
+pub const TCG_TARGET_HAS_andc_i64: u32 = 1;
+pub const TCG_TARGET_HAS_orc_i64: u32 = 1;
+pub const TCG_TARGET_HAS_eqv_i64: u32 = 1;
+pub const TCG_TARGET_HAS_nand_i64: u32 = 0;
+pub const TCG_TARGET_HAS_nor_i64: u32 = 0;
+pub const TCG_TARGET_HAS_clz_i64: u32 = 1;
+pub const TCG_TARGET_HAS_ctz_i64: u32 = 1;
+pub const TCG_TARGET_HAS_ctpop_i64: u32 = 0;
+pub const TCG_TARGET_HAS_deposit_i64: u32 = 1;
+pub const TCG_TARGET_HAS_extract_i64: u32 = 1;
+pub const TCG_TARGET_HAS_sextract_i64: u32 = 1;
+pub const TCG_TARGET_HAS_movcond_i64: u32 = 1;
+pub const TCG_TARGET_HAS_add2_i64: u32 = 1;
+pub const TCG_TARGET_HAS_sub2_i64: u32 = 1;
+pub const TCG_TARGET_HAS_mulu2_i64: u32 = 0;
+pub const TCG_TARGET_HAS_muls2_i64: u32 = 0;
+pub const TCG_TARGET_HAS_muluh_i64: u32 = 1;
+pub const TCG_TARGET_HAS_mulsh_i64: u32 = 1;
+pub const TARGET_LONG_SIZE: u32 = 8;
+pub const TARGET_FMT_lx: &'static [u8; 7usize] = b"%016lx\0";
+pub const TARGET_FMT_ld: &'static [u8; 4usize] = b"%ld\0";
+pub const TARGET_FMT_lu: &'static [u8; 4usize] = b"%lu\0";
 pub const CPU_VTLB_SIZE: u32 = 8;
 pub const CPU_TLB_ENTRY_BITS: u32 = 5;
-pub const MSA_WRLEN: u32 = 128;
-pub const FP_ENDIAN_IDX: u32 = 0;
-pub const FCR0_FREP: u32 = 29;
-pub const FCR0_UFRP: u32 = 28;
-pub const FCR0_HAS2008: u32 = 23;
-pub const FCR0_F64: u32 = 22;
-pub const FCR0_L: u32 = 21;
-pub const FCR0_W: u32 = 20;
-pub const FCR0_3D: u32 = 19;
-pub const FCR0_PS: u32 = 18;
-pub const FCR0_D: u32 = 17;
-pub const FCR0_S: u32 = 16;
-pub const FCR0_PRID: u32 = 8;
-pub const FCR0_REV: u32 = 0;
-pub const FCR31_FS: u32 = 24;
-pub const FCR31_ABS2008: u32 = 19;
-pub const FCR31_NAN2008: u32 = 18;
-pub const FP_INEXACT: u32 = 1;
-pub const FP_UNDERFLOW: u32 = 2;
-pub const FP_OVERFLOW: u32 = 4;
-pub const FP_DIV0: u32 = 8;
-pub const FP_INVALID: u32 = 16;
-pub const FP_UNIMPLEMENTED: u32 = 32;
-pub const NB_MMU_MODES: u32 = 3;
+pub const EXCP_UDEF: u32 = 1;
+pub const EXCP_SWI: u32 = 2;
+pub const EXCP_PREFETCH_ABORT: u32 = 3;
+pub const EXCP_DATA_ABORT: u32 = 4;
+pub const EXCP_IRQ: u32 = 5;
+pub const EXCP_FIQ: u32 = 6;
+pub const EXCP_BKPT: u32 = 7;
+pub const EXCP_EXCEPTION_EXIT: u32 = 8;
+pub const EXCP_KERNEL_TRAP: u32 = 9;
+pub const EXCP_HVC: u32 = 11;
+pub const EXCP_HYP_TRAP: u32 = 12;
+pub const EXCP_SMC: u32 = 13;
+pub const EXCP_VIRQ: u32 = 14;
+pub const EXCP_VFIQ: u32 = 15;
+pub const EXCP_SEMIHOST: u32 = 16;
+pub const EXCP_NOCP: u32 = 17;
+pub const EXCP_INVSTATE: u32 = 18;
+pub const ARMV7M_EXCP_RESET: u32 = 1;
+pub const ARMV7M_EXCP_NMI: u32 = 2;
+pub const ARMV7M_EXCP_HARD: u32 = 3;
+pub const ARMV7M_EXCP_MEM: u32 = 4;
+pub const ARMV7M_EXCP_BUS: u32 = 5;
+pub const ARMV7M_EXCP_USAGE: u32 = 6;
+pub const ARMV7M_EXCP_SVC: u32 = 11;
+pub const ARMV7M_EXCP_DEBUG: u32 = 12;
+pub const ARMV7M_EXCP_PENDSV: u32 = 14;
+pub const ARMV7M_EXCP_SYSTICK: u32 = 15;
+pub const ARM_CPU_IRQ: u32 = 0;
+pub const ARM_CPU_FIQ: u32 = 1;
+pub const ARM_CPU_VIRQ: u32 = 2;
+pub const ARM_CPU_VFIQ: u32 = 3;
+pub const NB_MMU_MODES: u32 = 7;
 pub const TARGET_INSN_START_EXTRA_WORDS: u32 = 2;
-pub const CP0MVPCo_CPA: u32 = 3;
-pub const CP0MVPCo_STLB: u32 = 2;
-pub const CP0MVPCo_VPC: u32 = 1;
-pub const CP0MVPCo_EVP: u32 = 0;
-pub const CP0MVPC0_M: u32 = 31;
-pub const CP0MVPC0_TLBS: u32 = 29;
-pub const CP0MVPC0_GS: u32 = 28;
-pub const CP0MVPC0_PCP: u32 = 27;
-pub const CP0MVPC0_PTLBE: u32 = 16;
-pub const CP0MVPC0_TCA: u32 = 15;
-pub const CP0MVPC0_PVPE: u32 = 10;
-pub const CP0MVPC0_PTC: u32 = 0;
-pub const CP0MVPC1_CIM: u32 = 31;
-pub const CP0MVPC1_CIF: u32 = 30;
-pub const CP0MVPC1_PCX: u32 = 20;
-pub const CP0MVPC1_PCP2: u32 = 10;
-pub const CP0MVPC1_PCP1: u32 = 0;
-pub const MIPS_SHADOW_SET_MAX: u32 = 16;
-pub const MIPS_TC_MAX: u32 = 5;
-pub const MIPS_FPU_MAX: u32 = 1;
-pub const MIPS_DSP_ACC: u32 = 4;
-pub const MIPS_KSCRATCH_NUM: u32 = 6;
-pub const MIPS_MAAR_MAX: u32 = 16;
-pub const CP0TCSt_TCU3: u32 = 31;
-pub const CP0TCSt_TCU2: u32 = 30;
-pub const CP0TCSt_TCU1: u32 = 29;
-pub const CP0TCSt_TCU0: u32 = 28;
-pub const CP0TCSt_TMX: u32 = 27;
-pub const CP0TCSt_RNST: u32 = 23;
-pub const CP0TCSt_TDS: u32 = 21;
-pub const CP0TCSt_DT: u32 = 20;
-pub const CP0TCSt_DA: u32 = 15;
-pub const CP0TCSt_A: u32 = 13;
-pub const CP0TCSt_TKSU: u32 = 11;
-pub const CP0TCSt_IXMT: u32 = 10;
-pub const CP0TCSt_TASID: u32 = 0;
-pub const CP0TCBd_CurTC: u32 = 21;
-pub const CP0TCBd_TBE: u32 = 17;
-pub const CP0TCBd_CurVPE: u32 = 0;
-pub const MSACSR_FS: u32 = 24;
-pub const MSACSR_FS_MASK: u32 = 16777216;
-pub const MSACSR_NX: u32 = 18;
-pub const MSACSR_NX_MASK: u32 = 262144;
-pub const MSACSR_CEF: u32 = 2;
-pub const MSACSR_CEF_MASK: u32 = 262140;
-pub const MSACSR_RM: u32 = 0;
-pub const MSACSR_RM_MASK: u32 = 3;
-pub const MSACSR_MASK: u32 = 17301503;
-pub const PABITS_BASE: u32 = 32;
-pub const PAMASK_BASE: u32 = 4294967295;
-pub const MSAIR_ProcID: u32 = 8;
-pub const MSAIR_Rev: u32 = 0;
-pub const CP0VPCtl_DIS: u32 = 0;
-pub const CP0VPECo_YSI: u32 = 21;
-pub const CP0VPECo_GSI: u32 = 20;
-pub const CP0VPECo_EXCPT: u32 = 16;
-pub const CP0VPECo_TE: u32 = 15;
-pub const CP0VPECo_TargTC: u32 = 0;
-pub const CP0VPEC0_M: u32 = 31;
-pub const CP0VPEC0_XTC: u32 = 21;
-pub const CP0VPEC0_TCS: u32 = 19;
-pub const CP0VPEC0_SCS: u32 = 18;
-pub const CP0VPEC0_DSC: u32 = 17;
-pub const CP0VPEC0_ICS: u32 = 16;
-pub const CP0VPEC0_MVP: u32 = 1;
-pub const CP0VPEC0_VPA: u32 = 0;
-pub const CP0VPEC1_NCX: u32 = 20;
-pub const CP0VPEC1_NCP2: u32 = 10;
-pub const CP0VPEC1_NCP1: u32 = 0;
-pub const CP0VPEOpt_IWX7: u32 = 15;
-pub const CP0VPEOpt_IWX6: u32 = 14;
-pub const CP0VPEOpt_IWX5: u32 = 13;
-pub const CP0VPEOpt_IWX4: u32 = 12;
-pub const CP0VPEOpt_IWX3: u32 = 11;
-pub const CP0VPEOpt_IWX2: u32 = 10;
-pub const CP0VPEOpt_IWX1: u32 = 9;
-pub const CP0VPEOpt_IWX0: u32 = 8;
-pub const CP0VPEOpt_DWX7: u32 = 7;
-pub const CP0VPEOpt_DWX6: u32 = 6;
-pub const CP0VPEOpt_DWX5: u32 = 5;
-pub const CP0VPEOpt_DWX4: u32 = 4;
-pub const CP0VPEOpt_DWX3: u32 = 3;
-pub const CP0VPEOpt_DWX2: u32 = 2;
-pub const CP0VPEOpt_DWX1: u32 = 1;
-pub const CP0VPEOpt_DWX0: u32 = 0;
-pub const CP0EnLo_RI: u32 = 31;
-pub const CP0EnLo_XI: u32 = 30;
-pub const CP0GN_VPId: u32 = 0;
-pub const CP0PG_RIE: u32 = 31;
-pub const CP0PG_XIE: u32 = 30;
-pub const CP0PG_ELPA: u32 = 29;
-pub const CP0PG_IEC: u32 = 27;
-pub const CP0SRSC0_M: u32 = 31;
-pub const CP0SRSC0_SRS3: u32 = 20;
-pub const CP0SRSC0_SRS2: u32 = 10;
-pub const CP0SRSC0_SRS1: u32 = 0;
-pub const CP0SRSC1_M: u32 = 31;
-pub const CP0SRSC1_SRS6: u32 = 20;
-pub const CP0SRSC1_SRS5: u32 = 10;
-pub const CP0SRSC1_SRS4: u32 = 0;
-pub const CP0SRSC2_M: u32 = 31;
-pub const CP0SRSC2_SRS9: u32 = 20;
-pub const CP0SRSC2_SRS8: u32 = 10;
-pub const CP0SRSC2_SRS7: u32 = 0;
-pub const CP0SRSC3_M: u32 = 31;
-pub const CP0SRSC3_SRS12: u32 = 20;
-pub const CP0SRSC3_SRS11: u32 = 10;
-pub const CP0SRSC3_SRS10: u32 = 0;
-pub const CP0SRSC4_SRS15: u32 = 20;
-pub const CP0SRSC4_SRS14: u32 = 10;
-pub const CP0SRSC4_SRS13: u32 = 0;
-pub const CP0EnHi_EHINV: u32 = 10;
-pub const CP0St_CU3: u32 = 31;
-pub const CP0St_CU2: u32 = 30;
-pub const CP0St_CU1: u32 = 29;
-pub const CP0St_CU0: u32 = 28;
-pub const CP0St_RP: u32 = 27;
-pub const CP0St_FR: u32 = 26;
-pub const CP0St_RE: u32 = 25;
-pub const CP0St_MX: u32 = 24;
-pub const CP0St_PX: u32 = 23;
-pub const CP0St_BEV: u32 = 22;
-pub const CP0St_TS: u32 = 21;
-pub const CP0St_SR: u32 = 20;
-pub const CP0St_NMI: u32 = 19;
-pub const CP0St_IM: u32 = 8;
-pub const CP0St_KX: u32 = 7;
-pub const CP0St_SX: u32 = 6;
-pub const CP0St_UX: u32 = 5;
-pub const CP0St_KSU: u32 = 3;
-pub const CP0St_ERL: u32 = 2;
-pub const CP0St_EXL: u32 = 1;
-pub const CP0St_IE: u32 = 0;
-pub const CP0IntCtl_IPTI: u32 = 29;
-pub const CP0IntCtl_IPPCI: u32 = 26;
-pub const CP0IntCtl_VS: u32 = 5;
-pub const CP0SRSCtl_HSS: u32 = 26;
-pub const CP0SRSCtl_EICSS: u32 = 18;
-pub const CP0SRSCtl_ESS: u32 = 12;
-pub const CP0SRSCtl_PSS: u32 = 6;
-pub const CP0SRSCtl_CSS: u32 = 0;
-pub const CP0SRSMap_SSV7: u32 = 28;
-pub const CP0SRSMap_SSV6: u32 = 24;
-pub const CP0SRSMap_SSV5: u32 = 20;
-pub const CP0SRSMap_SSV4: u32 = 16;
-pub const CP0SRSMap_SSV3: u32 = 12;
-pub const CP0SRSMap_SSV2: u32 = 8;
-pub const CP0SRSMap_SSV1: u32 = 4;
-pub const CP0SRSMap_SSV0: u32 = 0;
-pub const CP0Ca_BD: u32 = 31;
-pub const CP0Ca_TI: u32 = 30;
-pub const CP0Ca_CE: u32 = 28;
-pub const CP0Ca_DC: u32 = 27;
-pub const CP0Ca_PCI: u32 = 26;
-pub const CP0Ca_IV: u32 = 23;
-pub const CP0Ca_WP: u32 = 22;
-pub const CP0Ca_IP: u32 = 8;
-pub const CP0Ca_IP_mask: u32 = 65280;
-pub const CP0Ca_EC: u32 = 2;
-pub const CP0C0_M: u32 = 31;
-pub const CP0C0_K23: u32 = 28;
-pub const CP0C0_KU: u32 = 25;
-pub const CP0C0_MDU: u32 = 20;
-pub const CP0C0_MM: u32 = 18;
-pub const CP0C0_BM: u32 = 16;
-pub const CP0C0_BE: u32 = 15;
-pub const CP0C0_AT: u32 = 13;
-pub const CP0C0_AR: u32 = 10;
-pub const CP0C0_MT: u32 = 7;
-pub const CP0C0_VI: u32 = 3;
-pub const CP0C0_K0: u32 = 0;
-pub const CP0C1_M: u32 = 31;
-pub const CP0C1_MMU: u32 = 25;
-pub const CP0C1_IS: u32 = 22;
-pub const CP0C1_IL: u32 = 19;
-pub const CP0C1_IA: u32 = 16;
-pub const CP0C1_DS: u32 = 13;
-pub const CP0C1_DL: u32 = 10;
-pub const CP0C1_DA: u32 = 7;
-pub const CP0C1_C2: u32 = 6;
-pub const CP0C1_MD: u32 = 5;
-pub const CP0C1_PC: u32 = 4;
-pub const CP0C1_WR: u32 = 3;
-pub const CP0C1_CA: u32 = 2;
-pub const CP0C1_EP: u32 = 1;
-pub const CP0C1_FP: u32 = 0;
-pub const CP0C2_M: u32 = 31;
-pub const CP0C2_TU: u32 = 28;
-pub const CP0C2_TS: u32 = 24;
-pub const CP0C2_TL: u32 = 20;
-pub const CP0C2_TA: u32 = 16;
-pub const CP0C2_SU: u32 = 12;
-pub const CP0C2_SS: u32 = 8;
-pub const CP0C2_SL: u32 = 4;
-pub const CP0C2_SA: u32 = 0;
-pub const CP0C3_M: u32 = 31;
-pub const CP0C3_BPG: u32 = 30;
-pub const CP0C3_CMGCR: u32 = 29;
-pub const CP0C3_MSAP: u32 = 28;
-pub const CP0C3_BP: u32 = 27;
-pub const CP0C3_BI: u32 = 26;
-pub const CP0C3_IPLW: u32 = 21;
-pub const CP0C3_MMAR: u32 = 18;
-pub const CP0C3_MCU: u32 = 17;
-pub const CP0C3_ISA_ON_EXC: u32 = 16;
-pub const CP0C3_ISA: u32 = 14;
-pub const CP0C3_ULRI: u32 = 13;
-pub const CP0C3_RXI: u32 = 12;
-pub const CP0C3_DSP2P: u32 = 11;
-pub const CP0C3_DSPP: u32 = 10;
-pub const CP0C3_LPA: u32 = 7;
-pub const CP0C3_VEIC: u32 = 6;
-pub const CP0C3_VInt: u32 = 5;
-pub const CP0C3_SP: u32 = 4;
-pub const CP0C3_CDMM: u32 = 3;
-pub const CP0C3_MT: u32 = 2;
-pub const CP0C3_SM: u32 = 1;
-pub const CP0C3_TL: u32 = 0;
-pub const CP0C4_M: u32 = 31;
-pub const CP0C4_IE: u32 = 29;
-pub const CP0C4_AE: u32 = 28;
-pub const CP0C4_KScrExist: u32 = 16;
-pub const CP0C4_MMUExtDef: u32 = 14;
-pub const CP0C4_FTLBPageSize: u32 = 8;
-pub const CP0C4_FTLBWays: u32 = 4;
-pub const CP0C4_FTLBSets: u32 = 0;
-pub const CP0C4_MMUSizeExt: u32 = 0;
-pub const CP0C5_M: u32 = 31;
-pub const CP0C5_K: u32 = 30;
-pub const CP0C5_CV: u32 = 29;
-pub const CP0C5_EVA: u32 = 28;
-pub const CP0C5_MSAEn: u32 = 27;
-pub const CP0C5_XNP: u32 = 13;
-pub const CP0C5_UFE: u32 = 9;
-pub const CP0C5_FRE: u32 = 8;
-pub const CP0C5_VP: u32 = 7;
-pub const CP0C5_SBRI: u32 = 6;
-pub const CP0C5_MVH: u32 = 5;
-pub const CP0C5_LLB: u32 = 4;
-pub const CP0C5_MRP: u32 = 3;
-pub const CP0C5_UFR: u32 = 2;
-pub const CP0C5_NFExists: u32 = 0;
-pub const CP0WH_ASID: u32 = 16;
-pub const CP0DB_DBD: u32 = 31;
-pub const CP0DB_DM: u32 = 30;
-pub const CP0DB_LSNM: u32 = 28;
-pub const CP0DB_Doze: u32 = 27;
-pub const CP0DB_Halt: u32 = 26;
-pub const CP0DB_CNT: u32 = 25;
-pub const CP0DB_IBEP: u32 = 24;
-pub const CP0DB_DBEP: u32 = 21;
-pub const CP0DB_IEXI: u32 = 20;
-pub const CP0DB_VER: u32 = 15;
-pub const CP0DB_DEC: u32 = 10;
-pub const CP0DB_SSt: u32 = 8;
-pub const CP0DB_DINT: u32 = 5;
-pub const CP0DB_DIB: u32 = 4;
-pub const CP0DB_DDBS: u32 = 3;
-pub const CP0DB_DDBL: u32 = 2;
-pub const CP0DB_DBp: u32 = 1;
-pub const CP0DB_DSS: u32 = 0;
-pub const CP0EC_WST: u32 = 29;
-pub const CP0EC_SPR: u32 = 28;
-pub const CP0EC_ITC: u32 = 26;
-pub const EXCP_TLB_NOMATCH: u32 = 1;
-pub const EXCP_INST_NOTAVAIL: u32 = 2;
-pub const MIPS_HFLAG_TMASK: u32 = 257427455;
-pub const MIPS_HFLAG_MODE: u32 = 7;
-pub const MIPS_HFLAG_KSU: u32 = 3;
-pub const MIPS_HFLAG_UM: u32 = 2;
-pub const MIPS_HFLAG_SM: u32 = 1;
-pub const MIPS_HFLAG_KM: u32 = 0;
-pub const MIPS_HFLAG_DM: u32 = 4;
-pub const MIPS_HFLAG_64: u32 = 8;
-pub const MIPS_HFLAG_CP0: u32 = 16;
-pub const MIPS_HFLAG_FPU: u32 = 32;
-pub const MIPS_HFLAG_F64: u32 = 64;
-pub const MIPS_HFLAG_COP1X: u32 = 128;
-pub const MIPS_HFLAG_RE: u32 = 256;
-pub const MIPS_HFLAG_AWRAP: u32 = 512;
-pub const MIPS_HFLAG_M16: u32 = 1024;
-pub const MIPS_HFLAG_M16_SHIFT: u32 = 10;
-pub const MIPS_HFLAG_BMASK_BASE: u32 = 8402944;
-pub const MIPS_HFLAG_B: u32 = 2048;
-pub const MIPS_HFLAG_BC: u32 = 4096;
-pub const MIPS_HFLAG_BL: u32 = 6144;
-pub const MIPS_HFLAG_BR: u32 = 8192;
-pub const MIPS_HFLAG_BMASK_EXT: u32 = 507904;
-pub const MIPS_HFLAG_B16: u32 = 16384;
-pub const MIPS_HFLAG_BDS16: u32 = 32768;
-pub const MIPS_HFLAG_BDS32: u32 = 65536;
-pub const MIPS_HFLAG_BDS_STRICT: u32 = 131072;
-pub const MIPS_HFLAG_BX: u32 = 262144;
-pub const MIPS_HFLAG_BMASK: u32 = 8910848;
-pub const MIPS_HFLAG_DSP: u32 = 524288;
-pub const MIPS_HFLAG_DSPR2: u32 = 1048576;
-pub const MIPS_HFLAG_HWRENA_ULR: u32 = 2097152;
-pub const MIPS_HFLAG_SBRI: u32 = 4194304;
-pub const MIPS_HFLAG_FBNSLOT: u32 = 8388608;
-pub const MIPS_HFLAG_MSA: u32 = 16777216;
-pub const MIPS_HFLAG_FRE: u32 = 33554432;
-pub const MIPS_HFLAG_ELPA: u32 = 67108864;
-pub const MIPS_HFLAG_ITC_CACHE: u32 = 134217728;
-pub const MMU_USER_IDX: u32 = 2;
+pub const ARM_INSN_START_WORD2_MASK: u32 = 67108863;
+pub const ARM_INSN_START_WORD2_SHIFT: u32 = 14;
+pub const GTIMER_PHYS: u32 = 0;
+pub const GTIMER_VIRT: u32 = 1;
+pub const GTIMER_HYP: u32 = 2;
+pub const GTIMER_SEC: u32 = 3;
+pub const NUM_GTIMERS: u32 = 4;
+pub const SCTLR_M: u32 = 1;
+pub const SCTLR_A: u32 = 2;
+pub const SCTLR_C: u32 = 4;
+pub const SCTLR_W: u32 = 8;
+pub const SCTLR_SA: u32 = 8;
+pub const SCTLR_P: u32 = 16;
+pub const SCTLR_SA0: u32 = 16;
+pub const SCTLR_D: u32 = 32;
+pub const SCTLR_CP15BEN: u32 = 32;
+pub const SCTLR_L: u32 = 64;
+pub const SCTLR_B: u32 = 128;
+pub const SCTLR_ITD: u32 = 128;
+pub const SCTLR_S: u32 = 256;
+pub const SCTLR_SED: u32 = 256;
+pub const SCTLR_R: u32 = 512;
+pub const SCTLR_UMA: u32 = 512;
+pub const SCTLR_F: u32 = 1024;
+pub const SCTLR_SW: u32 = 1024;
+pub const SCTLR_Z: u32 = 2048;
+pub const SCTLR_I: u32 = 4096;
+pub const SCTLR_V: u32 = 8192;
+pub const SCTLR_RR: u32 = 16384;
+pub const SCTLR_DZE: u32 = 16384;
+pub const SCTLR_L4: u32 = 32768;
+pub const SCTLR_UCT: u32 = 32768;
+pub const SCTLR_DT: u32 = 65536;
+pub const SCTLR_nTWI: u32 = 65536;
+pub const SCTLR_HA: u32 = 131072;
+pub const SCTLR_BR: u32 = 131072;
+pub const SCTLR_IT: u32 = 262144;
+pub const SCTLR_nTWE: u32 = 262144;
+pub const SCTLR_WXN: u32 = 524288;
+pub const SCTLR_ST: u32 = 1048576;
+pub const SCTLR_UWXN: u32 = 1048576;
+pub const SCTLR_FI: u32 = 2097152;
+pub const SCTLR_U: u32 = 4194304;
+pub const SCTLR_XP: u32 = 8388608;
+pub const SCTLR_VE: u32 = 16777216;
+pub const SCTLR_E0E: u32 = 16777216;
+pub const SCTLR_EE: u32 = 33554432;
+pub const SCTLR_L2: u32 = 67108864;
+pub const SCTLR_UCI: u32 = 67108864;
+pub const SCTLR_NMFI: u32 = 134217728;
+pub const SCTLR_TRE: u32 = 268435456;
+pub const SCTLR_AFE: u32 = 536870912;
+pub const SCTLR_TE: u32 = 1073741824;
+pub const CPTR_TCPAC: u32 = 2147483648;
+pub const CPTR_TTA: u32 = 1048576;
+pub const CPTR_TFP: u32 = 1024;
+pub const MDCR_EPMAD: u32 = 2097152;
+pub const MDCR_EDAD: u32 = 1048576;
+pub const MDCR_SPME: u32 = 131072;
+pub const MDCR_SDD: u32 = 65536;
+pub const MDCR_SPD: u32 = 49152;
+pub const MDCR_TDRA: u32 = 2048;
+pub const MDCR_TDOSA: u32 = 1024;
+pub const MDCR_TDA: u32 = 512;
+pub const MDCR_TDE: u32 = 256;
+pub const MDCR_HPME: u32 = 128;
+pub const MDCR_TPM: u32 = 64;
+pub const MDCR_TPMCR: u32 = 32;
+pub const SDCR_VALID_MASK: u32 = 3325952;
+pub const CPSR_M: u32 = 31;
+pub const CPSR_T: u32 = 32;
+pub const CPSR_F: u32 = 64;
+pub const CPSR_I: u32 = 128;
+pub const CPSR_A: u32 = 256;
+pub const CPSR_E: u32 = 512;
+pub const CPSR_IT_2_7: u32 = 64512;
+pub const CPSR_GE: u32 = 983040;
+pub const CPSR_IL: u32 = 1048576;
+pub const CPSR_RESERVED: u32 = 14680064;
+pub const CPSR_J: u32 = 16777216;
+pub const CPSR_IT_0_1: u32 = 100663296;
+pub const CPSR_Q: u32 = 134217728;
+pub const CPSR_V: u32 = 268435456;
+pub const CPSR_C: u32 = 536870912;
+pub const CPSR_Z: u32 = 1073741824;
+pub const CPSR_N: u32 = 2147483648;
+pub const CPSR_NZCV: u32 = 4026531840;
+pub const CPSR_AIF: u32 = 448;
+pub const CPSR_IT: u32 = 100727808;
+pub const CACHED_CPSR_BITS: u32 = 4262460896;
+pub const CPSR_USER: u32 = 4161732608;
+pub const CPSR_EXEC: u32 = 118553632;
+pub const CPSR_ERET_MASK: i32 = -14680065;
+pub const TTBCR_N: u32 = 7;
+pub const TTBCR_T0SZ: u32 = 7;
+pub const TTBCR_PD0: u32 = 16;
+pub const TTBCR_PD1: u32 = 32;
+pub const TTBCR_EPD0: u32 = 128;
+pub const TTBCR_IRGN0: u32 = 768;
+pub const TTBCR_ORGN0: u32 = 3072;
+pub const TTBCR_SH0: u32 = 12288;
+pub const TTBCR_T1SZ: u32 = 196608;
+pub const TTBCR_A1: u32 = 4194304;
+pub const TTBCR_EPD1: u32 = 8388608;
+pub const TTBCR_IRGN1: u32 = 50331648;
+pub const TTBCR_ORGN1: u32 = 201326592;
+pub const TTBCR_SH1: u32 = 268435456;
+pub const TTBCR_EAE: u32 = 2147483648;
+pub const PSTATE_SP: u32 = 1;
+pub const PSTATE_M: u32 = 15;
+pub const PSTATE_nRW: u32 = 16;
+pub const PSTATE_F: u32 = 64;
+pub const PSTATE_I: u32 = 128;
+pub const PSTATE_A: u32 = 256;
+pub const PSTATE_D: u32 = 512;
+pub const PSTATE_IL: u32 = 1048576;
+pub const PSTATE_SS: u32 = 2097152;
+pub const PSTATE_V: u32 = 268435456;
+pub const PSTATE_C: u32 = 536870912;
+pub const PSTATE_Z: u32 = 1073741824;
+pub const PSTATE_N: u32 = 2147483648;
+pub const PSTATE_NZCV: u32 = 4026531840;
+pub const PSTATE_DAIF: u32 = 960;
+pub const CACHED_PSTATE_BITS: u32 = 4026532800;
+pub const PSTATE_MODE_EL3h: u32 = 13;
+pub const PSTATE_MODE_EL3t: u32 = 12;
+pub const PSTATE_MODE_EL2h: u32 = 9;
+pub const PSTATE_MODE_EL2t: u32 = 8;
+pub const PSTATE_MODE_EL1h: u32 = 5;
+pub const PSTATE_MODE_EL1t: u32 = 4;
+pub const PSTATE_MODE_EL0t: u32 = 0;
+pub const HCR_VM: u32 = 1;
+pub const HCR_SWIO: u32 = 2;
+pub const HCR_PTW: u32 = 4;
+pub const HCR_FMO: u32 = 8;
+pub const HCR_IMO: u32 = 16;
+pub const HCR_AMO: u32 = 32;
+pub const HCR_VF: u32 = 64;
+pub const HCR_VI: u32 = 128;
+pub const HCR_VSE: u32 = 256;
+pub const HCR_FB: u32 = 512;
+pub const HCR_BSU_MASK: u32 = 3072;
+pub const HCR_DC: u32 = 4096;
+pub const HCR_TWI: u32 = 8192;
+pub const HCR_TWE: u32 = 16384;
+pub const HCR_TID0: u32 = 32768;
+pub const HCR_TID1: u32 = 65536;
+pub const HCR_TID2: u32 = 131072;
+pub const HCR_TID3: u32 = 262144;
+pub const HCR_TSC: u32 = 524288;
+pub const HCR_TIDCP: u32 = 1048576;
+pub const HCR_TACR: u32 = 2097152;
+pub const HCR_TSW: u32 = 4194304;
+pub const HCR_TPC: u32 = 8388608;
+pub const HCR_TPU: u32 = 16777216;
+pub const HCR_TTLB: u32 = 33554432;
+pub const HCR_TVM: u32 = 67108864;
+pub const HCR_TGE: u32 = 134217728;
+pub const HCR_TDZ: u32 = 268435456;
+pub const HCR_HCD: u32 = 536870912;
+pub const HCR_TRVM: u32 = 1073741824;
+pub const HCR_RW: u32 = 2147483648;
+pub const HCR_CD: u64 = 4294967296;
+pub const HCR_ID: u64 = 8589934592;
+pub const HCR_MASK: u64 = 17179869183;
+pub const SCR_NS: u32 = 1;
+pub const SCR_IRQ: u32 = 2;
+pub const SCR_FIQ: u32 = 4;
+pub const SCR_EA: u32 = 8;
+pub const SCR_FW: u32 = 16;
+pub const SCR_AW: u32 = 32;
+pub const SCR_NET: u32 = 64;
+pub const SCR_SMD: u32 = 128;
+pub const SCR_HCE: u32 = 256;
+pub const SCR_SIF: u32 = 512;
+pub const SCR_RW: u32 = 1024;
+pub const SCR_ST: u32 = 2048;
+pub const SCR_TWI: u32 = 4096;
+pub const SCR_TWE: u32 = 8192;
+pub const SCR_AARCH32_MASK: u32 = 13311;
+pub const SCR_AARCH64_MASK: u32 = 16319;
+pub const FPSR_MASK: u32 = 4160749727;
+pub const FPCR_MASK: u32 = 133668608;
+pub const ARM_VFP_FPSID: u32 = 0;
+pub const ARM_VFP_FPSCR: u32 = 1;
+pub const ARM_VFP_MVFR2: u32 = 5;
+pub const ARM_VFP_MVFR1: u32 = 6;
+pub const ARM_VFP_MVFR0: u32 = 7;
+pub const ARM_VFP_FPEXC: u32 = 8;
+pub const ARM_VFP_FPINST: u32 = 9;
+pub const ARM_VFP_FPINST2: u32 = 10;
+pub const ARM_IWMMXT_wCID: u32 = 0;
+pub const ARM_IWMMXT_wCon: u32 = 1;
+pub const ARM_IWMMXT_wCSSF: u32 = 2;
+pub const ARM_IWMMXT_wCASF: u32 = 3;
+pub const ARM_IWMMXT_wCGR0: u32 = 8;
+pub const ARM_IWMMXT_wCGR1: u32 = 9;
+pub const ARM_IWMMXT_wCGR2: u32 = 10;
+pub const ARM_IWMMXT_wCGR3: u32 = 11;
+pub const CP_REG_AA64_SHIFT: u32 = 28;
+pub const CP_REG_AA64_MASK: u32 = 268435456;
+pub const CP_REG_NS_SHIFT: u32 = 29;
+pub const CP_REG_NS_MASK: u32 = 536870912;
+pub const ARM_CP_SPECIAL: u32 = 1;
+pub const ARM_CP_CONST: u32 = 2;
+pub const ARM_CP_64BIT: u32 = 4;
+pub const ARM_CP_SUPPRESS_TB_END: u32 = 8;
+pub const ARM_CP_OVERRIDE: u32 = 16;
+pub const ARM_CP_ALIAS: u32 = 32;
+pub const ARM_CP_IO: u32 = 64;
+pub const ARM_CP_NO_RAW: u32 = 128;
+pub const ARM_CP_NOP: u32 = 257;
+pub const ARM_CP_WFI: u32 = 513;
+pub const ARM_CP_NZCV: u32 = 769;
+pub const ARM_CP_CURRENTEL: u32 = 1025;
+pub const ARM_CP_DC_ZVA: u32 = 1281;
+pub const ARM_LAST_SPECIAL: u32 = 1281;
+pub const ARM_CP_SENTINEL: u32 = 65535;
+pub const ARM_CP_FLAG_MASK: u32 = 255;
+pub const PL3_R: u32 = 128;
+pub const PL3_W: u32 = 64;
+pub const PL2_R: u32 = 160;
+pub const PL2_W: u32 = 80;
+pub const PL1_R: u32 = 168;
+pub const PL1_W: u32 = 84;
+pub const PL0_R: u32 = 170;
+pub const PL0_W: u32 = 85;
+pub const PL3_RW: u32 = 192;
+pub const PL2_RW: u32 = 240;
+pub const PL1_RW: u32 = 252;
+pub const PL0_RW: u32 = 255;
+pub const CP_ANY: u32 = 255;
+pub const ARM_CPUID_TI915T: u32 = 1409454418;
+pub const ARM_CPUID_TI925T: u32 = 1409454674;
+pub const TARGET_PAGE_BITS_MIN: u32 = 10;
+pub const TARGET_PHYS_ADDR_SPACE_BITS: u32 = 48;
+pub const TARGET_VIRT_ADDR_SPACE_BITS: u32 = 64;
+pub const MMU_USER_IDX: u32 = 0;
 pub const RAM_ADDR_FMT: &'static [u8; 4usize] = b"%lx\0";
 pub const DIRTY_MEMORY_VGA: u32 = 0;
 pub const DIRTY_MEMORY_CODE: u32 = 1;
@@ -2482,9 +2478,6 @@ pub const EXCP_DEBUG: u32 = 65538;
 pub const EXCP_HALTED: u32 = 65539;
 pub const EXCP_YIELD: u32 = 65540;
 pub const EXCP_ATOMIC: u32 = 65541;
-pub const TARGET_PAGE_BITS_MIN: u32 = 12;
-pub const TARGET_PAGE_SIZE: u32 = 4096;
-pub const TARGET_PAGE_MASK: i32 = -4096;
 pub const PAGE_READ: u32 = 1;
 pub const PAGE_WRITE: u32 = 2;
 pub const PAGE_EXEC: u32 = 4;
@@ -2505,17 +2498,40 @@ pub const CPU_INTERRUPT_TGT_INT_0: u32 = 256;
 pub const CPU_INTERRUPT_TGT_INT_1: u32 = 2048;
 pub const CPU_INTERRUPT_TGT_INT_2: u32 = 8192;
 pub const CPU_INTERRUPT_SSTEP_MASK: u32 = 4698;
-pub const TLB_INVALID_MASK: u32 = 2048;
-pub const TLB_NOTDIRTY: u32 = 1024;
-pub const TLB_MMIO: u32 = 512;
-pub const TLB_FLAGS_MASK: u32 = 3584;
-pub const EXCP_SC: u32 = 256;
-pub const CPU_INTERRUPT_WAKE: u32 = 256;
-pub const TARGET_PTR_FMT: &'static [u8; 5usize] = b"%08x\0";
+pub const ARM_TBFLAG_AARCH64_STATE_SHIFT: u32 = 31;
+pub const ARM_TBFLAG_AARCH64_STATE_MASK: u32 = 2147483648;
+pub const ARM_TBFLAG_MMUIDX_SHIFT: u32 = 28;
+pub const ARM_TBFLAG_MMUIDX_MASK: u32 = 1879048192;
+pub const ARM_TBFLAG_SS_ACTIVE_SHIFT: u32 = 27;
+pub const ARM_TBFLAG_SS_ACTIVE_MASK: u32 = 134217728;
+pub const ARM_TBFLAG_PSTATE_SS_SHIFT: u32 = 26;
+pub const ARM_TBFLAG_PSTATE_SS_MASK: u32 = 67108864;
+pub const ARM_TBFLAG_FPEXC_EL_SHIFT: u32 = 24;
+pub const ARM_TBFLAG_FPEXC_EL_MASK: u32 = 50331648;
+pub const ARM_TBFLAG_THUMB_SHIFT: u32 = 0;
+pub const ARM_TBFLAG_THUMB_MASK: u32 = 1;
+pub const ARM_TBFLAG_VECLEN_SHIFT: u32 = 1;
+pub const ARM_TBFLAG_VECLEN_MASK: u32 = 14;
+pub const ARM_TBFLAG_VECSTRIDE_SHIFT: u32 = 4;
+pub const ARM_TBFLAG_VECSTRIDE_MASK: u32 = 48;
+pub const ARM_TBFLAG_VFPEN_SHIFT: u32 = 7;
+pub const ARM_TBFLAG_VFPEN_MASK: u32 = 128;
+pub const ARM_TBFLAG_CONDEXEC_SHIFT: u32 = 8;
+pub const ARM_TBFLAG_CONDEXEC_MASK: u32 = 65280;
+pub const ARM_TBFLAG_SCTLR_B_SHIFT: u32 = 16;
+pub const ARM_TBFLAG_SCTLR_B_MASK: u32 = 65536;
+pub const ARM_TBFLAG_XSCALE_CPAR_SHIFT: u32 = 17;
+pub const ARM_TBFLAG_XSCALE_CPAR_MASK: u32 = 393216;
+pub const ARM_TBFLAG_NS_SHIFT: u32 = 19;
+pub const ARM_TBFLAG_NS_MASK: u32 = 524288;
+pub const ARM_TBFLAG_BE_DATA_SHIFT: u32 = 20;
+pub const ARM_TBFLAG_BE_DATA_MASK: u32 = 1048576;
+pub const ARM_TBFLAG_TBI0_SHIFT: u32 = 0;
+pub const ARM_TBFLAG_TBI0_MASK: u32 = 1;
+pub const ARM_TBFLAG_TBI1_SHIFT: u32 = 1;
+pub const ARM_TBFLAG_TBI1_MASK: u32 = 2;
+pub const TARGET_PTR_FMT: &'static [u8; 7usize] = b"%016lx\0";
 pub const TARGET_PID_FMT: &'static [u8; 3usize] = b"%u\0";
-pub const MIPS_SP: u32 = 29;
-pub const MIPS_V0: u32 = 2;
-pub const MIPS_V1: u32 = 3;
 pub const QHT_MODE_AUTO_RESIZE: u32 = 1;
 pub const CODE_GEN_HTABLE_BITS: u32 = 15;
 pub const CODE_GEN_HTABLE_SIZE: u32 = 32768;
@@ -2562,47 +2578,12 @@ pub const OPC_BUF_SIZE: u32 = 640;
 pub const OPC_MAX_SIZE: u32 = 374;
 pub const OPPARAM_BUF_SIZE: u32 = 6400;
 pub const CPU_TEMP_BUF_NLONGS: u32 = 128;
-pub const TCG_PRIlx: &'static [u8; 2usize] = b"x\0";
-pub const TCG_PRIld: &'static [u8; 2usize] = b"d\0";
+pub const TCG_TARGET_REG_BITS: u32 = 64;
+pub const TCG_PRIlx: &'static [u8; 3usize] = b"lx\0";
+pub const TCG_PRIld: &'static [u8; 3usize] = b"ld\0";
 pub const TCG_OVERSIZED_GUEST: u32 = 0;
-pub const TCG_TARGET_HAS_extrl_i64_i32: u32 = 0;
-pub const TCG_TARGET_HAS_extrh_i64_i32: u32 = 0;
-pub const TCG_TARGET_HAS_div_i64: u32 = 0;
-pub const TCG_TARGET_HAS_rem_i64: u32 = 0;
-pub const TCG_TARGET_HAS_div2_i64: u32 = 0;
-pub const TCG_TARGET_HAS_rot_i64: u32 = 0;
-pub const TCG_TARGET_HAS_ext8s_i64: u32 = 0;
-pub const TCG_TARGET_HAS_ext16s_i64: u32 = 0;
-pub const TCG_TARGET_HAS_ext32s_i64: u32 = 0;
-pub const TCG_TARGET_HAS_ext8u_i64: u32 = 0;
-pub const TCG_TARGET_HAS_ext16u_i64: u32 = 0;
-pub const TCG_TARGET_HAS_ext32u_i64: u32 = 0;
-pub const TCG_TARGET_HAS_bswap16_i64: u32 = 0;
-pub const TCG_TARGET_HAS_bswap32_i64: u32 = 0;
-pub const TCG_TARGET_HAS_bswap64_i64: u32 = 0;
-pub const TCG_TARGET_HAS_neg_i64: u32 = 0;
-pub const TCG_TARGET_HAS_not_i64: u32 = 0;
-pub const TCG_TARGET_HAS_andc_i64: u32 = 0;
-pub const TCG_TARGET_HAS_orc_i64: u32 = 0;
-pub const TCG_TARGET_HAS_eqv_i64: u32 = 0;
-pub const TCG_TARGET_HAS_nand_i64: u32 = 0;
-pub const TCG_TARGET_HAS_nor_i64: u32 = 0;
-pub const TCG_TARGET_HAS_clz_i64: u32 = 0;
-pub const TCG_TARGET_HAS_ctz_i64: u32 = 0;
-pub const TCG_TARGET_HAS_ctpop_i64: u32 = 0;
-pub const TCG_TARGET_HAS_deposit_i64: u32 = 0;
-pub const TCG_TARGET_HAS_extract_i64: u32 = 0;
-pub const TCG_TARGET_HAS_sextract_i64: u32 = 0;
-pub const TCG_TARGET_HAS_movcond_i64: u32 = 0;
-pub const TCG_TARGET_HAS_add2_i64: u32 = 0;
-pub const TCG_TARGET_HAS_sub2_i64: u32 = 0;
-pub const TCG_TARGET_HAS_mulu2_i64: u32 = 0;
-pub const TCG_TARGET_HAS_muls2_i64: u32 = 0;
-pub const TCG_TARGET_HAS_muluh_i64: u32 = 0;
-pub const TCG_TARGET_HAS_mulsh_i64: u32 = 0;
-pub const TCG_TARGET_HAS_add2_i32: u32 = 1;
-pub const TCG_TARGET_HAS_sub2_i32: u32 = 1;
 pub const TCG_TARGET_HAS_div2_i32: u32 = 0;
+pub const TCG_TARGET_HAS_div2_i64: u32 = 0;
 pub const TARGET_INSN_START_WORDS: u32 = 3;
 pub const TCG_POOL_CHUNK_SIZE: u32 = 32768;
 pub const TCG_MAX_TEMPS: u32 = 512;
@@ -26766,6 +26747,664 @@ extern "C" {
 extern "C" {
     pub fn dump_in_progress() -> bool;
 }
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__0 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__0 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__1 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__1 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__2 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__2 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__3 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__3 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__4 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__4 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__5 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__5 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__6 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__6 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__7 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__7 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__8 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__8 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__9 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__9 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__10 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__10 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__11 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__11 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__12 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__12 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__13 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__13 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__14 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__14 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__15 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__15 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__16 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__16 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__17 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__17 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__18 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__18 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__19 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__19 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__20 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__20 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__21 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__21 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__22 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__22 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__23 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__23 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__24 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__24 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__25 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__25 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__26 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__26 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__27 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__27 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__28 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__28 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__29 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__29 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__30 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__30 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__31 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__31 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__32 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__32 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__33 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__33 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__34 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__34 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__35 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__35 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__36 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__36 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__37 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__37 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__38 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__38 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__39 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__39 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__40 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__40 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__41 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__41 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__42 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__42 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__43 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__43 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__44 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__44 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__45 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__45 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct qemu_build_bug_on__46 {
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
+    pub __bindgen_padding_0: u8,
+}
+impl qemu_build_bug_on__46 {
+    #[inline]
+    pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
+            Default::default();
+        __bindgen_bitfield_unit
+    }
+}
 pub type flag = u8;
 pub const float_relation_less: ::std::os::raw::c_int = -1;
 pub const float_relation_equal: ::std::os::raw::c_int = 0;
@@ -31494,71 +32133,85 @@ extern "C" {
 extern "C" {
     pub static vmstate_cpu_common: VMStateDescription;
 }
-#[doc = " MIPSCPUClass:"]
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct arm_boot_info {
+    _unused: [u8; 0],
+}
+#[doc = " ARMCPUClass:"]
 #[doc = " @parent_realize: The parent class' realize handler."]
 #[doc = " @parent_reset: The parent class' reset handler."]
 #[doc = ""]
-#[doc = " A MIPS CPU model."]
+#[doc = " An ARM CPU model."]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct MIPSCPUClass {
+pub struct ARMCPUClass {
     pub parent_class: CPUClass,
     pub parent_realize: DeviceRealize,
     pub parent_reset: ::std::option::Option<unsafe extern "C" fn(cpu: *mut CPUState)>,
 }
-pub const TCGReg_TCG_REG_ZERO: TCGReg = 0;
-pub const TCGReg_TCG_REG_AT: TCGReg = 1;
-pub const TCGReg_TCG_REG_V0: TCGReg = 2;
-pub const TCGReg_TCG_REG_V1: TCGReg = 3;
-pub const TCGReg_TCG_REG_A0: TCGReg = 4;
-pub const TCGReg_TCG_REG_A1: TCGReg = 5;
-pub const TCGReg_TCG_REG_A2: TCGReg = 6;
-pub const TCGReg_TCG_REG_A3: TCGReg = 7;
-pub const TCGReg_TCG_REG_T0: TCGReg = 8;
-pub const TCGReg_TCG_REG_T1: TCGReg = 9;
-pub const TCGReg_TCG_REG_T2: TCGReg = 10;
-pub const TCGReg_TCG_REG_T3: TCGReg = 11;
-pub const TCGReg_TCG_REG_T4: TCGReg = 12;
-pub const TCGReg_TCG_REG_T5: TCGReg = 13;
-pub const TCGReg_TCG_REG_T6: TCGReg = 14;
-pub const TCGReg_TCG_REG_T7: TCGReg = 15;
-pub const TCGReg_TCG_REG_S0: TCGReg = 16;
-pub const TCGReg_TCG_REG_S1: TCGReg = 17;
-pub const TCGReg_TCG_REG_S2: TCGReg = 18;
-pub const TCGReg_TCG_REG_S3: TCGReg = 19;
-pub const TCGReg_TCG_REG_S4: TCGReg = 20;
-pub const TCGReg_TCG_REG_S5: TCGReg = 21;
-pub const TCGReg_TCG_REG_S6: TCGReg = 22;
-pub const TCGReg_TCG_REG_S7: TCGReg = 23;
-pub const TCGReg_TCG_REG_T8: TCGReg = 24;
-pub const TCGReg_TCG_REG_T9: TCGReg = 25;
-pub const TCGReg_TCG_REG_K0: TCGReg = 26;
-pub const TCGReg_TCG_REG_K1: TCGReg = 27;
-pub const TCGReg_TCG_REG_GP: TCGReg = 28;
-pub const TCGReg_TCG_REG_SP: TCGReg = 29;
-pub const TCGReg_TCG_REG_S8: TCGReg = 30;
-pub const TCGReg_TCG_REG_RA: TCGReg = 31;
-pub const TCGReg_TCG_REG_CALL_STACK: TCGReg = 29;
-pub const TCGReg_TCG_AREG0: TCGReg = 16;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct AArch64CPUClass {
+    pub parent_class: ARMCPUClass,
+}
+extern "C" {
+    pub fn register_cp_regs_for_features(cpu: *mut ARMCPU);
+}
+extern "C" {
+    pub fn init_cpreg_list(cpu: *mut ARMCPU);
+}
+extern "C" {
+    pub fn arm_gt_ptimer_cb(opaque: *mut ::std::os::raw::c_void);
+}
+extern "C" {
+    pub fn arm_gt_vtimer_cb(opaque: *mut ::std::os::raw::c_void);
+}
+extern "C" {
+    pub fn arm_gt_htimer_cb(opaque: *mut ::std::os::raw::c_void);
+}
+extern "C" {
+    pub fn arm_gt_stimer_cb(opaque: *mut ::std::os::raw::c_void);
+}
+pub const TCGReg_TCG_REG_X0: TCGReg = 0;
+pub const TCGReg_TCG_REG_X1: TCGReg = 1;
+pub const TCGReg_TCG_REG_X2: TCGReg = 2;
+pub const TCGReg_TCG_REG_X3: TCGReg = 3;
+pub const TCGReg_TCG_REG_X4: TCGReg = 4;
+pub const TCGReg_TCG_REG_X5: TCGReg = 5;
+pub const TCGReg_TCG_REG_X6: TCGReg = 6;
+pub const TCGReg_TCG_REG_X7: TCGReg = 7;
+pub const TCGReg_TCG_REG_X8: TCGReg = 8;
+pub const TCGReg_TCG_REG_X9: TCGReg = 9;
+pub const TCGReg_TCG_REG_X10: TCGReg = 10;
+pub const TCGReg_TCG_REG_X11: TCGReg = 11;
+pub const TCGReg_TCG_REG_X12: TCGReg = 12;
+pub const TCGReg_TCG_REG_X13: TCGReg = 13;
+pub const TCGReg_TCG_REG_X14: TCGReg = 14;
+pub const TCGReg_TCG_REG_X15: TCGReg = 15;
+pub const TCGReg_TCG_REG_X16: TCGReg = 16;
+pub const TCGReg_TCG_REG_X17: TCGReg = 17;
+pub const TCGReg_TCG_REG_X18: TCGReg = 18;
+pub const TCGReg_TCG_REG_X19: TCGReg = 19;
+pub const TCGReg_TCG_REG_X20: TCGReg = 20;
+pub const TCGReg_TCG_REG_X21: TCGReg = 21;
+pub const TCGReg_TCG_REG_X22: TCGReg = 22;
+pub const TCGReg_TCG_REG_X23: TCGReg = 23;
+pub const TCGReg_TCG_REG_X24: TCGReg = 24;
+pub const TCGReg_TCG_REG_X25: TCGReg = 25;
+pub const TCGReg_TCG_REG_X26: TCGReg = 26;
+pub const TCGReg_TCG_REG_X27: TCGReg = 27;
+pub const TCGReg_TCG_REG_X28: TCGReg = 28;
+pub const TCGReg_TCG_REG_X29: TCGReg = 29;
+pub const TCGReg_TCG_REG_X30: TCGReg = 30;
+pub const TCGReg_TCG_REG_SP: TCGReg = 31;
+pub const TCGReg_TCG_REG_XZR: TCGReg = 31;
+pub const TCGReg_TCG_REG_FP: TCGReg = 29;
+pub const TCGReg_TCG_REG_LR: TCGReg = 30;
+pub const TCGReg_TCG_AREG0: TCGReg = 19;
 pub type TCGReg = ::std::os::raw::c_uint;
-extern "C" {
-    pub static mut use_movnz_instructions: bool;
-}
-extern "C" {
-    pub static mut use_mips32_instructions: bool;
-}
-extern "C" {
-    pub static mut use_mips32r2_instructions: bool;
-}
-extern "C" {
-    pub fn cacheflush(
-        start: *mut ::std::os::raw::c_void,
-        len: ::std::os::raw::c_int,
-        x: ::std::os::raw::c_int,
-    );
-}
-pub type target_long = i32;
-pub type target_ulong = u32;
+pub type target_long = i64;
+pub type target_ulong = u64;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct CPUTLBEntry {
@@ -31581,11 +32234,11 @@ pub struct CPUTLBEntry__bindgen_ty_1__bindgen_ty_1 {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct qemu_build_bug_on__2 {
+pub struct qemu_build_bug_on__49 {
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
     pub __bindgen_padding_0: u8,
 }
-impl qemu_build_bug_on__2 {
+impl qemu_build_bug_on__49 {
     #[inline]
     pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
         let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
@@ -31601,553 +32254,1056 @@ pub struct CPUIOTLBEntry {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct r4k_tlb_t {
-    pub VPN: target_ulong,
-    pub PageMask: u32,
-    pub ASID: u16,
-    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 2usize], u8>,
-    pub PFN: [u64; 2usize],
-}
-impl r4k_tlb_t {
-    #[inline]
-    pub fn G(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(0usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_G(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(0usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn C0(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(1usize, 3u8) as u32) }
-    }
-    #[inline]
-    pub fn set_C0(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(1usize, 3u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn C1(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(4usize, 3u8) as u32) }
-    }
-    #[inline]
-    pub fn set_C1(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(4usize, 3u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn V0(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(7usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_V0(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(7usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn V1(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(8usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_V1(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(8usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn D0(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(9usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_D0(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(9usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn D1(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(10usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_D1(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(10usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn XI0(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(11usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_XI0(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(11usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn XI1(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(12usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_XI1(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(12usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn RI0(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(13usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_RI0(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(13usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn RI1(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(14usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_RI1(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(14usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn EHINV(&self) -> ::std::os::raw::c_uint {
-        unsafe { ::std::mem::transmute(self._bitfield_1.get(15usize, 1u8) as u32) }
-    }
-    #[inline]
-    pub fn set_EHINV(&mut self, val: ::std::os::raw::c_uint) {
-        unsafe {
-            let val: u32 = ::std::mem::transmute(val);
-            self._bitfield_1.set(15usize, 1u8, val as u64)
-        }
-    }
-    #[inline]
-    pub fn new_bitfield_1(
-        G: ::std::os::raw::c_uint,
-        C0: ::std::os::raw::c_uint,
-        C1: ::std::os::raw::c_uint,
-        V0: ::std::os::raw::c_uint,
-        V1: ::std::os::raw::c_uint,
-        D0: ::std::os::raw::c_uint,
-        D1: ::std::os::raw::c_uint,
-        XI0: ::std::os::raw::c_uint,
-        XI1: ::std::os::raw::c_uint,
-        RI0: ::std::os::raw::c_uint,
-        RI1: ::std::os::raw::c_uint,
-        EHINV: ::std::os::raw::c_uint,
-    ) -> __BindgenBitfieldUnit<[u8; 2usize], u8> {
-        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 2usize], u8> =
-            Default::default();
-        __bindgen_bitfield_unit.set(0usize, 1u8, {
-            let G: u32 = unsafe { ::std::mem::transmute(G) };
-            G as u64
-        });
-        __bindgen_bitfield_unit.set(1usize, 3u8, {
-            let C0: u32 = unsafe { ::std::mem::transmute(C0) };
-            C0 as u64
-        });
-        __bindgen_bitfield_unit.set(4usize, 3u8, {
-            let C1: u32 = unsafe { ::std::mem::transmute(C1) };
-            C1 as u64
-        });
-        __bindgen_bitfield_unit.set(7usize, 1u8, {
-            let V0: u32 = unsafe { ::std::mem::transmute(V0) };
-            V0 as u64
-        });
-        __bindgen_bitfield_unit.set(8usize, 1u8, {
-            let V1: u32 = unsafe { ::std::mem::transmute(V1) };
-            V1 as u64
-        });
-        __bindgen_bitfield_unit.set(9usize, 1u8, {
-            let D0: u32 = unsafe { ::std::mem::transmute(D0) };
-            D0 as u64
-        });
-        __bindgen_bitfield_unit.set(10usize, 1u8, {
-            let D1: u32 = unsafe { ::std::mem::transmute(D1) };
-            D1 as u64
-        });
-        __bindgen_bitfield_unit.set(11usize, 1u8, {
-            let XI0: u32 = unsafe { ::std::mem::transmute(XI0) };
-            XI0 as u64
-        });
-        __bindgen_bitfield_unit.set(12usize, 1u8, {
-            let XI1: u32 = unsafe { ::std::mem::transmute(XI1) };
-            XI1 as u64
-        });
-        __bindgen_bitfield_unit.set(13usize, 1u8, {
-            let RI0: u32 = unsafe { ::std::mem::transmute(RI0) };
-            RI0 as u64
-        });
-        __bindgen_bitfield_unit.set(14usize, 1u8, {
-            let RI1: u32 = unsafe { ::std::mem::transmute(RI1) };
-            RI1 as u64
-        });
-        __bindgen_bitfield_unit.set(15usize, 1u8, {
-            let EHINV: u32 = unsafe { ::std::mem::transmute(EHINV) };
-            EHINV as u64
-        });
-        __bindgen_bitfield_unit
-    }
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct CPUMIPSTLBContext {
-    pub nb_tlb: u32,
-    pub tlb_in_use: u32,
-    pub map_address: ::std::option::Option<
-        unsafe extern "C" fn(
-            env: *mut CPUMIPSState,
-            physical: *mut hwaddr,
-            prot: *mut ::std::os::raw::c_int,
-            address: target_ulong,
-            rw: ::std::os::raw::c_int,
-            access_type: ::std::os::raw::c_int,
-        ) -> ::std::os::raw::c_int,
-    >,
-    pub helper_tlbwi: ::std::option::Option<unsafe extern "C" fn(env: *mut CPUMIPSState)>,
-    pub helper_tlbwr: ::std::option::Option<unsafe extern "C" fn(env: *mut CPUMIPSState)>,
-    pub helper_tlbp: ::std::option::Option<unsafe extern "C" fn(env: *mut CPUMIPSState)>,
-    pub helper_tlbr: ::std::option::Option<unsafe extern "C" fn(env: *mut CPUMIPSState)>,
-    pub helper_tlbinv: ::std::option::Option<unsafe extern "C" fn(env: *mut CPUMIPSState)>,
-    pub helper_tlbinvf: ::std::option::Option<unsafe extern "C" fn(env: *mut CPUMIPSState)>,
-    pub mmu: CPUMIPSTLBContext__bindgen_ty_1,
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub union CPUMIPSTLBContext__bindgen_ty_1 {
-    pub r4k: CPUMIPSTLBContext__bindgen_ty_1__bindgen_ty_1,
-    _bindgen_union_align: [u64; 512usize],
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct CPUMIPSTLBContext__bindgen_ty_1__bindgen_ty_1 {
-    pub tlb: [r4k_tlb_t; 128usize],
-}
-pub const CPUMIPSMSADataFormat_DF_BYTE: CPUMIPSMSADataFormat = 0;
-pub const CPUMIPSMSADataFormat_DF_HALF: CPUMIPSMSADataFormat = 1;
-pub const CPUMIPSMSADataFormat_DF_WORD: CPUMIPSMSADataFormat = 2;
-pub const CPUMIPSMSADataFormat_DF_DOUBLE: CPUMIPSMSADataFormat = 3;
-pub type CPUMIPSMSADataFormat = ::std::os::raw::c_uint;
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub union wr_t {
-    pub b: [i8; 16usize],
-    pub h: [i16; 8usize],
-    pub w: [i32; 4usize],
-    pub d: [i64; 2usize],
-    _bindgen_union_align: [u64; 2usize],
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub union fpr_t {
-    pub fd: float64,
-    pub fs: [float32; 2usize],
-    pub d: u64,
-    pub w: [u32; 2usize],
-    pub wr: wr_t,
-    _bindgen_union_align: [u64; 2usize],
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct CPUMIPSFPUContext {
-    pub fpr: [fpr_t; 32usize],
-    pub fp_status: float_status,
-    pub fcr0: u32,
-    pub fcr31_rw_bitmask: u32,
-    pub fcr31: u32,
+pub struct ARMGenericTimer {
+    pub cval: u64,
+    pub ctl: u64,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct CPUMIPSMVPContext {
-    pub CP0_MVPControl: i32,
-    pub CP0_MVPConf0: i32,
-    pub CP0_MVPConf1: i32,
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct mips_def_t {
-    _unused: [u8; 0],
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct TCState {
-    pub gpr: [target_ulong; 32usize],
-    pub PC: target_ulong,
-    pub HI: [target_ulong; 4usize],
-    pub LO: [target_ulong; 4usize],
-    pub ACX: [target_ulong; 4usize],
-    pub DSPControl: target_ulong,
-    pub CP0_TCStatus: i32,
-    pub CP0_TCBind: i32,
-    pub CP0_TCHalt: target_ulong,
-    pub CP0_TCContext: target_ulong,
-    pub CP0_TCSchedule: target_ulong,
-    pub CP0_TCScheFBack: target_ulong,
-    pub CP0_Debug_tcstatus: i32,
-    pub CP0_UserLocal: target_ulong,
-    pub msacsr: i32,
-    pub msa_fp_status: float_status,
+pub struct TCR {
+    pub raw_tcr: u64,
+    pub mask: u32,
+    pub base_mask: u32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
-pub struct CPUMIPSState {
-    pub active_tc: TCState,
-    pub active_fpu: CPUMIPSFPUContext,
-    pub current_tc: u32,
-    pub current_fpu: u32,
-    pub SEGBITS: u32,
-    pub PABITS: u32,
-    pub SEGMask: target_ulong,
-    pub PAMask: u64,
-    pub msair: i32,
-    pub CP0_Index: i32,
-    pub CP0_VPControl: i32,
-    pub CP0_Random: i32,
-    pub CP0_VPEControl: i32,
-    pub CP0_VPEConf0: i32,
-    pub CP0_VPEConf1: i32,
-    pub CP0_YQMask: target_ulong,
-    pub CP0_VPESchedule: target_ulong,
-    pub CP0_VPEScheFBack: target_ulong,
-    pub CP0_VPEOpt: i32,
-    pub CP0_EntryLo0: u64,
-    pub CP0_EntryLo1: u64,
-    pub CP0_GlobalNumber: i32,
-    pub CP0_Context: target_ulong,
-    pub CP0_KScratch: [target_ulong; 6usize],
-    pub CP0_PageMask: i32,
-    pub CP0_PageGrain_rw_bitmask: i32,
-    pub CP0_PageGrain: i32,
-    pub CP0_Wired: i32,
-    pub CP0_SRSConf0_rw_bitmask: i32,
-    pub CP0_SRSConf0: i32,
-    pub CP0_SRSConf1_rw_bitmask: i32,
-    pub CP0_SRSConf1: i32,
-    pub CP0_SRSConf2_rw_bitmask: i32,
-    pub CP0_SRSConf2: i32,
-    pub CP0_SRSConf3_rw_bitmask: i32,
-    pub CP0_SRSConf3: i32,
-    pub CP0_SRSConf4_rw_bitmask: i32,
-    pub CP0_SRSConf4: i32,
-    pub CP0_HWREna: i32,
-    pub CP0_BadVAddr: target_ulong,
-    pub CP0_BadInstr: u32,
-    pub CP0_BadInstrP: u32,
-    pub CP0_Count: i32,
-    pub CP0_EntryHi: target_ulong,
-    pub CP0_EntryHi_ASID_mask: target_ulong,
-    pub CP0_Compare: i32,
-    pub CP0_Status: i32,
-    pub CP0_IntCtl: i32,
-    pub CP0_SRSCtl: i32,
-    pub CP0_SRSMap: i32,
-    pub CP0_Cause: i32,
-    pub CP0_EPC: target_ulong,
-    pub CP0_PRid: i32,
-    pub CP0_EBase: i32,
-    pub CP0_CMGCRBase: target_ulong,
-    pub CP0_Config0: i32,
-    pub CP0_Config1: i32,
-    pub CP0_Config2: i32,
-    pub CP0_Config3: i32,
-    pub CP0_Config4: i32,
-    pub CP0_Config4_rw_bitmask: i32,
-    pub CP0_Config5: i32,
-    pub CP0_Config5_rw_bitmask: i32,
-    pub CP0_Config6: i32,
-    pub CP0_Config7: i32,
-    pub CP0_MAAR: [u64; 16usize],
-    pub CP0_MAARI: i32,
-    pub lladdr: u64,
-    pub llval: target_ulong,
-    pub llnewval: target_ulong,
-    pub llreg: target_ulong,
-    pub CP0_LLAddr_rw_bitmask: u64,
-    pub CP0_LLAddr_shift: ::std::os::raw::c_int,
-    pub CP0_WatchLo: [target_ulong; 8usize],
-    pub CP0_WatchHi: [i32; 8usize],
-    pub CP0_XContext: target_ulong,
-    pub CP0_Framemask: i32,
-    pub CP0_Debug: i32,
-    pub CP0_DEPC: target_ulong,
-    pub CP0_Performance0: i32,
-    pub CP0_ErrCtl: i32,
-    pub CP0_TagLo: u64,
-    pub CP0_DataLo: i32,
-    pub CP0_TagHi: i32,
-    pub CP0_DataHi: i32,
-    pub CP0_ErrorEPC: target_ulong,
-    pub CP0_DESAVE: i32,
-    pub tcs: [TCState; 16usize],
-    pub fpus: [CPUMIPSFPUContext; 1usize],
-    pub error_code: ::std::os::raw::c_int,
-    pub hflags: u32,
-    pub btarget: target_ulong,
-    pub bcond: target_ulong,
-    pub SYNCI_Step: ::std::os::raw::c_int,
-    pub CCRes: ::std::os::raw::c_int,
-    pub CP0_Status_rw_bitmask: u32,
-    pub CP0_TCStatus_rw_bitmask: u32,
-    pub insn_flags: ::std::os::raw::c_int,
-    pub end_reset_fields: CPUMIPSState__bindgen_ty_1,
-    pub tlb_table: [[CPUTLBEntry; 256usize]; 3usize],
-    pub tlb_v_table: [[CPUTLBEntry; 8usize]; 3usize],
-    pub iotlb: [[CPUIOTLBEntry; 256usize]; 3usize],
-    pub iotlb_v: [[CPUIOTLBEntry; 8usize]; 3usize],
+pub struct CPUARMState {
+    pub regs: [u32; 16usize],
+    pub xregs: [u64; 32usize],
+    pub pc: u64,
+    pub pstate: u32,
+    pub aarch64: u32,
+    pub uncached_cpsr: u32,
+    pub spsr: u32,
+    pub banked_spsr: [u64; 8usize],
+    pub banked_r13: [u32; 8usize],
+    pub banked_r14: [u32; 8usize],
+    pub usr_regs: [u32; 5usize],
+    pub fiq_regs: [u32; 5usize],
+    pub CF: u32,
+    pub VF: u32,
+    pub NF: u32,
+    pub ZF: u32,
+    pub QF: u32,
+    pub GE: u32,
+    pub thumb: u32,
+    pub condexec_bits: u32,
+    pub daif: u64,
+    pub elr_el: [u64; 4usize],
+    pub sp_el: [u64; 4usize],
+    pub cp15: CPUARMState__bindgen_ty_1,
+    pub v7m: CPUARMState__bindgen_ty_2,
+    pub exception: CPUARMState__bindgen_ty_3,
+    pub teecr: u32,
+    pub teehbr: u32,
+    pub vfp: CPUARMState__bindgen_ty_4,
+    pub exclusive_addr: u64,
+    pub exclusive_val: u64,
+    pub exclusive_high: u64,
+    pub iwmmxt: CPUARMState__bindgen_ty_5,
+    pub cpu_breakpoint: [*mut CPUBreakpoint; 16usize],
+    pub cpu_watchpoint: [*mut CPUWatchpoint; 16usize],
+    pub end_reset_fields: CPUARMState__bindgen_ty_6,
+    pub tlb_table: [[CPUTLBEntry; 256usize]; 7usize],
+    pub tlb_v_table: [[CPUTLBEntry; 8usize]; 7usize],
+    pub iotlb: [[CPUIOTLBEntry; 256usize]; 7usize],
+    pub iotlb_v: [[CPUIOTLBEntry; 8usize]; 7usize],
     pub tlb_flush_addr: target_ulong,
     pub tlb_flush_mask: target_ulong,
     pub vtlb_index: target_ulong,
-    pub mvp: *mut CPUMIPSMVPContext,
-    pub tlb: *mut CPUMIPSTLBContext,
-    pub cpu_model: *const mips_def_t,
-    pub irq: [*mut ::std::os::raw::c_void; 8usize],
-    pub timer: *mut QEMUTimer,
-    pub itc_tag: *mut MemoryRegion,
-    pub exception_base: target_ulong,
+    pub features: u64,
+    pub pmsav7: CPUARMState__bindgen_ty_7,
+    pub nvic: *mut ::std::os::raw::c_void,
+    pub boot_info: *const arm_boot_info,
+    pub gicv3state: *mut ::std::os::raw::c_void,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1 {
+    pub c0_cpuid: u32,
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_1,
+    pub __bindgen_anon_2: CPUARMState__bindgen_ty_1__bindgen_ty_2,
+    pub cpacr_el1: u64,
+    pub cptr_el: [u64; 4usize],
+    pub c1_xscaleauxcr: u32,
+    pub sder: u64,
+    pub nsacr: u32,
+    pub __bindgen_anon_3: CPUARMState__bindgen_ty_1__bindgen_ty_3,
+    pub __bindgen_anon_4: CPUARMState__bindgen_ty_1__bindgen_ty_4,
+    pub vttbr_el2: u64,
+    pub tcr_el: [TCR; 4usize],
+    pub vtcr_el2: TCR,
+    pub c2_data: u32,
+    pub c2_insn: u32,
+    pub __bindgen_anon_5: CPUARMState__bindgen_ty_1__bindgen_ty_5,
+    pub pmsav5_data_ap: u32,
+    pub pmsav5_insn_ap: u32,
+    pub hcr_el2: u64,
+    pub scr_el3: u64,
+    pub __bindgen_anon_6: CPUARMState__bindgen_ty_1__bindgen_ty_6,
+    pub __bindgen_anon_7: CPUARMState__bindgen_ty_1__bindgen_ty_7,
+    pub c6_region: [u32; 8usize],
+    pub __bindgen_anon_8: CPUARMState__bindgen_ty_1__bindgen_ty_8,
+    pub hpfar_el2: u64,
+    pub hstr_el2: u64,
+    pub __bindgen_anon_9: CPUARMState__bindgen_ty_1__bindgen_ty_9,
+    pub c6_rgnr: u32,
+    pub c9_insn: u32,
+    pub c9_data: u32,
+    pub c9_pmcr: u64,
+    pub c9_pmcnten: u64,
+    pub c9_pmovsr: u32,
+    pub c9_pmuserenr: u32,
+    pub c9_pmselr: u64,
+    pub c9_pminten: u64,
+    pub __bindgen_anon_10: CPUARMState__bindgen_ty_1__bindgen_ty_10,
+    pub __bindgen_anon_11: CPUARMState__bindgen_ty_1__bindgen_ty_11,
+    pub mvbar: u32,
+    pub __bindgen_anon_12: CPUARMState__bindgen_ty_1__bindgen_ty_12,
+    pub __bindgen_anon_13: CPUARMState__bindgen_ty_1__bindgen_ty_13,
+    pub __bindgen_anon_14: CPUARMState__bindgen_ty_1__bindgen_ty_14,
+    pub tpidrurw_s: u64,
+    pub tpidrprw_s: u64,
+    pub tpidruro_s: u64,
+    pub __bindgen_anon_15: CPUARMState__bindgen_ty_1__bindgen_ty_15,
+    pub c14_cntfrq: u64,
+    pub c14_cntkctl: u64,
+    pub cnthctl_el2: u32,
+    pub cntvoff_el2: u64,
+    pub c14_timer: [ARMGenericTimer; 4usize],
+    pub c15_cpar: u32,
+    pub c15_ticonfig: u32,
+    pub c15_i_max: u32,
+    pub c15_i_min: u32,
+    pub c15_threadid: u32,
+    pub c15_config_base_address: u32,
+    pub c15_diagnostic: u32,
+    pub c15_power_diagnostic: u32,
+    pub c15_power_control: u32,
+    pub dbgbvr: [u64; 16usize],
+    pub dbgbcr: [u64; 16usize],
+    pub dbgwvr: [u64; 16usize],
+    pub dbgwcr: [u64; 16usize],
+    pub mdscr_el1: u64,
+    pub oslsr_el1: u64,
+    pub mdcr_el2: u64,
+    pub mdcr_el3: u64,
+    pub c15_ccnt: u64,
+    pub pmccfiltr_el0: u64,
+    pub vpidr_el2: u64,
+    pub vmpidr_el2: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_1 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1,
+    pub csselr_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct CPUMIPSState__bindgen_ty_1 {}
-#[doc = " MIPSCPU:"]
-#[doc = " @env: #CPUMIPSState"]
-#[doc = ""]
-#[doc = " A MIPS CPU."]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1 {
+    pub _unused_csselr0: u64,
+    pub csselr_ns: u64,
+    pub _unused_csselr1: u64,
+    pub csselr_s: u64,
+}
 #[repr(C)]
 #[derive(Copy, Clone)]
-pub struct MIPSCPU {
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_2 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_2__bindgen_ty_1,
+    pub sctlr_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_2__bindgen_ty_1 {
+    pub _unused_sctlr: u64,
+    pub sctlr_ns: u64,
+    pub hsctlr: u64,
+    pub sctlr_s: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_3 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_3__bindgen_ty_1,
+    pub ttbr0_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_3__bindgen_ty_1 {
+    pub _unused_ttbr0_0: u64,
+    pub ttbr0_ns: u64,
+    pub _unused_ttbr0_1: u64,
+    pub ttbr0_s: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_4 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_4__bindgen_ty_1,
+    pub ttbr1_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_4__bindgen_ty_1 {
+    pub _unused_ttbr1_0: u64,
+    pub ttbr1_ns: u64,
+    pub _unused_ttbr1_1: u64,
+    pub ttbr1_s: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_5 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_5__bindgen_ty_1,
+    pub __bindgen_anon_2: CPUARMState__bindgen_ty_1__bindgen_ty_5__bindgen_ty_2,
+    _bindgen_union_align: [u64; 2usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_5__bindgen_ty_1 {
+    pub dacr_ns: u64,
+    pub dacr_s: u64,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_5__bindgen_ty_2 {
+    pub dacr32_el2: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_6 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_6__bindgen_ty_1,
+    pub __bindgen_anon_2: CPUARMState__bindgen_ty_1__bindgen_ty_6__bindgen_ty_2,
+    _bindgen_union_align: [u64; 2usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_6__bindgen_ty_1 {
+    pub ifsr_ns: u64,
+    pub ifsr_s: u64,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_6__bindgen_ty_2 {
+    pub ifsr32_el2: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_7 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_7__bindgen_ty_1,
+    pub esr_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_7__bindgen_ty_1 {
+    pub _unused_dfsr: u64,
+    pub dfsr_ns: u64,
+    pub hsr: u64,
+    pub dfsr_s: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_8 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_8__bindgen_ty_1,
+    pub far_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_8__bindgen_ty_1 {
+    pub _unused_far0: u64,
+    pub dfar_ns: u32,
+    pub ifar_ns: u32,
+    pub dfar_s: u32,
+    pub ifar_s: u32,
+    pub _unused_far3: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_9 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_9__bindgen_ty_1,
+    pub par_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_9__bindgen_ty_1 {
+    pub _unused_par_0: u64,
+    pub par_ns: u64,
+    pub _unused_par_1: u64,
+    pub par_s: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_10 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_10__bindgen_ty_1,
+    pub mair_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_10__bindgen_ty_1 {
+    pub _unused_mair_0: u64,
+    pub mair0_ns: u32,
+    pub mair1_ns: u32,
+    pub _unused_mair_1: u64,
+    pub mair0_s: u32,
+    pub mair1_s: u32,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_11 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_11__bindgen_ty_1,
+    pub vbar_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_11__bindgen_ty_1 {
+    pub _unused_vbar: u64,
+    pub vbar_ns: u64,
+    pub hvbar: u64,
+    pub vbar_s: u64,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_12 {
+    pub fcseidr_ns: u32,
+    pub fcseidr_s: u32,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_13 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_13__bindgen_ty_1,
+    pub contextidr_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_13__bindgen_ty_1 {
+    pub _unused_contextidr_0: u64,
+    pub contextidr_ns: u64,
+    pub _unused_contextidr_1: u64,
+    pub contextidr_s: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_14 {
+    pub __bindgen_anon_1: CPUARMState__bindgen_ty_1__bindgen_ty_14__bindgen_ty_1,
+    pub tpidr_el: [u64; 4usize],
+    _bindgen_union_align: [u64; 4usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_1__bindgen_ty_14__bindgen_ty_1 {
+    pub tpidrurw_ns: u64,
+    pub tpidrprw_ns: u64,
+    pub htpidr: u64,
+    pub _tpidr_el3: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union CPUARMState__bindgen_ty_1__bindgen_ty_15 {
+    pub tpidruro_ns: u64,
+    pub tpidrro_el: [u64; 1usize],
+    _bindgen_union_align: u64,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_2 {
+    pub other_sp: u32,
+    pub vecbase: u32,
+    pub basepri: u32,
+    pub control: u32,
+    pub ccr: u32,
+    pub cfsr: u32,
+    pub hfsr: u32,
+    pub dfsr: u32,
+    pub mmfar: u32,
+    pub bfar: u32,
+    pub exception: ::std::os::raw::c_int,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_3 {
+    pub syndrome: u32,
+    pub fsr: u32,
+    pub vaddress: u64,
+    pub target_el: u32,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_4 {
+    pub regs: [float64; 64usize],
+    pub xregs: [u32; 16usize],
+    pub vec_len: ::std::os::raw::c_int,
+    pub vec_stride: ::std::os::raw::c_int,
+    pub scratch: [u32; 8usize],
+    pub fp_status: float_status,
+    pub standard_fp_status: float_status,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_5 {
+    pub regs: [u64; 16usize],
+    pub val: u64,
+    pub cregs: [u32; 16usize],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_6 {}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct CPUARMState__bindgen_ty_7 {
+    pub drbar: *mut u32,
+    pub drsr: *mut u32,
+    pub dracr: *mut u32,
+}
+#[doc = " ARMELChangeHook:"]
+#[doc = " type of a function which can be registered via arm_register_el_change_hook()"]
+#[doc = " to get callbacks when the CPU changes its exception level or mode."]
+pub type ARMELChangeHook = ::std::option::Option<
+    unsafe extern "C" fn(cpu: *mut ARMCPU, opaque: *mut ::std::os::raw::c_void),
+>;
+pub const ARMPSCIState_PSCI_ON: ARMPSCIState = 0;
+pub const ARMPSCIState_PSCI_OFF: ARMPSCIState = 1;
+pub const ARMPSCIState_PSCI_ON_PENDING: ARMPSCIState = 2;
+pub type ARMPSCIState = ::std::os::raw::c_uint;
+#[doc = " ARMCPU:"]
+#[doc = " @env: #CPUARMState"]
+#[doc = ""]
+#[doc = " An ARM CPU core."]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct ARMCPU {
     pub parent_obj: CPUState,
-    pub env: CPUMIPSState,
+    pub env: CPUARMState,
+    pub cp_regs: *mut GHashTable,
+    pub cpreg_indexes: *mut u64,
+    pub cpreg_values: *mut u64,
+    pub cpreg_array_len: i32,
+    pub cpreg_vmstate_indexes: *mut u64,
+    pub cpreg_vmstate_values: *mut u64,
+    pub cpreg_vmstate_array_len: i32,
+    pub gt_timer: [*mut QEMUTimer; 4usize],
+    pub gt_timer_outputs: [qemu_irq; 4usize],
+    pub gicv3_maintenance_interrupt: qemu_irq,
+    pub secure_memory: *mut MemoryRegion,
+    pub dtb_compatible: *const ::std::os::raw::c_char,
+    pub psci_version: u32,
+    pub start_powered_off: bool,
+    pub power_state: ARMPSCIState,
+    pub has_el2: bool,
+    pub has_el3: bool,
+    pub has_pmu: bool,
+    pub has_mpu: bool,
+    pub pmsav7_dregion: u32,
+    pub psci_conduit: u32,
+    pub kvm_target: u32,
+    pub kvm_init_features: [u32; 7usize],
+    pub mp_is_up: bool,
+    pub midr: u32,
+    pub revidr: u32,
+    pub reset_fpsid: u32,
+    pub mvfr0: u32,
+    pub mvfr1: u32,
+    pub mvfr2: u32,
+    pub ctr: u32,
+    pub reset_sctlr: u32,
+    pub id_pfr0: u32,
+    pub id_pfr1: u32,
+    pub id_dfr0: u32,
+    pub pmceid0: u32,
+    pub pmceid1: u32,
+    pub id_afr0: u32,
+    pub id_mmfr0: u32,
+    pub id_mmfr1: u32,
+    pub id_mmfr2: u32,
+    pub id_mmfr3: u32,
+    pub id_mmfr4: u32,
+    pub id_isar0: u32,
+    pub id_isar1: u32,
+    pub id_isar2: u32,
+    pub id_isar3: u32,
+    pub id_isar4: u32,
+    pub id_isar5: u32,
+    pub id_aa64pfr0: u64,
+    pub id_aa64pfr1: u64,
+    pub id_aa64dfr0: u64,
+    pub id_aa64dfr1: u64,
+    pub id_aa64afr0: u64,
+    pub id_aa64afr1: u64,
+    pub id_aa64isar0: u64,
+    pub id_aa64isar1: u64,
+    pub id_aa64mmfr0: u64,
+    pub id_aa64mmfr1: u64,
+    pub dbgdidr: u32,
+    pub clidr: u32,
+    pub mp_affinity: u64,
+    pub ccsidr: [u32; 16usize],
+    pub reset_cbar: u64,
+    pub reset_auxcr: u32,
+    pub reset_hivecs: bool,
+    pub dcz_blocksize: u32,
+    pub rvbar: u64,
+    pub gic_num_lrs: ::std::os::raw::c_int,
+    pub gic_vpribits: ::std::os::raw::c_int,
+    pub gic_vprebits: ::std::os::raw::c_int,
+    pub cfgend: bool,
+    pub el_change_hook: ARMELChangeHook,
+    pub el_change_hook_opaque: *mut ::std::os::raw::c_void,
 }
 extern "C" {
-    pub static vmstate_mips_cpu: VMStateDescription;
+    pub static vmstate_arm_cpu: VMStateDescription;
 }
 extern "C" {
-    pub fn mips_cpu_do_interrupt(cpu: *mut CPUState);
+    pub fn arm_cpu_do_interrupt(cpu: *mut CPUState);
 }
 extern "C" {
-    pub fn mips_cpu_exec_interrupt(cpu: *mut CPUState, int_req: ::std::os::raw::c_int) -> bool;
+    pub fn arm_v7m_cpu_do_interrupt(cpu: *mut CPUState);
 }
 extern "C" {
-    pub fn mips_cpu_dump_state(
-        cpu: *mut CPUState,
+    pub fn arm_cpu_exec_interrupt(cpu: *mut CPUState, int_req: ::std::os::raw::c_int) -> bool;
+}
+extern "C" {
+    pub fn arm_cpu_dump_state(
+        cs: *mut CPUState,
         f: *mut FILE,
         cpu_fprintf: fprintf_function,
         flags: ::std::os::raw::c_int,
     );
 }
 extern "C" {
-    pub fn mips_cpu_get_phys_page_debug(cpu: *mut CPUState, addr: vaddr) -> hwaddr;
-}
-extern "C" {
-    pub fn mips_cpu_gdb_read_register(
-        cpu: *mut CPUState,
-        buf: *mut u8,
-        reg: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn mips_cpu_gdb_write_register(
-        cpu: *mut CPUState,
-        buf: *mut u8,
-        reg: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn mips_cpu_do_unaligned_access(
+    pub fn arm_cpu_get_phys_page_attrs_debug(
         cpu: *mut CPUState,
         addr: vaddr,
-        access_type: MMUAccessType,
-        mmu_idx: ::std::os::raw::c_int,
-        retaddr: usize,
-    );
+        attrs: *mut MemTxAttrs,
+    ) -> hwaddr;
 }
 extern "C" {
-    pub fn no_mmu_map_address(
-        env: *mut CPUMIPSState,
-        physical: *mut hwaddr,
-        prot: *mut ::std::os::raw::c_int,
-        address: target_ulong,
-        rw: ::std::os::raw::c_int,
-        access_type: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn fixed_mmu_map_address(
-        env: *mut CPUMIPSState,
-        physical: *mut hwaddr,
-        prot: *mut ::std::os::raw::c_int,
-        address: target_ulong,
-        rw: ::std::os::raw::c_int,
-        access_type: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn r4k_map_address(
-        env: *mut CPUMIPSState,
-        physical: *mut hwaddr,
-        prot: *mut ::std::os::raw::c_int,
-        address: target_ulong,
-        rw: ::std::os::raw::c_int,
-        access_type: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn r4k_helper_tlbwi(env: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn r4k_helper_tlbwr(env: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn r4k_helper_tlbp(env: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn r4k_helper_tlbr(env: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn r4k_helper_tlbinv(env: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn r4k_helper_tlbinvf(env: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn mips_cpu_unassigned_access(
+    pub fn arm_cpu_gdb_read_register(
         cpu: *mut CPUState,
-        addr: hwaddr,
-        is_write: bool,
-        is_exec: bool,
-        unused: ::std::os::raw::c_int,
-        size: ::std::os::raw::c_uint,
+        buf: *mut u8,
+        reg: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn arm_cpu_gdb_write_register(
+        cpu: *mut CPUState,
+        buf: *mut u8,
+        reg: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn arm_cpu_write_elf64_note(
+        f: WriteCoreDumpFunction,
+        cs: *mut CPUState,
+        cpuid: ::std::os::raw::c_int,
+        opaque: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn arm_cpu_write_elf32_note(
+        f: WriteCoreDumpFunction,
+        cs: *mut CPUState,
+        cpuid: ::std::os::raw::c_int,
+        opaque: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn aarch64_cpu_gdb_read_register(
+        cpu: *mut CPUState,
+        buf: *mut u8,
+        reg: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn aarch64_cpu_gdb_write_register(
+        cpu: *mut CPUState,
+        buf: *mut u8,
+        reg: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn cpu_arm_init(cpu_model: *const ::std::os::raw::c_char) -> *mut ARMCPU;
+}
+extern "C" {
+    pub fn do_arm_semihosting(env: *mut CPUARMState) -> target_ulong;
+}
+extern "C" {
+    pub fn aarch64_sync_32_to_64(env: *mut CPUARMState);
+}
+extern "C" {
+    pub fn aarch64_sync_64_to_32(env: *mut CPUARMState);
+}
+extern "C" {
+    pub fn cpu_arm_signal_handler(
+        host_signum: ::std::os::raw::c_int,
+        pinfo: *mut ::std::os::raw::c_void,
+        puc: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    #[doc = " pmccntr_sync"]
+    #[doc = " @env: CPUARMState"]
+    #[doc = ""]
+    #[doc = " Synchronises the counter in the PMCCNTR. This must always be called twice,"]
+    #[doc = " once before any action that might affect the timer and again afterwards."]
+    #[doc = " The function is used to swap the state of the register if required."]
+    #[doc = " This only happens when not in user mode (!CONFIG_USER_ONLY)"]
+    pub fn pmccntr_sync(env: *mut CPUARMState);
+}
+extern "C" {
+    pub fn cpsr_read(env: *mut CPUARMState) -> u32;
+}
+pub const CPSRWriteType_CPSRWriteByInstr: CPSRWriteType = 0;
+pub const CPSRWriteType_CPSRWriteExceptionReturn: CPSRWriteType = 1;
+pub const CPSRWriteType_CPSRWriteRaw: CPSRWriteType = 2;
+pub const CPSRWriteType_CPSRWriteByGDBStub: CPSRWriteType = 3;
+pub type CPSRWriteType = ::std::os::raw::c_uint;
+extern "C" {
+    pub fn cpsr_write(env: *mut CPUARMState, val: u32, mask: u32, write_type: CPSRWriteType);
+}
+extern "C" {
+    pub fn vfp_get_fpscr(env: *mut CPUARMState) -> u32;
+}
+extern "C" {
+    pub fn vfp_set_fpscr(env: *mut CPUARMState, val: u32);
+}
+pub const arm_cpu_mode_ARM_CPU_MODE_USR: arm_cpu_mode = 16;
+pub const arm_cpu_mode_ARM_CPU_MODE_FIQ: arm_cpu_mode = 17;
+pub const arm_cpu_mode_ARM_CPU_MODE_IRQ: arm_cpu_mode = 18;
+pub const arm_cpu_mode_ARM_CPU_MODE_SVC: arm_cpu_mode = 19;
+pub const arm_cpu_mode_ARM_CPU_MODE_MON: arm_cpu_mode = 22;
+pub const arm_cpu_mode_ARM_CPU_MODE_ABT: arm_cpu_mode = 23;
+pub const arm_cpu_mode_ARM_CPU_MODE_HYP: arm_cpu_mode = 26;
+pub const arm_cpu_mode_ARM_CPU_MODE_UND: arm_cpu_mode = 27;
+pub const arm_cpu_mode_ARM_CPU_MODE_SYS: arm_cpu_mode = 31;
+pub type arm_cpu_mode = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_NONBASETHRDENA_SHIFT: ::std::os::raw::c_uint = 0;
+pub type _bindgen_ty_39 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_NONBASETHRDENA_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_40 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_NONBASETHRDENA_MASK: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_41 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_USERSETMPEND_SHIFT: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_42 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_USERSETMPEND_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_43 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_USERSETMPEND_MASK: ::std::os::raw::c_uint = 2;
+pub type _bindgen_ty_44 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_UNALIGN_TRP_SHIFT: ::std::os::raw::c_uint = 3;
+pub type _bindgen_ty_45 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_UNALIGN_TRP_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_46 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_UNALIGN_TRP_MASK: ::std::os::raw::c_uint = 8;
+pub type _bindgen_ty_47 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_DIV_0_TRP_SHIFT: ::std::os::raw::c_uint = 4;
+pub type _bindgen_ty_48 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_DIV_0_TRP_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_49 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_DIV_0_TRP_MASK: ::std::os::raw::c_uint = 16;
+pub type _bindgen_ty_50 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_BFHFNMIGN_SHIFT: ::std::os::raw::c_uint = 8;
+pub type _bindgen_ty_51 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_BFHFNMIGN_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_52 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_BFHFNMIGN_MASK: ::std::os::raw::c_uint = 256;
+pub type _bindgen_ty_53 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_STKALIGN_SHIFT: ::std::os::raw::c_uint = 9;
+pub type _bindgen_ty_54 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_STKALIGN_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_55 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_STKALIGN_MASK: ::std::os::raw::c_uint = 512;
+pub type _bindgen_ty_56 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_DC_SHIFT: ::std::os::raw::c_uint = 16;
+pub type _bindgen_ty_57 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_DC_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_58 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_DC_MASK: ::std::os::raw::c_uint = 65536;
+pub type _bindgen_ty_59 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_IC_SHIFT: ::std::os::raw::c_uint = 17;
+pub type _bindgen_ty_60 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_IC_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_61 = ::std::os::raw::c_uint;
+pub const R_V7M_CCR_IC_MASK: ::std::os::raw::c_uint = 131072;
+pub type _bindgen_ty_62 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_IACCVIOL_SHIFT: ::std::os::raw::c_uint = 0;
+pub type _bindgen_ty_63 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_IACCVIOL_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_64 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_IACCVIOL_MASK: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_65 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_DACCVIOL_SHIFT: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_66 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_DACCVIOL_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_67 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_DACCVIOL_MASK: ::std::os::raw::c_uint = 2;
+pub type _bindgen_ty_68 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MUNSTKERR_SHIFT: ::std::os::raw::c_uint = 3;
+pub type _bindgen_ty_69 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MUNSTKERR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_70 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MUNSTKERR_MASK: ::std::os::raw::c_uint = 8;
+pub type _bindgen_ty_71 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MSTKERR_SHIFT: ::std::os::raw::c_uint = 4;
+pub type _bindgen_ty_72 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MSTKERR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_73 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MSTKERR_MASK: ::std::os::raw::c_uint = 16;
+pub type _bindgen_ty_74 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MLSPERR_SHIFT: ::std::os::raw::c_uint = 5;
+pub type _bindgen_ty_75 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MLSPERR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_76 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MLSPERR_MASK: ::std::os::raw::c_uint = 32;
+pub type _bindgen_ty_77 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MMARVALID_SHIFT: ::std::os::raw::c_uint = 7;
+pub type _bindgen_ty_78 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MMARVALID_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_79 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_MMARVALID_MASK: ::std::os::raw::c_uint = 128;
+pub type _bindgen_ty_80 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_IBUSERR_SHIFT: ::std::os::raw::c_uint = 8;
+pub type _bindgen_ty_81 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_IBUSERR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_82 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_IBUSERR_MASK: ::std::os::raw::c_uint = 256;
+pub type _bindgen_ty_83 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_PRECISERR_SHIFT: ::std::os::raw::c_uint = 9;
+pub type _bindgen_ty_84 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_PRECISERR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_85 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_PRECISERR_MASK: ::std::os::raw::c_uint = 512;
+pub type _bindgen_ty_86 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_IMPRECISERR_SHIFT: ::std::os::raw::c_uint = 10;
+pub type _bindgen_ty_87 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_IMPRECISERR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_88 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_IMPRECISERR_MASK: ::std::os::raw::c_uint = 1024;
+pub type _bindgen_ty_89 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_UNSTKERR_SHIFT: ::std::os::raw::c_uint = 11;
+pub type _bindgen_ty_90 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_UNSTKERR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_91 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_UNSTKERR_MASK: ::std::os::raw::c_uint = 2048;
+pub type _bindgen_ty_92 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_STKERR_SHIFT: ::std::os::raw::c_uint = 12;
+pub type _bindgen_ty_93 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_STKERR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_94 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_STKERR_MASK: ::std::os::raw::c_uint = 4096;
+pub type _bindgen_ty_95 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_LSPERR_SHIFT: ::std::os::raw::c_uint = 13;
+pub type _bindgen_ty_96 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_LSPERR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_97 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_LSPERR_MASK: ::std::os::raw::c_uint = 8192;
+pub type _bindgen_ty_98 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_BFARVALID_SHIFT: ::std::os::raw::c_uint = 15;
+pub type _bindgen_ty_99 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_BFARVALID_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_100 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_BFARVALID_MASK: ::std::os::raw::c_uint = 32768;
+pub type _bindgen_ty_101 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_UNDEFINSTR_SHIFT: ::std::os::raw::c_uint = 16;
+pub type _bindgen_ty_102 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_UNDEFINSTR_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_103 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_UNDEFINSTR_MASK: ::std::os::raw::c_uint = 65536;
+pub type _bindgen_ty_104 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_INVSTATE_SHIFT: ::std::os::raw::c_uint = 17;
+pub type _bindgen_ty_105 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_INVSTATE_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_106 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_INVSTATE_MASK: ::std::os::raw::c_uint = 131072;
+pub type _bindgen_ty_107 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_INVPC_SHIFT: ::std::os::raw::c_uint = 18;
+pub type _bindgen_ty_108 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_INVPC_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_109 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_INVPC_MASK: ::std::os::raw::c_uint = 262144;
+pub type _bindgen_ty_110 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_NOCP_SHIFT: ::std::os::raw::c_uint = 19;
+pub type _bindgen_ty_111 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_NOCP_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_112 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_NOCP_MASK: ::std::os::raw::c_uint = 524288;
+pub type _bindgen_ty_113 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_UNALIGNED_SHIFT: ::std::os::raw::c_uint = 24;
+pub type _bindgen_ty_114 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_UNALIGNED_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_115 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_UNALIGNED_MASK: ::std::os::raw::c_uint = 16777216;
+pub type _bindgen_ty_116 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_DIVBYZERO_SHIFT: ::std::os::raw::c_uint = 25;
+pub type _bindgen_ty_117 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_DIVBYZERO_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_118 = ::std::os::raw::c_uint;
+pub const R_V7M_CFSR_DIVBYZERO_MASK: ::std::os::raw::c_uint = 33554432;
+pub type _bindgen_ty_119 = ::std::os::raw::c_uint;
+pub const R_V7M_HFSR_VECTTBL_SHIFT: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_120 = ::std::os::raw::c_uint;
+pub const R_V7M_HFSR_VECTTBL_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_121 = ::std::os::raw::c_uint;
+pub const R_V7M_HFSR_VECTTBL_MASK: ::std::os::raw::c_uint = 2;
+pub type _bindgen_ty_122 = ::std::os::raw::c_uint;
+pub const R_V7M_HFSR_FORCED_SHIFT: ::std::os::raw::c_uint = 30;
+pub type _bindgen_ty_123 = ::std::os::raw::c_uint;
+pub const R_V7M_HFSR_FORCED_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_124 = ::std::os::raw::c_uint;
+pub const R_V7M_HFSR_FORCED_MASK: ::std::os::raw::c_uint = 1073741824;
+pub type _bindgen_ty_125 = ::std::os::raw::c_uint;
+pub const R_V7M_HFSR_DEBUGEVT_SHIFT: ::std::os::raw::c_uint = 31;
+pub type _bindgen_ty_126 = ::std::os::raw::c_uint;
+pub const R_V7M_HFSR_DEBUGEVT_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_127 = ::std::os::raw::c_uint;
+pub const R_V7M_HFSR_DEBUGEVT_MASK: ::std::os::raw::c_uint = 2147483648;
+pub type _bindgen_ty_128 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_HALTED_SHIFT: ::std::os::raw::c_uint = 0;
+pub type _bindgen_ty_129 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_HALTED_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_130 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_HALTED_MASK: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_131 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_BKPT_SHIFT: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_132 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_BKPT_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_133 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_BKPT_MASK: ::std::os::raw::c_uint = 2;
+pub type _bindgen_ty_134 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_DWTTRAP_SHIFT: ::std::os::raw::c_uint = 2;
+pub type _bindgen_ty_135 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_DWTTRAP_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_136 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_DWTTRAP_MASK: ::std::os::raw::c_uint = 4;
+pub type _bindgen_ty_137 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_VCATCH_SHIFT: ::std::os::raw::c_uint = 3;
+pub type _bindgen_ty_138 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_VCATCH_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_139 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_VCATCH_MASK: ::std::os::raw::c_uint = 8;
+pub type _bindgen_ty_140 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_EXTERNAL_SHIFT: ::std::os::raw::c_uint = 4;
+pub type _bindgen_ty_141 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_EXTERNAL_LENGTH: ::std::os::raw::c_uint = 1;
+pub type _bindgen_ty_142 = ::std::os::raw::c_uint;
+pub const R_V7M_DFSR_EXTERNAL_MASK: ::std::os::raw::c_uint = 16;
+pub type _bindgen_ty_143 = ::std::os::raw::c_uint;
+pub const arm_features_ARM_FEATURE_VFP: arm_features = 0;
+pub const arm_features_ARM_FEATURE_AUXCR: arm_features = 1;
+pub const arm_features_ARM_FEATURE_XSCALE: arm_features = 2;
+pub const arm_features_ARM_FEATURE_IWMMXT: arm_features = 3;
+pub const arm_features_ARM_FEATURE_V6: arm_features = 4;
+pub const arm_features_ARM_FEATURE_V6K: arm_features = 5;
+pub const arm_features_ARM_FEATURE_V7: arm_features = 6;
+pub const arm_features_ARM_FEATURE_THUMB2: arm_features = 7;
+pub const arm_features_ARM_FEATURE_MPU: arm_features = 8;
+pub const arm_features_ARM_FEATURE_VFP3: arm_features = 9;
+pub const arm_features_ARM_FEATURE_VFP_FP16: arm_features = 10;
+pub const arm_features_ARM_FEATURE_NEON: arm_features = 11;
+pub const arm_features_ARM_FEATURE_THUMB_DIV: arm_features = 12;
+pub const arm_features_ARM_FEATURE_M: arm_features = 13;
+pub const arm_features_ARM_FEATURE_OMAPCP: arm_features = 14;
+pub const arm_features_ARM_FEATURE_THUMB2EE: arm_features = 15;
+pub const arm_features_ARM_FEATURE_V7MP: arm_features = 16;
+pub const arm_features_ARM_FEATURE_V4T: arm_features = 17;
+pub const arm_features_ARM_FEATURE_V5: arm_features = 18;
+pub const arm_features_ARM_FEATURE_STRONGARM: arm_features = 19;
+pub const arm_features_ARM_FEATURE_VAPA: arm_features = 20;
+pub const arm_features_ARM_FEATURE_ARM_DIV: arm_features = 21;
+pub const arm_features_ARM_FEATURE_VFP4: arm_features = 22;
+pub const arm_features_ARM_FEATURE_GENERIC_TIMER: arm_features = 23;
+pub const arm_features_ARM_FEATURE_MVFR: arm_features = 24;
+pub const arm_features_ARM_FEATURE_DUMMY_C15_REGS: arm_features = 25;
+pub const arm_features_ARM_FEATURE_CACHE_TEST_CLEAN: arm_features = 26;
+pub const arm_features_ARM_FEATURE_CACHE_DIRTY_REG: arm_features = 27;
+pub const arm_features_ARM_FEATURE_CACHE_BLOCK_OPS: arm_features = 28;
+pub const arm_features_ARM_FEATURE_MPIDR: arm_features = 29;
+pub const arm_features_ARM_FEATURE_PXN: arm_features = 30;
+pub const arm_features_ARM_FEATURE_LPAE: arm_features = 31;
+pub const arm_features_ARM_FEATURE_V8: arm_features = 32;
+pub const arm_features_ARM_FEATURE_AARCH64: arm_features = 33;
+pub const arm_features_ARM_FEATURE_V8_AES: arm_features = 34;
+pub const arm_features_ARM_FEATURE_CBAR: arm_features = 35;
+pub const arm_features_ARM_FEATURE_CRC: arm_features = 36;
+pub const arm_features_ARM_FEATURE_CBAR_RO: arm_features = 37;
+pub const arm_features_ARM_FEATURE_EL2: arm_features = 38;
+pub const arm_features_ARM_FEATURE_EL3: arm_features = 39;
+pub const arm_features_ARM_FEATURE_V8_SHA1: arm_features = 40;
+pub const arm_features_ARM_FEATURE_V8_SHA256: arm_features = 41;
+pub const arm_features_ARM_FEATURE_V8_PMULL: arm_features = 42;
+pub const arm_features_ARM_FEATURE_THUMB_DSP: arm_features = 43;
+pub const arm_features_ARM_FEATURE_PMU: arm_features = 44;
+pub const arm_features_ARM_FEATURE_VBAR: arm_features = 45;
+pub const arm_features_ARM_FEATURE_CONFIGURABLE: arm_features = 46;
+pub type arm_features = ::std::os::raw::c_uint;
+extern "C" {
+    pub fn arm_cpu_list(f: *mut FILE, cpu_fprintf: fprintf_function);
+}
+extern "C" {
+    pub fn arm_phys_excp_target_el(
+        cs: *mut CPUState,
+        excp_idx: u32,
+        cur_el: u32,
+        secure: bool,
+    ) -> u32;
+}
+extern "C" {
+    pub fn armv7m_nvic_can_take_pending_exception(opaque: *mut ::std::os::raw::c_void) -> bool;
+}
+extern "C" {
+    pub fn armv7m_nvic_set_pending(opaque: *mut ::std::os::raw::c_void, irq: ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn armv7m_nvic_acknowledge_irq(opaque: *mut ::std::os::raw::c_void);
+}
+extern "C" {
+    #[doc = " armv7m_nvic_complete_irq: complete specified interrupt or exception"]
+    #[doc = " @opaque: the NVIC"]
+    #[doc = " @irq: the exception number to complete"]
+    #[doc = ""]
+    #[doc = " Returns: -1 if the irq was not active"]
+    #[doc = "           1 if completing this irq brought us back to base (no active irqs)"]
+    #[doc = "           0 if there is still an irq active after this one was completed"]
+    #[doc = " (Ignoring -1, this is the same as the RETTOBASE value before completion.)"]
+    pub fn armv7m_nvic_complete_irq(
+        opaque: *mut ::std::os::raw::c_void,
+        irq: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+pub const ARM_CP_STATE_AA32: ::std::os::raw::c_uint = 0;
+pub const ARM_CP_STATE_AA64: ::std::os::raw::c_uint = 1;
+pub const ARM_CP_STATE_BOTH: ::std::os::raw::c_uint = 2;
+pub type _bindgen_ty_144 = ::std::os::raw::c_uint;
+pub const ARM_CP_SECSTATE_S: ::std::os::raw::c_uint = 1;
+pub const ARM_CP_SECSTATE_NS: ::std::os::raw::c_uint = 2;
+pub type _bindgen_ty_145 = ::std::os::raw::c_uint;
+pub const CPAccessResult_CP_ACCESS_OK: CPAccessResult = 0;
+pub const CPAccessResult_CP_ACCESS_TRAP: CPAccessResult = 1;
+pub const CPAccessResult_CP_ACCESS_TRAP_UNCATEGORIZED: CPAccessResult = 2;
+pub const CPAccessResult_CP_ACCESS_TRAP_EL2: CPAccessResult = 3;
+pub const CPAccessResult_CP_ACCESS_TRAP_EL3: CPAccessResult = 4;
+pub const CPAccessResult_CP_ACCESS_TRAP_UNCATEGORIZED_EL2: CPAccessResult = 5;
+pub const CPAccessResult_CP_ACCESS_TRAP_UNCATEGORIZED_EL3: CPAccessResult = 6;
+pub const CPAccessResult_CP_ACCESS_TRAP_FP_EL2: CPAccessResult = 7;
+pub const CPAccessResult_CP_ACCESS_TRAP_FP_EL3: CPAccessResult = 8;
+pub type CPAccessResult = ::std::os::raw::c_uint;
+pub type CPReadFn = ::std::option::Option<
+    unsafe extern "C" fn(env: *mut CPUARMState, opaque: *const ARMCPRegInfo) -> u64,
+>;
+pub type CPWriteFn = ::std::option::Option<
+    unsafe extern "C" fn(env: *mut CPUARMState, opaque: *const ARMCPRegInfo, value: u64),
+>;
+pub type CPAccessFn = ::std::option::Option<
+    unsafe extern "C" fn(
+        env: *mut CPUARMState,
+        opaque: *const ARMCPRegInfo,
+        isread: bool,
+    ) -> CPAccessResult,
+>;
+pub type CPResetFn =
+    ::std::option::Option<unsafe extern "C" fn(env: *mut CPUARMState, opaque: *const ARMCPRegInfo)>;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct ARMCPRegInfo {
+    pub name: *const ::std::os::raw::c_char,
+    pub cp: u8,
+    pub crn: u8,
+    pub crm: u8,
+    pub opc0: u8,
+    pub opc1: u8,
+    pub opc2: u8,
+    pub state: ::std::os::raw::c_int,
+    pub type_: ::std::os::raw::c_int,
+    pub access: ::std::os::raw::c_int,
+    pub secure: ::std::os::raw::c_int,
+    pub opaque: *mut ::std::os::raw::c_void,
+    pub resetvalue: u64,
+    pub fieldoffset: isize,
+    pub bank_fieldoffsets: [isize; 2usize],
+    pub accessfn: CPAccessFn,
+    pub readfn: CPReadFn,
+    pub writefn: CPWriteFn,
+    pub raw_readfn: CPReadFn,
+    pub raw_writefn: CPWriteFn,
+    pub resetfn: CPResetFn,
+}
+extern "C" {
+    pub fn define_arm_cp_regs_with_opaque(
+        cpu: *mut ARMCPU,
+        regs: *const ARMCPRegInfo,
+        opaque: *mut ::std::os::raw::c_void,
     );
 }
 extern "C" {
-    pub fn mips_cpu_list(f: *mut FILE, cpu_fprintf: fprintf_function);
+    pub fn define_one_arm_cp_reg_with_opaque(
+        cpu: *mut ARMCPU,
+        regs: *const ARMCPRegInfo,
+        opaque: *mut ::std::os::raw::c_void,
+    );
 }
 extern "C" {
-    pub fn cpu_wrdsp(rs: u32, mask_num: u32, env: *mut CPUMIPSState);
+    pub fn get_arm_cp_reginfo(cpregs: *mut GHashTable, encoded_cp: u32) -> *const ARMCPRegInfo;
 }
 extern "C" {
-    pub fn cpu_rddsp(mask_num: u32, env: *mut CPUMIPSState) -> u32;
+    pub fn arm_cp_write_ignore(env: *mut CPUARMState, ri: *const ARMCPRegInfo, value: u64);
 }
+extern "C" {
+    pub fn arm_cp_read_zero(env: *mut CPUARMState, ri: *const ARMCPRegInfo) -> u64;
+}
+extern "C" {
+    pub fn arm_cp_reset_ignore(env: *mut CPUARMState, opaque: *const ARMCPRegInfo);
+}
+extern "C" {
+    pub fn read_raw_cp_reg(env: *mut CPUARMState, ri: *const ARMCPRegInfo) -> u64;
+}
+extern "C" {
+    #[doc = " write_list_to_cpustate"]
+    #[doc = " @cpu: ARMCPU"]
+    #[doc = ""]
+    #[doc = " For each register listed in the ARMCPU cpreg_indexes list, write"]
+    #[doc = " its value from the cpreg_values list into the ARMCPUState structure."]
+    #[doc = " This updates TCG's working data structures from KVM data or"]
+    #[doc = " from incoming migration state."]
+    #[doc = ""]
+    #[doc = " Returns: true if all register values were updated correctly,"]
+    #[doc = " false if some register was unknown or could not be written."]
+    #[doc = " Note that we do not stop early on failure -- we will attempt"]
+    #[doc = " writing all registers in the list."]
+    pub fn write_list_to_cpustate(cpu: *mut ARMCPU) -> bool;
+}
+extern "C" {
+    #[doc = " write_cpustate_to_list:"]
+    #[doc = " @cpu: ARMCPU"]
+    #[doc = ""]
+    #[doc = " For each register listed in the ARMCPU cpreg_indexes list, write"]
+    #[doc = " its value from the ARMCPUState structure into the cpreg_values list."]
+    #[doc = " This is used to copy info from TCG's working data structures into"]
+    #[doc = " KVM or for outbound migration."]
+    #[doc = ""]
+    #[doc = " Returns: true if all register values were read correctly,"]
+    #[doc = " false if some register was unknown or could not be read."]
+    #[doc = " Note that we do not stop early on failure -- we will attempt"]
+    #[doc = " reading all registers in the list."]
+    pub fn write_cpustate_to_list(cpu: *mut ARMCPU) -> bool;
+}
+pub const ARMMMUIdx_ARMMMUIdx_S12NSE0: ARMMMUIdx = 0;
+pub const ARMMMUIdx_ARMMMUIdx_S12NSE1: ARMMMUIdx = 1;
+pub const ARMMMUIdx_ARMMMUIdx_S1E2: ARMMMUIdx = 2;
+pub const ARMMMUIdx_ARMMMUIdx_S1E3: ARMMMUIdx = 3;
+pub const ARMMMUIdx_ARMMMUIdx_S1SE0: ARMMMUIdx = 4;
+pub const ARMMMUIdx_ARMMMUIdx_S1SE1: ARMMMUIdx = 5;
+pub const ARMMMUIdx_ARMMMUIdx_S2NS: ARMMMUIdx = 6;
+pub const ARMMMUIdx_ARMMMUIdx_S1NSE0: ARMMMUIdx = 7;
+pub const ARMMMUIdx_ARMMMUIdx_S1NSE1: ARMMMUIdx = 8;
+pub type ARMMMUIdx = ::std::os::raw::c_uint;
+pub const ARMASIdx_ARMASIdx_NS: ARMASIdx = 0;
+pub const ARMASIdx_ARMASIdx_S: ARMASIdx = 1;
+pub type ARMASIdx = ::std::os::raw::c_uint;
 #[doc = " CPUListState:"]
 #[doc = " @cpu_fprintf: Print function."]
 #[doc = " @file: File to print to using @cpu_fprint."]
@@ -34366,6 +35522,12 @@ extern "C" {
     );
 }
 extern "C" {
+    pub static mut target_page_bits_decided: bool;
+}
+extern "C" {
+    pub static mut target_page_bits: ::std::os::raw::c_int;
+}
+extern "C" {
     pub static mut qemu_real_host_page_size: usize;
 }
 extern "C" {
@@ -34378,7 +35540,7 @@ extern "C" {
     pub static mut qemu_host_page_mask: isize;
 }
 extern "C" {
-    pub fn cpu_copy(env: *mut CPUMIPSState) -> *mut CPUMIPSState;
+    pub fn cpu_copy(env: *mut CPUARMState) -> *mut CPUARMState;
 }
 extern "C" {
     pub fn dump_exec_info(f: *mut FILE, cpu_fprintf: fprintf_function);
@@ -34407,166 +35569,44 @@ extern "C" {
         safe: bool,
     ) -> MemTxResult;
 }
-pub const ACCESS_USER: ::std::os::raw::c_uint = 0;
-pub const ACCESS_SUPER: ::std::os::raw::c_uint = 1;
-pub const ACCESS_STORE: ::std::os::raw::c_uint = 2;
-pub const ACCESS_CODE: ::std::os::raw::c_uint = 16;
-pub const ACCESS_INT: ::std::os::raw::c_uint = 32;
-pub const ACCESS_FLOAT: ::std::os::raw::c_uint = 48;
-pub type _bindgen_ty_39 = ::std::os::raw::c_uint;
-pub const EXCP_NONE: ::std::os::raw::c_int = -1;
-pub const EXCP_RESET: ::std::os::raw::c_int = 0;
-pub const EXCP_SRESET: ::std::os::raw::c_int = 1;
-pub const EXCP_DSS: ::std::os::raw::c_int = 2;
-pub const EXCP_DINT: ::std::os::raw::c_int = 3;
-pub const EXCP_DDBL: ::std::os::raw::c_int = 4;
-pub const EXCP_DDBS: ::std::os::raw::c_int = 5;
-pub const EXCP_NMI: ::std::os::raw::c_int = 6;
-pub const EXCP_MCHECK: ::std::os::raw::c_int = 7;
-pub const EXCP_EXT_INTERRUPT: ::std::os::raw::c_int = 8;
-pub const EXCP_DFWATCH: ::std::os::raw::c_int = 9;
-pub const EXCP_DIB: ::std::os::raw::c_int = 10;
-pub const EXCP_IWATCH: ::std::os::raw::c_int = 11;
-pub const EXCP_AdEL: ::std::os::raw::c_int = 12;
-pub const EXCP_AdES: ::std::os::raw::c_int = 13;
-pub const EXCP_TLBF: ::std::os::raw::c_int = 14;
-pub const EXCP_IBE: ::std::os::raw::c_int = 15;
-pub const EXCP_DBp: ::std::os::raw::c_int = 16;
-pub const EXCP_SYSCALL: ::std::os::raw::c_int = 17;
-pub const EXCP_BREAK: ::std::os::raw::c_int = 18;
-pub const EXCP_CpU: ::std::os::raw::c_int = 19;
-pub const EXCP_RI: ::std::os::raw::c_int = 20;
-pub const EXCP_OVERFLOW: ::std::os::raw::c_int = 21;
-pub const EXCP_TRAP: ::std::os::raw::c_int = 22;
-pub const EXCP_FPE: ::std::os::raw::c_int = 23;
-pub const EXCP_DWATCH: ::std::os::raw::c_int = 24;
-pub const EXCP_LTLBL: ::std::os::raw::c_int = 25;
-pub const EXCP_TLBL: ::std::os::raw::c_int = 26;
-pub const EXCP_TLBS: ::std::os::raw::c_int = 27;
-pub const EXCP_DBE: ::std::os::raw::c_int = 28;
-pub const EXCP_THREAD: ::std::os::raw::c_int = 29;
-pub const EXCP_MDMX: ::std::os::raw::c_int = 30;
-pub const EXCP_C2E: ::std::os::raw::c_int = 31;
-pub const EXCP_CACHE: ::std::os::raw::c_int = 32;
-pub const EXCP_DSPDIS: ::std::os::raw::c_int = 33;
-pub const EXCP_MSADIS: ::std::os::raw::c_int = 34;
-pub const EXCP_MSAFPE: ::std::os::raw::c_int = 35;
-pub const EXCP_TLBXI: ::std::os::raw::c_int = 36;
-pub const EXCP_TLBRI: ::std::os::raw::c_int = 37;
-pub const EXCP_LAST: ::std::os::raw::c_int = 37;
-pub type _bindgen_ty_40 = ::std::os::raw::c_int;
 extern "C" {
-    pub fn mips_tcg_init();
+    #[doc = " arm_regime_tbi0:"]
+    #[doc = " @env: CPUARMState"]
+    #[doc = " @mmu_idx: MMU index indicating required translation regime"]
+    #[doc = ""]
+    #[doc = " Extracts the TBI0 value from the appropriate TCR for the current EL"]
+    #[doc = ""]
+    #[doc = " Returns: the TBI0 value."]
+    pub fn arm_regime_tbi0(env: *mut CPUARMState, mmu_idx: ARMMMUIdx) -> u32;
 }
 extern "C" {
-    pub fn cpu_mips_init(cpu_model: *const ::std::os::raw::c_char) -> *mut MIPSCPU;
+    #[doc = " arm_regime_tbi1:"]
+    #[doc = " @env: CPUARMState"]
+    #[doc = " @mmu_idx: MMU index indicating required translation regime"]
+    #[doc = ""]
+    #[doc = " Extracts the TBI1 value from the appropriate TCR for the current EL"]
+    #[doc = ""]
+    #[doc = " Returns: the TBI1 value."]
+    pub fn arm_regime_tbi1(env: *mut CPUARMState, mmu_idx: ARMMMUIdx) -> u32;
 }
+pub const QEMU_PSCI_CONDUIT_DISABLED: ::std::os::raw::c_uint = 0;
+pub const QEMU_PSCI_CONDUIT_SMC: ::std::os::raw::c_uint = 1;
+pub const QEMU_PSCI_CONDUIT_HVC: ::std::os::raw::c_uint = 2;
+pub type _bindgen_ty_146 = ::std::os::raw::c_uint;
 extern "C" {
-    pub fn cpu_mips_signal_handler(
-        host_signum: ::std::os::raw::c_int,
-        pinfo: *mut ::std::os::raw::c_void,
-        puc: *mut ::std::os::raw::c_void,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn cpu_supports_cps_smp(cpu_model: *const ::std::os::raw::c_char) -> bool;
-}
-extern "C" {
-    pub fn cpu_supports_isa(
-        cpu_model: *const ::std::os::raw::c_char,
-        isa: ::std::os::raw::c_uint,
-    ) -> bool;
-}
-extern "C" {
-    pub fn cpu_set_exception_base(vp_index: ::std::os::raw::c_int, address: target_ulong);
-}
-extern "C" {
-    pub fn cpu_state_reset(s: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn cpu_mips_get_random(env: *mut CPUMIPSState) -> u32;
-}
-extern "C" {
-    pub fn cpu_mips_get_count(env: *mut CPUMIPSState) -> u32;
-}
-extern "C" {
-    pub fn cpu_mips_store_count(env: *mut CPUMIPSState, value: u32);
-}
-extern "C" {
-    pub fn cpu_mips_store_compare(env: *mut CPUMIPSState, value: u32);
-}
-extern "C" {
-    pub fn cpu_mips_start_count(env: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn cpu_mips_stop_count(env: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn cpu_mips_soft_irq(
-        env: *mut CPUMIPSState,
-        irq: ::std::os::raw::c_int,
-        level: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn mips_cpu_handle_mmu_fault(
-        cpu: *mut CPUState,
-        address: vaddr,
-        rw: ::std::os::raw::c_int,
-        mmu_idx: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn float_class_s(arg: u32, fst: *mut float_status) -> u32;
-}
-extern "C" {
-    pub fn float_class_d(arg: u64, fst: *mut float_status) -> u64;
-}
-extern "C" {
-    pub fn r4k_invalidate_tlb(
-        env: *mut CPUMIPSState,
-        idx: ::std::os::raw::c_int,
-        use_extra: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn cpu_mips_translate_address(
-        env: *mut CPUMIPSState,
-        address: target_ulong,
-        rw: ::std::os::raw::c_int,
-    ) -> hwaddr;
-}
-extern "C" {
-    pub fn exception_resume_pc(env: *mut CPUMIPSState) -> target_ulong;
-}
-extern "C" {
-    pub static mut ieee_rm: [::std::os::raw::c_uint; 0usize];
-}
-extern "C" {
-    pub fn ieee_ex_to_mips(xcpt: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
-}
-extern "C" {
-    pub fn cpu_mips_tlb_flush(env: *mut CPUMIPSState);
-}
-extern "C" {
-    pub fn sync_c0_status(
-        env: *mut CPUMIPSState,
-        cpu: *mut CPUMIPSState,
-        tc: ::std::os::raw::c_int,
-    );
-}
-extern "C" {
-    pub fn cpu_mips_store_status(env: *mut CPUMIPSState, val: target_ulong);
-}
-extern "C" {
-    pub fn cpu_mips_store_cause(env: *mut CPUMIPSState, val: target_ulong);
-}
-extern "C" {
-    pub fn do_raise_exception_err(
-        env: *mut CPUMIPSState,
-        exception: u32,
-        error_code: ::std::os::raw::c_int,
-        pc: usize,
+    #[doc = " arm_register_el_change_hook:"]
+    #[doc = " Register a hook function which will be called back whenever this"]
+    #[doc = " CPU changes exception level or mode. The hook function will be"]
+    #[doc = " passed a pointer to the ARMCPU and the opaque data pointer passed"]
+    #[doc = " to this function when the hook was registered."]
+    #[doc = ""]
+    #[doc = " Note that we currently only support registering a single hook function,"]
+    #[doc = " and will assert if this function is called twice."]
+    #[doc = " This facility is intended for the use of the GICv3 emulation."]
+    pub fn arm_register_el_change_hook(
+        cpu: *mut ARMCPU,
+        hook: ARMELChangeHook,
+        opaque: *mut ::std::os::raw::c_void,
     );
 }
 extern "C" {
@@ -34923,11 +35963,11 @@ extern "C" {
     pub fn qemu_log_close();
 }
 extern "C" {
-    pub fn gen_intermediate_code(env: *mut CPUMIPSState, tb: *mut TranslationBlock);
+    pub fn gen_intermediate_code(env: *mut CPUARMState, tb: *mut TranslationBlock);
 }
 extern "C" {
     pub fn restore_state_to_opc(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         tb: *mut TranslationBlock,
         data: *mut target_ulong,
     );
@@ -35157,7 +36197,7 @@ extern "C" {
 }
 extern "C" {
     pub fn probe_write(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         mmu_idx: ::std::os::raw::c_int,
         retaddr: usize,
@@ -35215,7 +36255,7 @@ extern "C" {
     );
 }
 extern "C" {
-    pub fn get_page_addr_code(env1: *mut CPUMIPSState, addr: target_ulong) -> tb_page_addr_t;
+    pub fn get_page_addr_code(env1: *mut CPUARMState, addr: target_ulong) -> tb_page_addr_t;
 }
 extern "C" {
     pub fn tlb_reset_dirty(cpu: *mut CPUState, start1: ram_addr_t, length: ram_addr_t);
@@ -35276,8 +36316,8 @@ pub const TCGBar_TCG_BAR_LDAQ: TCGBar = 16;
 pub const TCGBar_TCG_BAR_STRL: TCGBar = 32;
 pub const TCGBar_TCG_BAR_SC: TCGBar = 48;
 pub type TCGBar = ::std::os::raw::c_uint;
-pub type tcg_target_long = i32;
-pub type tcg_target_ulong = u32;
+pub type tcg_target_long = i64;
+pub type tcg_target_ulong = u64;
 pub type TCGRegSet = u32;
 pub const TCGOpcode_INDEX_op_discard: TCGOpcode = 0;
 pub const TCGOpcode_INDEX_op_set_label: TCGOpcode = 1;
@@ -35491,9 +36531,9 @@ pub struct TCGPool {
 pub const TCGType_TCG_TYPE_I32: TCGType = 0;
 pub const TCGType_TCG_TYPE_I64: TCGType = 1;
 pub const TCGType_TCG_TYPE_COUNT: TCGType = 2;
-pub const TCGType_TCG_TYPE_REG: TCGType = 0;
+pub const TCGType_TCG_TYPE_REG: TCGType = 1;
 pub const TCGType_TCG_TYPE_PTR: TCGType = 1;
-pub const TCGType_TCG_TYPE_TL: TCGType = 0;
+pub const TCGType_TCG_TYPE_TL: TCGType = 1;
 pub type TCGType = ::std::os::raw::c_uint;
 pub const TCGMemOp_MO_8: TCGMemOp = 0;
 pub const TCGMemOp_MO_16: TCGMemOp = 1;
@@ -35507,8 +36547,8 @@ pub const TCGMemOp_MO_BE: TCGMemOp = 8;
 pub const TCGMemOp_MO_TE: TCGMemOp = 0;
 pub const TCGMemOp_MO_ASHIFT: TCGMemOp = 4;
 pub const TCGMemOp_MO_AMASK: TCGMemOp = 112;
-pub const TCGMemOp_MO_ALIGN: TCGMemOp = 0;
-pub const TCGMemOp_MO_UNALN: TCGMemOp = 112;
+pub const TCGMemOp_MO_ALIGN: TCGMemOp = 112;
+pub const TCGMemOp_MO_UNALN: TCGMemOp = 0;
 pub const TCGMemOp_MO_ALIGN_2: TCGMemOp = 16;
 pub const TCGMemOp_MO_ALIGN_4: TCGMemOp = 32;
 pub const TCGMemOp_MO_ALIGN_8: TCGMemOp = 48;
@@ -35906,11 +36946,11 @@ impl TCGOp {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct qemu_build_bug_on__13 {
+pub struct qemu_build_bug_on__60 {
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
     pub __bindgen_padding_0: u8,
 }
-impl qemu_build_bug_on__13 {
+impl qemu_build_bug_on__60 {
     #[inline]
     pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
         let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
@@ -35920,11 +36960,11 @@ impl qemu_build_bug_on__13 {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct qemu_build_bug_on__14 {
+pub struct qemu_build_bug_on__61 {
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
     pub __bindgen_padding_0: u8,
 }
-impl qemu_build_bug_on__14 {
+impl qemu_build_bug_on__61 {
     #[inline]
     pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
         let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
@@ -35934,11 +36974,11 @@ impl qemu_build_bug_on__14 {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct qemu_build_bug_on__15 {
+pub struct qemu_build_bug_on__62 {
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
     pub __bindgen_padding_0: u8,
 }
-impl qemu_build_bug_on__15 {
+impl qemu_build_bug_on__62 {
     #[inline]
     pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
         let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
@@ -35948,11 +36988,11 @@ impl qemu_build_bug_on__15 {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct qemu_build_bug_on__16 {
+pub struct qemu_build_bug_on__63 {
     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 0usize], u8>,
     pub __bindgen_padding_0: u8,
 }
-impl qemu_build_bug_on__16 {
+impl qemu_build_bug_on__63 {
     #[inline]
     pub fn new_bitfield_1() -> __BindgenBitfieldUnit<[u8; 0usize], u8> {
         let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 0usize], u8> =
@@ -36093,7 +37133,7 @@ pub const TCG_OPF_CALL_CLOBBER: ::std::os::raw::c_uint = 2;
 pub const TCG_OPF_SIDE_EFFECTS: ::std::os::raw::c_uint = 4;
 pub const TCG_OPF_64BIT: ::std::os::raw::c_uint = 8;
 pub const TCG_OPF_NOT_PRESENT: ::std::os::raw::c_uint = 16;
-pub type _bindgen_ty_41 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_147 = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct TCGOpDef {
@@ -36176,7 +37216,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_ret_ldub_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36184,7 +37224,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_lduw_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36192,7 +37232,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_ldul_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36200,7 +37240,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_ldq_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36208,7 +37248,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_lduw_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36216,7 +37256,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_ldul_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36224,7 +37264,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_ldq_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36232,7 +37272,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_ret_ldsb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36240,7 +37280,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_ldsw_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36248,7 +37288,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_ldsl_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36256,7 +37296,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_ldsw_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36264,7 +37304,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_ldsl_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36272,7 +37312,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_ret_stb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u8,
         oi: TCGMemOpIdx,
@@ -36281,7 +37321,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_stw_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u16,
         oi: TCGMemOpIdx,
@@ -36290,7 +37330,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_stl_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36299,7 +37339,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_stq_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36308,7 +37348,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_stw_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u16,
         oi: TCGMemOpIdx,
@@ -36317,7 +37357,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_stl_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36326,7 +37366,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_stq_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36335,7 +37375,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_ret_ldb_cmmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36343,7 +37383,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_ldw_cmmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36351,7 +37391,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_ldl_cmmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36359,7 +37399,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_ldq_cmmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36367,7 +37407,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_ldw_cmmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36375,7 +37415,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_ldl_cmmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36383,7 +37423,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_ldq_cmmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36391,7 +37431,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_ret_ldub_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36399,7 +37439,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_lduw_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36407,7 +37447,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_ldul_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36415,7 +37455,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_ldq_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36423,7 +37463,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_lduw_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36431,7 +37471,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_ldul_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36439,7 +37479,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_ldq_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         oi: TCGMemOpIdx,
         retaddr: usize,
@@ -36447,7 +37487,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_ret_stb_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u8,
         oi: TCGMemOpIdx,
@@ -36456,7 +37496,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_stw_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u16,
         oi: TCGMemOpIdx,
@@ -36465,7 +37505,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_stl_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36474,7 +37514,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_le_stq_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36483,7 +37523,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_stw_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u16,
         oi: TCGMemOpIdx,
@@ -36492,7 +37532,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_stl_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36501,7 +37541,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_be_stq_mmu_panda(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36510,7 +37550,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_cmpxchgb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         cmpv: u32,
         newv: u32,
@@ -36520,7 +37560,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_cmpxchgw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         cmpv: u32,
         newv: u32,
@@ -36530,7 +37570,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_cmpxchgl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         cmpv: u32,
         newv: u32,
@@ -36540,7 +37580,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_cmpxchgq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         cmpv: u64,
         newv: u64,
@@ -36550,7 +37590,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_cmpxchgw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         cmpv: u32,
         newv: u32,
@@ -36560,7 +37600,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_cmpxchgl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         cmpv: u32,
         newv: u32,
@@ -36570,7 +37610,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_cmpxchgq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         cmpv: u64,
         newv: u64,
@@ -36580,7 +37620,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_addb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36589,7 +37629,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_addw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36598,7 +37638,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_addw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36607,7 +37647,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_addl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36616,7 +37656,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_addl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36625,7 +37665,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_addq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36634,7 +37674,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_addq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36643,7 +37683,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_subb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36652,7 +37692,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_subw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36661,7 +37701,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_subw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36670,7 +37710,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_subl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36679,7 +37719,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_subl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36688,7 +37728,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_subq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36697,7 +37737,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_subq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36706,7 +37746,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_andb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36715,7 +37755,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_andw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36724,7 +37764,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_andw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36733,7 +37773,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_andl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36742,7 +37782,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_andl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36751,7 +37791,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_andq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36760,7 +37800,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_andq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36769,7 +37809,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_orb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36778,7 +37818,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_orw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36787,7 +37827,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_orw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36796,7 +37836,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_orl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36805,7 +37845,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_orl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36814,7 +37854,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_orq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36823,7 +37863,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_orq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36832,7 +37872,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_xorb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36841,7 +37881,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_xorw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36850,7 +37890,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_xorw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36859,7 +37899,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_xorl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36868,7 +37908,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_xorl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36877,7 +37917,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_xorq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36886,7 +37926,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_fetch_xorq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36895,7 +37935,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_add_fetchb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36904,7 +37944,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_add_fetchw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36913,7 +37953,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_add_fetchw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36922,7 +37962,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_add_fetchl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36931,7 +37971,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_add_fetchl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36940,7 +37980,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_add_fetchq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36949,7 +37989,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_add_fetchq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -36958,7 +37998,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_sub_fetchb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36967,7 +38007,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_sub_fetchw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36976,7 +38016,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_sub_fetchw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36985,7 +38025,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_sub_fetchl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -36994,7 +38034,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_sub_fetchl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37003,7 +38043,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_sub_fetchq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -37012,7 +38052,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_sub_fetchq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -37021,7 +38061,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_and_fetchb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37030,7 +38070,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_and_fetchw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37039,7 +38079,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_and_fetchw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37048,7 +38088,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_and_fetchl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37057,7 +38097,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_and_fetchl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37066,7 +38106,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_and_fetchq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -37075,7 +38115,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_and_fetchq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -37084,7 +38124,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_or_fetchb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37093,7 +38133,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_or_fetchw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37102,7 +38142,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_or_fetchw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37111,7 +38151,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_or_fetchl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37120,7 +38160,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_or_fetchl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37129,7 +38169,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_or_fetchq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -37138,7 +38178,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_or_fetchq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -37147,7 +38187,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xor_fetchb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37156,7 +38196,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xor_fetchw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37165,7 +38205,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xor_fetchw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37174,7 +38214,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xor_fetchl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37183,7 +38223,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xor_fetchl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37192,7 +38232,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xor_fetchq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -37201,7 +38241,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xor_fetchq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -37210,7 +38250,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xchgb_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37219,7 +38259,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xchgw_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37228,7 +38268,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xchgw_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37237,7 +38277,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xchgl_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37246,7 +38286,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xchgl_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u32,
         oi: TCGMemOpIdx,
@@ -37255,7 +38295,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xchgq_le_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,
@@ -37264,7 +38304,7 @@ extern "C" {
 }
 extern "C" {
     pub fn helper_atomic_xchgq_be_mmu(
-        env: *mut CPUMIPSState,
+        env: *mut CPUARMState,
         addr: target_ulong,
         val: u64,
         oi: TCGMemOpIdx,

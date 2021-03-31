@@ -13,6 +13,11 @@ mod arm;
 #[cfg(feature = "arm")]
 pub use arm::*;
 
+#[cfg(feature = "aarch64")]
+mod aarch64;
+#[cfg(feature = "aarch64")]
+pub use aarch64::*;
+
 #[cfg(feature = "ppc")]
 mod ppc;
 #[cfg(feature = "ppc")]
