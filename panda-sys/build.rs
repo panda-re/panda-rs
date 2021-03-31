@@ -49,16 +49,35 @@ fn get_panda_path() -> PathBuf {
     )
 }
 
+#[cfg(feature = "x86_64")]
+const ARCH: &str = "x86_64";
+
+#[cfg(feature = "i386")]
+const ARCH: &str = "i386";
+
+#[cfg(feature = "arm")]
+const ARCH: &str = "arm";
+
+#[cfg(feature = "aarch64")]
+const ARCH: &str = "aarch64";
+
+#[cfg(feature = "ppc")]
+const ARCH: &str = "ppc";
+
+#[cfg(feature = "mips")]
+const ARCH: &str = "mips";
+
+#[cfg(feature = "mipsel")]
+const ARCH: &str = "mipsel";
+
 fn main() {
     if cfg!(feature = "libpanda") {
         println!("libpanda mode enabled");
-        let dylib_path = get_panda_path().join("x86_64-softmmu");
-        println!("cargo:rustc-link-lib=dylib=panda-x86_64");
+        let dylib_path = get_panda_path().join(format!("{}-softmmu", ARCH));
+        println!("cargo:rustc-link-lib=dylib=panda-{}", ARCH);
         println!("cargo:rustc-link-search=native={}", dylib_path.display());
 
         let out_dir: PathBuf = env::var("OUT_DIR").unwrap().into();
-        fs::copy(dylib_path.join("libpanda-x86_64.so"), out_dir.join("..").join("..").join("..").join("libpanda-x86_64.so")).unwrap();
-        //println!("cargo:rustc-link-search=dylib={}", out_dir.join("..").join("..").join("..").display());
-        //println!("cargo:rustc-link-search=dylib=/lib/x86_64-linux-gnu");
+        fs::copy(dylib_path.join(format!("libpanda-{}.so", ARCH)), out_dir.join("..").join("..").join("..").join("libpanda-x86_64.so")).unwrap();
     }
 }
