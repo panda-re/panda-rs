@@ -16,6 +16,10 @@ name = "showcase"
 required-features = ["libpanda"]
 
 [[example]]
+name = "dump_regs"
+required-features = ["libpanda"]
+
+[[example]]
 name = "unicorn"
 required-features = ["libpanda"]
 

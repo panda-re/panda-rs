@@ -28,7 +28,7 @@ fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
             tb.pc,
             NUM_BB.load(Ordering::SeqCst) - 1,
         );
-        panda::dump_regs(cpu);
+        panda::regs::dump_regs(cpu);
     }
 }
 
