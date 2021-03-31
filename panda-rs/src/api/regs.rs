@@ -78,6 +78,32 @@ pub enum Reg {
 #[cfg(feature = "arm")]
 static RET_REGS: &'static [Reg] = &[Reg::R0, Reg::R1, Reg::R2, Reg::R3];
 
+/// AArch64 named guest registers
+#[cfg(feature = "aarch64")]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter, ToString)]
+pub enum Reg {
+    X0 = 0,
+    X1 = 1,
+    X2 = 2,
+    X3 = 3,
+    X4 = 4,
+    X5 = 5,
+    X6 = 6,
+    X7 = 7,
+    X8 = 8,
+    X9 = 9,
+    X10 = 10,
+    X11 = 11,
+    X12 = 12,
+    LR = 13,
+    SP = 14,
+    IP = 15,
+}
+
+/// AArch64 return registers
+#[cfg(feature = "aarch64")]
+static RET_REGS: &'static [Reg] = &[Reg::X0, Reg::X1, Reg::X2, Reg::X3];
+
 /// MIPS named guest registers
 #[cfg(any(feature = "mips", feature = "mipsel"))]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter, ToString)]
@@ -119,11 +145,6 @@ pub enum Reg {
 /// MIPS return registers
 #[cfg(any(feature = "mips", feature = "mipsel"))]
 static RET_REGS: &'static [Reg] = &[Reg::V0, Reg::V1];
-
-// TODO: reg map
-/// AARCH64 named guest registers
-//#[cfg(feature = "aarch64")]
-//#[derive(Debug, Copy, Clone, PartialEq, Eq, EnumString, EnumIter)]
 
 // TODO: support floating point set as well? Separate QEMU bank.
 /// PPC named guest registers
@@ -180,7 +201,7 @@ pub fn reg_sp() -> Reg {
     #[cfg(feature = "x86_64")]
     return Reg::RSP;
 
-    #[cfg(any(feature = "arm", feature = "mips", feature = "mipsel"))]
+    #[cfg(any(feature = "arm", feature = "aarch64", feature = "mips", feature = "mipsel"))]
     return Reg::SP;
 
     #[cfg(any(feature = "ppc"))]
@@ -202,7 +223,7 @@ pub fn reg_ret_addr() -> Option<Reg> {
     #[cfg(feature = "x86_64")]
     return None;
 
-    #[cfg(any(feature = "arm", feature = "ppc"))]
+    #[cfg(any(feature = "arm", feature = "aarch64", feature = "ppc"))]
     return Some(Reg::LR);
 
     #[cfg(any(feature = "mips", feature = "mipsel"))]
@@ -217,6 +238,11 @@ pub fn get_reg<T: Into<Reg>>(cpu: &CPUState, reg: T) -> target_ulong {
     #[cfg(any(feature = "i386", feature = "x86_64", feature = "arm"))]
     unsafe {
         val = (*cpu_arch).regs[reg.into() as usize];
+    }
+
+    #[cfg(feature = "aarch64")]
+    unsafe {
+        val = (*cpu_arch).xregs[reg.into() as usize];
     }
 
     #[cfg(any(feature = "mips", feature = "mipsel"))]
@@ -260,6 +286,11 @@ pub fn set_reg<T: Into<Reg>>(cpu: &CPUState, reg: T, val: target_ulong) {
             (*cpu_arch).gpr[reg_enum as usize] = val;
         }
     }
+
+    #[cfg(feature = "aarch64")]
+    unsafe {
+        (*cpu_arch).xregs[reg.into() as usize] = val;
+    }
 }
 
 pub fn get_pc(cpu: &CPUState) -> target_ulong {
@@ -274,6 +305,11 @@ pub fn get_pc(cpu: &CPUState) -> target_ulong {
     #[cfg(feature = "arm")]
     unsafe {
         val = (*cpu_arch).regs[15];
+    }
+
+    #[cfg(feature = "aarch64")]
+    unsafe {
+        val = (*cpu_arch).pc;
     }
 
     #[cfg(feature = "ppc")]
@@ -300,6 +336,11 @@ pub fn set_pc(cpu: &mut CPUState, pc: target_ulong) {
     #[cfg(feature = "arm")]
     unsafe {
         (*cpu_arch).regs[15] = pc;
+    }
+
+    #[cfg(feature = "aarch64")]
+    unsafe {
+        (*cpu_arch).pc = pc;
     }
 
     #[cfg(feature = "ppc")]

@@ -123,6 +123,9 @@ const PLUGIN_DIR: &str = "i386-softmmu/panda/plugins";
 #[cfg(feature = "arm")]
 const PLUGIN_DIR: &str = "arm-softmmu/panda/plugins";
 
+#[cfg(feature = "aarch64")]
+const PLUGIN_DIR: &str = "aarch64-softmmu/panda/plugins";
+
 #[cfg(feature = "mips")]
 const PLUGIN_DIR: &str = "mips-softmmu/panda/plugins";
 

@@ -14,8 +14,10 @@ pub enum Arch {
     x86_64,
     Arm,
     Mips,
+    AArch64,
 }
 
+// TODO: tie architecture to architecture being compiled for?
 impl fmt::Display for Arch {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", match self {
@@ -23,6 +25,7 @@ impl fmt::Display for Arch {
             Self::x86_64 => "x86_64",
             Self::Arm => "arm",
             Self::Mips => "mips",
+            Self::AArch64 => "aarch64",
         })
     }
 }
