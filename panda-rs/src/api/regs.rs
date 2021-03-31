@@ -281,6 +281,11 @@ pub fn get_pc(cpu: &CPUState) -> target_ulong {
         todo!();
     }
 
+    #[cfg(any(feature = "mips", features = "mipsel"))]
+    unsafe {
+        val = (*cpu_arch).active_tc.PC;
+    }
+
     val
 }
 
@@ -300,6 +305,11 @@ pub fn set_pc(cpu: &mut CPUState, pc: target_ulong) {
     #[cfg(feature = "ppc")]
     unsafe {
         todo!();
+    }
+
+    #[cfg(any(feature = "mips", features = "mipsel"))]
+    unsafe {
+        (*cpu_arch).active_tc.PC = val;
     }
 }
 
