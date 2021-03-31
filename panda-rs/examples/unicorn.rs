@@ -2,13 +2,12 @@ use panda::prelude::*;
 use panda::regs::{get_reg, set_reg, set_pc, get_pc, Reg};
 use panda::mem::{map_memory, physical_memory_write, PAGE_SIZE};
 
+// inc rax
+// add rbx, rax
+// inc rcx
+const X86_CODE: &[u8] = b"\x48\xFF\xC0\x48\x01\xC3\x48\xFF\xC1";
+
 const ADDRESS: target_ulong = 0x1000;
-
-// inc eax
-// add ebx, eax
-// inc ecx
-const X86_CODE: &[u8] = b"\x40\x01\xC3\x41";
-
 const STOP_ADDR: target_ulong = ADDRESS + (X86_CODE.len() as target_ulong);
 
 #[panda::after_machine_init]
@@ -27,8 +26,6 @@ fn setup(cpu: &mut CPUState) {
 
     // Set starting PC
     set_pc(cpu, ADDRESS);
-    let pc = get_pc(cpu);
-    println!("PC is {:#x?}", pc);
 }
 
 #[panda::insn_translate]
@@ -38,15 +35,14 @@ fn insn_translate(cpu: &mut CPUState, pc: target_ptr_t) -> bool {
 
 #[panda::insn_exec]
 fn insn_exec(cpu: &mut CPUState, pc: target_ptr_t) {
-    if pc >= STOP_ADDR {
+    println!("pc: {:#x?}", pc);
+    if pc == STOP_ADDR {
         println!("Final CPU state:");
         panda::regs::dump_regs(cpu);
         unsafe {
             // ?
             panda::sys::exit(0);
         }
-    } else {
-        println!("pc: {:#x?}", pc);
     }
 }
 
