@@ -309,7 +309,7 @@ pub fn set_pc(cpu: &mut CPUState, pc: target_ulong) {
 
     #[cfg(any(feature = "mips", features = "mipsel"))]
     unsafe {
-        (*cpu_arch).active_tc.PC = val;
+        (*cpu_arch).active_tc.PC = pc;
     }
 }
 
