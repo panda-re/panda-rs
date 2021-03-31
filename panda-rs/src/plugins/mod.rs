@@ -114,8 +114,23 @@ struct Plugin {
     lib: libloading::Library,
 }
 
-// TODO: make this work for other archs
+#[cfg(feature = "x86_64")]
 const PLUGIN_DIR: &str = "x86_64-softmmu/panda/plugins";
+
+#[cfg(feature = "i386")]
+const PLUGIN_DIR: &str = "i386-softmmu/panda/plugins";
+
+#[cfg(feature = "arm")]
+const PLUGIN_DIR: &str = "arm-softmmu/panda/plugins";
+
+#[cfg(feature = "mips")]
+const PLUGIN_DIR: &str = "mips-softmmu/panda/plugins";
+
+#[cfg(feature = "mipsel")]
+const PLUGIN_DIR: &str = "mipsel-softmmu/panda/plugins";
+
+#[cfg(feature = "ppc")]
+const PLUGIN_DIR: &str = "ppc-softmmu/panda/plugins";
 
 impl Plugin {
     pub fn new(name: &str) -> Self {
