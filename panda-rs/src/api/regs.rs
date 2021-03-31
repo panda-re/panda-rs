@@ -281,7 +281,7 @@ pub fn get_pc(cpu: &CPUState) -> target_ulong {
         val = (*cpu_arch).nip;
     }
 
-    #[cfg(any(feature = "mips", features = "mipsel"))]
+    #[cfg(any(feature = "mips", feature = "mipsel"))]
     unsafe {
         val = (*cpu_arch).active_tc.PC;
     }
@@ -307,7 +307,7 @@ pub fn set_pc(cpu: &mut CPUState, pc: target_ulong) {
         (*cpu_arch).nip = pc;
     }
 
-    #[cfg(any(feature = "mips", features = "mipsel"))]
+    #[cfg(any(feature = "mips", feature = "mipsel"))]
     unsafe {
         (*cpu_arch).active_tc.PC = pc;
     }
