@@ -78,6 +78,9 @@ fn main() {
         println!("cargo:rustc-link-search=native={}", dylib_path.display());
 
         let out_dir: PathBuf = env::var("OUT_DIR").unwrap().into();
-        fs::copy(dylib_path.join(format!("libpanda-{}.so", ARCH)), out_dir.join("..").join("..").join("..").join("libpanda-x86_64.so")).unwrap();
+        fs::copy(
+            dylib_path.join(format!("libpanda-{}.so", ARCH)),
+            out_dir.join("..").join("..").join("..").join(format!("libpanda-{}.so", ARCH))
+        ).unwrap();
     }
 }
