@@ -243,8 +243,6 @@ impl Panda {
             .unwrap_or("128M")
             .to_owned();
 
-        assert_eq!(arch, Arch::x86_64, "Only x86_64 is currently supported");
-
         let mut args = vec![
             "".into(), // filler, argv[0] == path of executable, n/a
             "-L".into(),
