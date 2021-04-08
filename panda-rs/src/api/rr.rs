@@ -25,7 +25,7 @@ pub fn record_begin(name: &str, snapshot: Option<&str>) -> Result<c_int, Error> 
     match CString::new(name) {
         Ok(c_name) => match snapshot {
             Some(snap_name) => match CString::new(snap_name) {
-            Ok(c_snap_name) => Ok(unsafe { panda_sys::panda_record_begin(c_name.as_ptr(), c_snap_name.as_ptr()) }),
+                Ok(c_snap_name) => Ok(unsafe { panda_sys::panda_record_begin(c_name.as_ptr(), c_snap_name.as_ptr()) }),
                 Err(e) => Err(Error::InvalidString(e))
             },
             None => Ok(unsafe { panda_sys::panda_record_begin(c_name.as_ptr(), ptr::null()) }),

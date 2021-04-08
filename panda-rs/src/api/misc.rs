@@ -1,9 +1,16 @@
 use crate::prelude::*;
 
-/// Determine if guest is currently in kernelspace
-pub fn in_kernel(cpu: &mut CPUState) -> bool {
+/// Determine if guest is currently executing in kernel mode
+pub fn in_kernel_mode(cpu: &mut CPUState) -> bool {
     unsafe {
-        panda_sys::panda_in_kernel_external(cpu)
+        panda_sys::panda_in_kernel_mode_external(cpu)
+    }
+}
+
+/// Determine if guest is currently executing kernel code
+pub fn in_kernel_code_linux(cpu: &mut CPUState) -> bool {
+    unsafe {
+        panda_sys::panda_in_kernel_code_linux_external(cpu)
     }
 }
 
