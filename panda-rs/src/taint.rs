@@ -17,6 +17,7 @@ plugin_import!{
         fn taint2_label_reg(reg_num: c_int, offset: c_int, label: u32);
         fn taint2_query_reg(reg_num: c_int, offset: c_int) -> u32;
         fn taint2_query_ram(ram_offset: u64) -> u32;
+        fn taint2_query_laddr(la: u64, off: u64) -> u32;
     };
 }
 
@@ -77,5 +78,9 @@ pub fn check_ram_range(mut addr_range: Range<target_ptr_t>) -> bool {
     TAINT_ENABLE.is_completed() && addr_range.any(|addr| TAINT.taint2_query_ram(addr) > 0)
 }
 
-// TODO: get_reg, get_ram, check_laddr, sym_enable, sym_label_ram, sym_label_reg
+pub fn check_laddr(addr: u64, offset: u64) -> bool {
+    TAINT_ENABLE.is_completed() && TAINT.taint2_query_laddr(addr, offset) > 0
+}
+
+// TODO: get_reg, get_ram, sym_enable, sym_label_ram, sym_label_reg
 
