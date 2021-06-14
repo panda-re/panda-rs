@@ -29,6 +29,7 @@ fn get_panda_path() -> PathBuf {
         &env::var("PANDA_PATH")
             .map(PathBuf::from)
             .or_else(|_| -> Result<_, ()> {
+                println!("cargo:warning=PANDA_PATH is missing");
                 Ok(
                     get_site_packages()
                         .map_err(|_| ())?

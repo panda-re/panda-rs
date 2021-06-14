@@ -51,6 +51,7 @@ pub use panda_arg::PandaArgs;
 
 pub mod enums;
 pub mod plugins;
+pub mod taint;
 
 pub mod prelude {
     pub use crate::Panda;
