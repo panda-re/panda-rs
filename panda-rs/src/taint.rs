@@ -1,6 +1,6 @@
 //! Taint analysis API
 
-use crate::sys::{self, target_ptr_t};
+use crate::sys::target_ptr_t;
 use crate::api::regs::Reg;
 use crate::plugin_import;
 
@@ -71,11 +71,11 @@ pub fn check_reg_num(reg_num: c_int) -> bool {
 }
 
 pub fn check_ram(addr: target_ptr_t) -> bool {
-    TAINT_ENABLE.is_completed() && TAINT.taint2_query_ram(addr) > 0
+    TAINT_ENABLE.is_completed() && TAINT.taint2_query_ram(addr as u64) > 0
 }
 
 pub fn check_ram_range(mut addr_range: Range<target_ptr_t>) -> bool {
-    TAINT_ENABLE.is_completed() && addr_range.any(|addr| TAINT.taint2_query_ram(addr) > 0)
+    TAINT_ENABLE.is_completed() && addr_range.any(|addr| TAINT.taint2_query_ram(addr as u64) > 0)
 }
 
 pub fn check_laddr(addr: u64, offset: u64) -> bool {
