@@ -110,7 +110,7 @@ macro_rules! plugin_import {
     }
 }
 
-struct Plugin {
+pub struct Plugin {
     lib: libloading::Library,
 }
 
