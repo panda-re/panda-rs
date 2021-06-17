@@ -1,3 +1,5 @@
+//! glib wrappers for supporting glib-based plugins
+
 use std::mem::size_of;
 use std::marker::PhantomData;
 use std::ops::{Deref, DerefMut};

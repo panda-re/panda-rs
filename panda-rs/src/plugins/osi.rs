@@ -1,3 +1,4 @@
+//! Bingings for the OSI (Operating System Introspection) plugin
 use crate::sys::{target_ptr_t, target_pid_t, target_ulong, CPUState};
 use crate::plugins::glib::{GBox, GBoxedSlice};
 use crate::plugin_import;
