@@ -74,3 +74,5 @@ Sample snippets in the `panda-rs/examples` directory can be run by name, e.g. `s
 cd panda-rs
 cargo run --example showcase --features=libpanda
 ```
+
+Note the addition of the 'libpanda' feature. This is because Rust examples are standalone executables, not shared libraries (like PANDA plugins) and thus must consume PANDA as a library.
