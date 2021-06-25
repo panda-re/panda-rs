@@ -34,9 +34,11 @@ use crate::sys::target_ptr_t;
 use crate::api::regs::Reg;
 use crate::plugin_import;
 
-use std::os::raw::c_int;
+use std::os::raw::{c_void, c_int};
+use std::collections::HashSet;
 use std::sync::Once;
 use std::ops::Range;
+use std::ptr;
 
 plugin_import!{
     /// Direct access to the taint2 C API when direct use is needed
@@ -49,6 +51,10 @@ plugin_import!{
         fn taint2_query_reg(reg_num: c_int, offset: c_int) -> u32;
         fn taint2_query_ram(ram_offset: u64) -> u32;
         fn taint2_query_laddr(la: u64, off: u64) -> u32;
+
+        fn taint2_query_result_next(qr: &mut QueryResult, done: &mut bool) -> u32;
+        fn taint2_query_reg_full(reg_num: u32, offset: u32, qr: &mut QueryResult);
+        fn taint2_query_ram_full(addr: u64, qr: &mut QueryResult);
     };
 }
 
@@ -217,5 +223,100 @@ pub fn check_laddr(addr: u64, offset: u64) -> bool {
     TAINT_ENABLE.is_completed() && TAINT.taint2_query_laddr(addr, offset) > 0
 }
 
-// TODO: get_reg, get_ram, sym_enable, sym_label_ram, sym_label_reg
+/// Get a list of all taint labels applied to a register, excluding duplicates across bytes
+pub fn get_reg(reg: impl Into<Reg>) -> Vec<u32> {
+    let labels: HashSet<u32> = iter_reg_labels(reg).collect();
+
+    labels.into_iter().collect()
+}
+
+/// Get a list of all taint labels applied to a byte of memory
+pub fn get_ram(addr: target_ptr_t) -> Vec<u32> {
+    let mut query_result = QueryResult::empty();
+    TAINT.taint2_query_ram_full(addr as u64, &mut query_result);
+
+    LabelIter { done: query_result.num_labels == 0, query_result }.collect()
+}
+
+/// Get a unique list of all taint labels applied to a segment of memory
+pub fn get_ram_range(addr_range: Range<target_ptr_t>) -> Vec<u32> {
+    let labels: HashSet<u32> = iter_ram_labels(addr_range).collect();
+
+    labels.into_iter().collect()
+}
+
+/// Iterate over all the taint labels applied to a given register
+///
+/// **NOTE**: this will repeat labels if they are applied to multiple bytes in
+/// the register. For automatic deduplication behavior, try [`get_reg`].
+pub fn iter_reg_labels(reg: impl Into<Reg>) -> impl Iterator<Item = u32> {
+    let reg_size = std::mem::size_of::<target_ptr_t>();
+
+    let reg = reg.into();
+    (0..reg_size)
+        .map(move |i| {
+            let mut query_result = QueryResult::empty();
+            TAINT.taint2_query_reg_full(reg as u32, i as u32, &mut query_result);
+            
+            LabelIter { done: query_result.num_labels == 0, query_result }
+        })
+        .flatten()
+}
+
+/// Iterate over all the taint labels applied to a segment of memory
+///
+/// **NOTE**: this will repeat labels if they are applied to multiple bytes in
+/// the memory range. For automatic deduplication behavior, try [`get_ram_range`].
+pub fn iter_ram_labels(addr_range: Range<target_ptr_t>) -> impl Iterator<Item = u32> {
+    addr_range
+        .map(move |addr| {
+            let mut query_result = QueryResult::empty();
+            TAINT.taint2_query_ram_full(addr as u64, &mut query_result);
+            
+            LabelIter { done: query_result.num_labels == 0, query_result }
+        })
+        .flatten()
+}
+
+#[repr(C)]
+pub struct QueryResult {
+    num_labels: u32,
+    ls: *mut c_void,
+    it_end: *mut c_void,
+    it_curr: *mut c_void,
+    tcn: u32,
+    cb_mask: u8,
+}
+
+impl QueryResult {
+    fn empty() -> Self {
+        Self {
+            num_labels: 0,
+            ls: ptr::null_mut(),
+            it_end: ptr::null_mut(),
+            it_curr: ptr::null_mut(),
+            tcn: 0,
+            cb_mask: 0,
+        }
+    }
+}
+
+pub struct LabelIter {
+    query_result: QueryResult,
+    done: bool,
+}
+
+impl Iterator for LabelIter {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.done {
+            None
+        } else {
+            Some(TAINT.taint2_query_result_next(&mut self.query_result, &mut self.done))
+        }
+    }
+}
+
+// TODO: sym_enable, sym_label_ram, sym_label_reg
 

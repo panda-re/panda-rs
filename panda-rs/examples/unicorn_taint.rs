@@ -28,8 +28,11 @@ fn setup(cpu: &mut CPUState) {
     for reg in [Reg::RAX, Reg::RBX, Reg::RCX, Reg::RDX] {
         println!("{:?} is tained? {:?}", reg, taint::check_reg(reg));
     }
-    println!("Tainting RAX...");
+    println!("Tainting RAX with label '1'...");
     taint::label_reg(Reg::RAX, 1);
+
+    println!("Tainting RBX with label '2'...");
+    taint::label_reg(Reg::RBX, 2);
 
     // Set starting PC
     set_pc(cpu, ADDRESS);
@@ -49,6 +52,10 @@ fn insn_exec(cpu: &mut CPUState, pc: target_ptr_t) {
 
         for reg in [Reg::RAX, Reg::RBX, Reg::RCX, Reg::RDX] {
             println!("{:?} is tained? {:?}", reg, taint::check_reg(reg));
+
+            if taint::check_reg(reg) {
+                println!("(Tainted by {:?})", taint::get_reg(reg));
+            }
         }
         unsafe {
             // ?
