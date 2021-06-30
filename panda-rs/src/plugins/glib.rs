@@ -63,8 +63,12 @@ impl<T> Deref for GBoxedSlice<T> {
         } else {
             let g_array = unsafe { &*self.0 };
 
-            unsafe {
-                std::slice::from_raw_parts(g_array.data as _, g_array.len as usize)
+            if g_array.data.is_null() {
+                &[]
+            } else {
+                unsafe {
+                    std::slice::from_raw_parts(g_array.data as _, g_array.len as usize)
+                }
             }
         }
     }
@@ -77,8 +81,12 @@ impl<T> DerefMut for GBoxedSlice<T> {
         }
         let g_array = unsafe { &mut *self.0 };
 
-        unsafe {
-            std::slice::from_raw_parts_mut(g_array.data as *mut T, g_array.len as usize)
+        if g_array.data.is_null() {
+            &mut []
+        } else {
+            unsafe {
+                std::slice::from_raw_parts_mut(g_array.data as *mut T, g_array.len as usize)
+            }
         }
     }
 }

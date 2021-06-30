@@ -235,7 +235,11 @@ pub fn get_ram(addr: target_ptr_t) -> Vec<u32> {
     let mut query_result = QueryResult::empty();
     TAINT.taint2_query_ram_full(addr as u64, &mut query_result);
 
-    LabelIter { done: query_result.num_labels == 0, query_result }.collect()
+    if check_ram(addr) {
+        LabelIter { done: query_result.num_labels == 0, query_result }.collect()
+    } else {
+        Vec::with_capacity(0)
+    }
 }
 
 /// Get a unique list of all taint labels applied to a segment of memory
@@ -258,7 +262,11 @@ pub fn iter_reg_labels(reg: impl Into<Reg>) -> impl Iterator<Item = u32> {
             let mut query_result = QueryResult::empty();
             TAINT.taint2_query_reg_full(reg as u32, i as u32, &mut query_result);
             
-            LabelIter { done: query_result.num_labels == 0, query_result }
+            if TAINT.taint2_query_reg(reg as i32, i as c_int) > 0 {
+                LabelIter { done: query_result.is_empty_or_invalid(), query_result }
+            } else {
+                LabelIter { done: true, query_result }
+            }
         })
         .flatten()
 }
@@ -273,7 +281,11 @@ pub fn iter_ram_labels(addr_range: Range<target_ptr_t>) -> impl Iterator<Item = 
             let mut query_result = QueryResult::empty();
             TAINT.taint2_query_ram_full(addr as u64, &mut query_result);
             
-            LabelIter { done: query_result.num_labels == 0, query_result }
+            if check_ram(addr) {
+                LabelIter { done: query_result.is_empty_or_invalid(), query_result }
+            } else {
+                LabelIter { done: true, query_result }
+            }
         })
         .flatten()
 }
@@ -298,6 +310,10 @@ impl QueryResult {
             tcn: 0,
             cb_mask: 0,
         }
+    }
+
+    fn is_empty_or_invalid(&self) -> bool {
+        self.num_labels == 0 || self.it_end.is_null() || self.it_curr.is_null()
     }
 }
 
