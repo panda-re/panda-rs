@@ -141,7 +141,7 @@ pub fn derive_panda_args(input: TokenStream) -> TokenStream {
 
     let name = match get_name(&input.attrs) {
         Some(name) => name,
-        None => return quote!(compiler_error!("Missing plugin name, add `#[name = ...]` above struct")).into()
+        None => return quote!(compile_error!("Missing plugin name, add `#[name = ...]` above struct")).into(),
     };
 
     let ident = &input.ident;
