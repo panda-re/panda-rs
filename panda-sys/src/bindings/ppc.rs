@@ -198,22 +198,22 @@ pub const PANDA_LOG_WARNING: u32 = 2;
 pub const PANDA_LOG_INFO: u32 = 3;
 pub const PANDA_LOG_DEBUG: u32 = 4;
 pub const PANDA_LOG_LEVEL: u32 = 2;
-pub const CONFIG_QEMU_CONFDIR: &'static [u8; 49usize] =
-    b"/home/jam/dev/work/panda/build/install/etc/panda\0";
-pub const CONFIG_QEMU_DATADIR: &'static [u8; 51usize] =
-    b"/home/jam/dev/work/panda/build/install/share/panda\0";
-pub const CONFIG_QEMU_DOCDIR: &'static [u8; 54usize] =
-    b"/home/jam/dev/work/panda/build/install/share/doc/qemu\0";
-pub const CONFIG_QEMU_MODDIR: &'static [u8; 49usize] =
-    b"/home/jam/dev/work/panda/build/install/lib/panda\0";
-pub const CONFIG_PANDA_PLUGINDIR: &'static [u8; 49usize] =
-    b"/home/jam/dev/work/panda/build/install/lib/panda\0";
-pub const CONFIG_QEMU_LOCALSTATEDIR: &'static [u8; 43usize] =
-    b"/home/jam/dev/work/panda/build/install/var\0";
-pub const CONFIG_QEMU_HELPERDIR: &'static [u8; 47usize] =
-    b"/home/jam/dev/work/panda/build/install/libexec\0";
-pub const CONFIG_QEMU_LOCALEDIR: &'static [u8; 52usize] =
-    b"/home/jam/dev/work/panda/build/install/share/locale\0";
+pub const CONFIG_QEMU_CONFDIR: &'static [u8; 48usize] =
+    b"/home/tballo/proj/panda/build/install/etc/panda\0";
+pub const CONFIG_QEMU_DATADIR: &'static [u8; 50usize] =
+    b"/home/tballo/proj/panda/build/install/share/panda\0";
+pub const CONFIG_QEMU_DOCDIR: &'static [u8; 53usize] =
+    b"/home/tballo/proj/panda/build/install/share/doc/qemu\0";
+pub const CONFIG_QEMU_MODDIR: &'static [u8; 48usize] =
+    b"/home/tballo/proj/panda/build/install/lib/panda\0";
+pub const CONFIG_PANDA_PLUGINDIR: &'static [u8; 48usize] =
+    b"/home/tballo/proj/panda/build/install/lib/panda\0";
+pub const CONFIG_QEMU_LOCALSTATEDIR: &'static [u8; 42usize] =
+    b"/home/tballo/proj/panda/build/install/var\0";
+pub const CONFIG_QEMU_HELPERDIR: &'static [u8; 46usize] =
+    b"/home/tballo/proj/panda/build/install/libexec\0";
+pub const CONFIG_QEMU_LOCALEDIR: &'static [u8; 51usize] =
+    b"/home/tballo/proj/panda/build/install/share/locale\0";
 pub const HOST_X86_64: u32 = 1;
 pub const CONFIG_POSIX: u32 = 1;
 pub const CONFIG_LINUX: u32 = 1;
@@ -233,7 +233,7 @@ pub const QEMU_VERSION_MAJOR: u32 = 2;
 pub const QEMU_VERSION_MINOR: u32 = 9;
 pub const QEMU_VERSION_MICRO: u32 = 1;
 pub const CONFIG_SDL: u32 = 1;
-pub const CONFIG_SDLABI: f64 = 2.0;
+pub const CONFIG_SDLABI: f64 = 1.2;
 pub const CONFIG_CURSES: u32 = 1;
 pub const CONFIG_UTIMENSAT: u32 = 1;
 pub const CONFIG_PIPE2: u32 = 1;
@@ -38818,7 +38818,7 @@ extern "C" {
     ) -> *mut *mut ::std::os::raw::c_char;
 }
 extern "C" {
-    pub static mut panda_argv: [*const gchar; 32usize];
+    pub static mut panda_argv: [*mut gchar; 32usize];
 }
 extern "C" {
     pub static mut panda_argc: ::std::os::raw::c_int;
@@ -41777,6 +41777,12 @@ extern "C" {
 }
 extern "C" {
     pub fn panda_in_kernel_external(cpu: *const CPUState) -> bool;
+}
+extern "C" {
+    pub fn panda_in_kernel_mode_external(cpu: *const CPUState) -> bool;
+}
+extern "C" {
+    pub fn panda_in_kernel_code_linux_external(cpu: *mut CPUState) -> bool;
 }
 extern "C" {
     pub fn panda_current_ksp_external(cpu: *mut CPUState) -> target_ulong;

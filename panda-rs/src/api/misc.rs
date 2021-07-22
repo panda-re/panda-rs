@@ -1,9 +1,18 @@
 use crate::prelude::*;
+use std::os::raw::c_int;
+use std::ffi::CStr;
 
-/// Determine if guest is currently in kernelspace
-pub fn in_kernel(cpu: &mut CPUState) -> bool {
+/// Determine if guest is currently executing in kernel mode
+pub fn in_kernel_mode(cpu: &mut CPUState) -> bool {
     unsafe {
-        panda_sys::panda_in_kernel_external(cpu)
+        panda_sys::panda_in_kernel_mode_external(cpu)
+    }
+}
+
+/// Determine if guest is currently executing kernel code
+pub fn in_kernel_code_linux(cpu: &mut CPUState) -> bool {
+    unsafe {
+        panda_sys::panda_in_kernel_code_linux_external(cpu)
     }
 }
 
@@ -57,10 +66,31 @@ pub fn enter_priv(cpu: &mut CPUState) -> bool {
         panda_sys::enter_priv(cpu)
     }
 }
+
 /// Revert the guest to the privilege mode it was in prior to the last call to enter_priv().
 /// A NO-OP for architectures where enter_priv() is a NO-OP.
 pub fn exit_priv(cpu: &mut CPUState) {
     unsafe {
         panda_sys::exit_priv(cpu)
     }
+}
+
+/// Get count of commandline arguments
+pub fn argc() -> c_int {
+    unsafe {
+        panda_sys::panda_argc
+    }
+}
+
+/// Get commandline arguments
+pub fn argv() -> Vec<String> {
+    let mut rs_argv = Vec::new();
+
+    for char_ptr in unsafe { panda_sys::panda_argv }.iter() {
+        if let Ok(str_slice) = unsafe { CStr::from_ptr(*char_ptr) }.to_str() {
+            rs_argv.push(str_slice.to_owned());
+        }
+    }
+
+    rs_argv
 }

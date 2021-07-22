@@ -14,7 +14,7 @@ fn init(_: &mut PluginHandle) {
 // Dump registers every 1000 basic blocks
 #[panda::before_block_exec]
 fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
-    if panda::in_kernel(cpu) {
+    if panda::in_kernel_mode(cpu) {
         return;
     }
 

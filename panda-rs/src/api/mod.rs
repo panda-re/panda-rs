@@ -4,6 +4,8 @@ pub mod llvm;
 pub mod mem;
 /// Functions for reading and modifying guest registers
 pub mod regs;
+/// Functions for record and replay
+pub mod rr;
 
 /// Miscellaneous PANDA API utilities
 mod misc;

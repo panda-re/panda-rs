@@ -14,7 +14,7 @@ fn init(_: &mut PluginHandle) {
 // Print every 1000 basic blocks
 #[panda::after_block_exec]
 fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock, exit_code: u8) {
-    if (u32::from(exit_code) > panda_sys::TB_EXIT_IDX1) || (panda::in_kernel(cpu)) {
+    if (u32::from(exit_code) > panda_sys::TB_EXIT_IDX1) || (panda::in_kernel_mode(cpu)) {
         return;
     }
 

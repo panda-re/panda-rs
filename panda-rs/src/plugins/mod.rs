@@ -12,6 +12,9 @@ pub mod proc_start_linux;
 #[macro_export]
 macro_rules! plugin_import {
     {
+        $(
+            #[ $type_meta:meta ]
+        )*
         static $static:ident : $ty:ident = extern $name:literal {
         $(
             $(
@@ -47,6 +50,9 @@ macro_rules! plugin_import {
         )?
         };
     } => {
+        $(
+            #[ $type_meta ]
+        )*
         pub struct $ty {
             plugin: $crate::plugins::Plugin
         }
@@ -105,12 +111,15 @@ macro_rules! plugin_import {
         }
 
         lazy_static::lazy_static!{
+            $(
+                #[ $type_meta ]
+            )*
             pub static ref $static: $ty = $ty::new();
         }
     }
 }
 
-struct Plugin {
+pub struct Plugin {
     lib: libloading::Library,
 }
 
