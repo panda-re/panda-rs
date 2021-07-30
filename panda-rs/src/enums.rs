@@ -39,3 +39,39 @@ impl From<i32> for GenericRet {
         }
     }
 }
+
+pub(crate) mod arch {
+    /// The name of the architecture as used by PANDA
+    ///
+    /// This can be one of:
+    ///
+    /// * x86_64
+    /// * i386
+    /// * arm
+    /// * ppc
+    /// * mips
+    /// * mipsel
+    /// * aarch64
+    pub const ARCH_NAME: &str = ARCH;
+
+    #[cfg(feature = "x86_64")]
+    const ARCH: &str = "x86_64";
+
+    #[cfg(feature = "i386")]
+    const ARCH: &str = "i386";
+
+    #[cfg(feature = "arm")]
+    const ARCH: &str = "arm";
+
+    #[cfg(feature = "ppc")]
+    const ARCH: &str = "ppc";
+
+    #[cfg(feature = "mips")]
+    const ARCH: &str = "mips";
+
+    #[cfg(feature = "mipsel")]
+    const ARCH: &str = "mipsel";
+
+    #[cfg(feature = "aarch64")]
+    const ARCH: &str = "aarch64";
+}

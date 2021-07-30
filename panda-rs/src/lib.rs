@@ -53,6 +53,8 @@ pub mod enums;
 pub mod plugins;
 pub mod taint;
 
+pub use enums::arch::*;
+
 pub mod prelude {
     pub use crate::Panda;
     pub use crate::PluginHandle;
