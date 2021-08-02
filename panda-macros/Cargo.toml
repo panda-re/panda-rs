@@ -17,3 +17,12 @@ syn = { version = "1.0.37", features = ["full"] }
 quote = "1.0.7"
 doc-comment = "0.3.3"
 darling = "0.10.2"
+
+[features]
+x86_64 = []
+i386 = []
+arm = []
+aarch64 = []
+ppc = []
+mips = []
+mipsel = []

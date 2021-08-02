@@ -15,7 +15,7 @@ struct Args {
 }
 
 #[panda::on_sys_write_enter]
-fn sys_write_test(cpu: &mut CPUState, _pc: target_ulong, _fd: target_ulong, buf: target_ulong, count: target_ulong) {
+fn sys_write_test(cpu: &mut CPUState, _pc: target_ulong, _fd: u32, buf: target_ulong, count: u32) {
     println!(
         "sys_write buf = \"{}\"",
         String::from_utf8_lossy(&cpu.mem_read(buf, count as usize))

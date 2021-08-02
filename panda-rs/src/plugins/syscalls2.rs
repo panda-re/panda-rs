@@ -5,8 +5,9 @@
 //! * [`on_sys_write_enter`](crate::on_sys_write_enter)
 //! * [`on_sys_execve_enter`](crate::on_sys_execve_enter)
 //!
-//! Currently not many syscalls are implemented, open an issue if you'd like another added.
+
+#[allow(unused_imports)]
+use crate::sys::{target_ptr_t, target_ulong, CPUState};
 use crate::{plugin_import, generate_syscalls_callbacks};
-use crate::sys::{target_ptr_t, target_ulong};
 
 generate_syscalls_callbacks!();

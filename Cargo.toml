@@ -3,4 +3,5 @@ members = [
     "panda-rs",
     "panda-sys",
     "panda-macros",
+    "syscall-parser",
 ]

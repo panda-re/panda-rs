@@ -261,11 +261,11 @@ macro_rules! define_callback_attributes {
 macro_rules! define_syscalls_callbacks {
     ($(
         $($doc:literal)*
-        ($attr_name:ident, $cb_name:ident, ($($arg_name:ident : $arg:ty),*))
-    ),*) => {
+        ($attr_name:ident, $cb_name:ident, ($($arg_name:ident : $arg:ty),* $(,)?))
+    ),* $(,)?) => {
         $(
             doc_comment::doc_comment!{
-                concat!("(Callback) ", $($doc, "\n",)* "\n\nCallback arguments: (`&mut CPUState`, `target_ulong`", $(", `", stringify!($arg), "`",)* ")\n### Example\n```rust\nuse panda::prelude::*;\n\n#[panda::", stringify!($attr_name),"]\nfn callback(cpu: &mut CPUState, pc: target_ulong", $(", _: ", stringify!($arg), )* ") {\n    // do stuff\n}\n```"),
+                concat!("(Callback) ", $($doc, "\n",)* "\n\nCallback arguments: (" /*"`&mut CPUState`, `target_ulong`"*/, $(", `", stringify!($arg), "`",)* ")\n### Example\n```rust\nuse panda::prelude::*;\n\n#[panda::", stringify!($attr_name),"]\nfn callback(cpu: &mut CPUState, pc: target_ulong", $(", _: ", stringify!($arg), )* ") {\n    // do stuff\n}\n```"),
                 #[proc_macro_attribute]
                 pub fn $attr_name(_: TokenStream, function: TokenStream) -> TokenStream {
                     let mut function = syn::parse_macro_input!(function as syn::ItemFn);
@@ -294,6 +294,7 @@ macro_rules! define_syscalls_callbacks {
 
         /// For internal use only
         #[proc_macro]
+        #[doc(hidden)]
         pub fn generate_syscalls_callbacks(_: TokenStream) -> TokenStream {
             quote!(
                 plugin_import!{
@@ -301,8 +302,8 @@ macro_rules! define_syscalls_callbacks {
                         callbacks {
                             $(
                                 fn $attr_name(
-                                    cpu: &mut crate::sys::CPUState,
-                                    pc: crate::sys::target_ulong,
+                                    //cpu: &mut crate::sys::CPUState,
+                                    //pc: crate::sys::target_ulong,
                                     $($arg_name : $arg),*
                                 );
                             )*
@@ -351,6 +352,7 @@ macro_rules! define_hooks2_callbacks {
         )*
 
         /// For internal use only
+        #[doc(hidden)]
         #[proc_macro]
         pub fn generate_hooks2_callbacks(_: TokenStream) -> TokenStream {
             quote!(
@@ -372,5 +374,25 @@ macro_rules! define_hooks2_callbacks {
 }
 
 include!("base_callbacks.rs");
-include!("syscalls.rs");
 include!("hooks2.rs");
+
+#[cfg(feature = "x86_64")]
+include!("syscalls/x86_64.rs");
+
+#[cfg(feature = "i386")]
+include!("syscalls/i386.rs");
+
+#[cfg(feature = "arm")]
+include!("syscalls/arm.rs");
+
+#[cfg(feature = "aarch64")]
+include!("syscalls/aarch64.rs");
+
+#[cfg(feature = "ppc")]
+include!("syscalls/ppc.rs");
+
+#[cfg(feature = "mips")]
+include!("syscalls/mips.rs");
+
+#[cfg(feature = "mipsel")]
+include!("syscalls/mipsel.rs");
