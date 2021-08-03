@@ -261,11 +261,29 @@ macro_rules! define_callback_attributes {
 macro_rules! define_syscalls_callbacks {
     ($(
         $($doc:literal)*
-        ($attr_name:ident, $cb_name:ident, ($($arg_name:ident : $arg:ty),* $(,)?))
+        (
+            $attr_name:ident,
+            $cb_name:ident,
+            $syscall_name:ident,
+            $before_or_after:literal,
+            ($($arg_name:ident : $arg:ty),* $(,)?)
+        )
     ),* $(,)?) => {
         $(
             doc_comment::doc_comment!{
-                concat!("(Callback) ", $($doc, "\n",)* "\n\nCallback arguments: (" /*"`&mut CPUState`, `target_ulong`"*/, $(", `", stringify!($arg), "`",)* ")\n### Example\n```rust\nuse panda::prelude::*;\n\n#[panda::", stringify!($attr_name),"]\nfn callback(cpu: &mut CPUState, pc: target_ulong", $(", _: ", stringify!($arg), )* ") {\n    // do stuff\n}\n```"),
+                concat!(
+                    "(Callback) A callback that runs ",
+                    $before_or_after,
+                    " the ",
+                    stringify!($syscall_name),
+                    " syscall runs.\n\nCallback arguments: (",
+                    $("`", stringify!($arg), "`,",)*
+                    ")\n### Example\n```rust\nuse panda::prelude::*;\n\n#[panda::",
+                    stringify!($attr_name),
+                    "]\nfn callback(",
+                    $("_: ", stringify!($arg), ", ",)*
+                    ") {\n    // do stuff\n}\n```"
+                ),
                 #[proc_macro_attribute]
                 pub fn $attr_name(_: TokenStream, function: TokenStream) -> TokenStream {
                     let mut function = syn::parse_macro_input!(function as syn::ItemFn);

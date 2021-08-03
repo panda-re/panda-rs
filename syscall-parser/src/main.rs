@@ -45,6 +45,30 @@ fn sanitize_name(name: &str) -> String {
     }
 }
 
+fn syscall_name(callback_name: &str) -> &str {
+    let cb_name = callback_name
+        .strip_prefix("on_sys_")
+        .unwrap();
+
+    cb_name
+        .strip_suffix("_return")
+        .unwrap_or_else(|| {
+            cb_name
+                .strip_suffix("_enter")
+                .unwrap()
+        })
+}
+
+fn before_or_after(callback_name: &str) -> &'static str {
+    if callback_name.ends_with("_return") {
+        "after"
+    } else if callback_name.ends_with("_enter") {
+        "before"
+    } else {
+        panic!("Callback {} does not end in `return` or `enter`", callback_name)
+    }
+}
+
 peg::parser! {
     grammar c_parser() for str {
         pub(crate) rule callback_types() -> Vec<CallbackType>
@@ -123,8 +147,10 @@ fn main() {
                     .join(", ");
                 writeln!(
                     f,
-                    "    ({name}, add_callback_{name}, ({args})),",
+                    "    ({name}, add_callback_{name}, {sys_name}, {before_or_after:?}, ({args})),",
                     name=name,
+                    sys_name=syscall_name(&name),
+                    before_or_after=before_or_after(&name),
                     args=args,
                 ).unwrap();
             }
