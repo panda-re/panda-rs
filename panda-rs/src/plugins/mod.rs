@@ -6,8 +6,10 @@ use crate::sys::panda_require;
 pub mod glib;
 pub mod osi;
 pub mod hooks2;
-pub mod syscalls2;
 pub mod proc_start_linux;
+
+#[cfg(not(feature = "ppc"))]
+pub mod syscalls2;
 
 #[macro_export]
 macro_rules! plugin_import {

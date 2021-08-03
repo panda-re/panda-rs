@@ -406,8 +406,9 @@ include!("syscalls/arm.rs");
 #[cfg(feature = "aarch64")]
 include!("syscalls/aarch64.rs");
 
-#[cfg(feature = "ppc")]
-include!("syscalls/ppc.rs");
+// PANDA doesn't have PPC support!
+//#[cfg(feature = "ppc")]
+//include!("syscalls/ppc.rs");
 
 #[cfg(feature = "mips")]
 include!("syscalls/mips.rs");
