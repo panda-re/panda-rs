@@ -14,7 +14,7 @@ struct Args {
     file: String,
 }
 
-#[panda::on_sys_write_enter]
+#[panda::on_sys::write_enter]
 fn sys_write_test(cpu: &mut CPUState, _pc: target_ulong, _fd: u32, buf: target_ulong, count: u32) {
     println!(
         "sys_write buf = \"{}\"",
