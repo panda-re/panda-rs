@@ -54,6 +54,8 @@ pub use inventory;
 
 /// Helpers for getting plugin arguments from panda
 pub mod panda_arg;
+
+#[doc(inline)]
 pub use panda_arg::PandaArgs;
 
 pub mod enums;
