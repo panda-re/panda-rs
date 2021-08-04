@@ -29,7 +29,7 @@ required-features = ["libpanda", "aarch64"]
 
 [dependencies]
 panda-re-sys = { version = "0.3", path = "../panda-sys" }
-panda-re-macros = { version = "0.4", path = "../panda-macros" }
+panda-re-macros = { version = "0.4.1", path = "../panda-macros" }
 inventory = "0.1.8"
 dirs = "3.0.1"
 lazy_static = "1.4.0"
