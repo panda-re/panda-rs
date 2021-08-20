@@ -1,5 +1,6 @@
 use panda::prelude::*;
-use panda::plugins::osi::OSI;
+use panda::plugins::{osi::OSI, syscalls2::SYSCALLS};
+use 
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static NUM_BB: AtomicU64 = AtomicU64::new(0);
@@ -19,6 +20,17 @@ fn sys_write_test(cpu: &mut CPUState, _pc: target_ulong, _fd: u32, buf: target_u
     println!(
         "sys_write buf = \"{}\"",
         String::from_utf8_lossy(&cpu.mem_read(buf, count as usize))
+    );
+}
+
+// print out the pc and syscall number of the first syscall to run
+#[panda::on_all_sys_enter]
+fn on_sys_enter(cpu: &mut CPUState, pc: target_ulong, callno: target_ulong) {
+    println!("pc: {:#x?} | syscall: {}", pc, callno);
+
+    // remove the hook once the first syscall has been printed out 
+    SYSCALLS.remove_callback_on_all_sys_enter(
+        on_sys_enter
     );
 }
 

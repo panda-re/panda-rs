@@ -109,6 +109,28 @@ macro_rules! plugin_import {
                         add_cb(callback);
                     }
                 }
+
+                ::paste::paste!{
+                    pub fn [<remove_callback_ $cb_fn_name>](
+                        &self,
+                        callback: extern "C" fn(
+                            $($cb_arg_name: $cb_arg_ty),*
+                        )
+                    )
+                    {
+                        let remove_cb = self.plugin.get::<
+                            extern "C" fn(
+                                extern "C" fn(
+                                    $($cb_arg_ty),*
+                                ) $(-> $cb_fn_ret)?
+                            )
+                        >(
+                            concat!("ppp_remove_cb_", stringify!($cb_fn_name))
+                        );
+
+                        remove_cb(callback);
+                    }
+                }
             )*)?
         }
 
