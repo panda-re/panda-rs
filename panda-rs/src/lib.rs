@@ -1,7 +1,11 @@
 //! panda-rs is a set of Rust bindings for PANDA.
 //!
 //! **The following are provided:**
-//! * Callbacks in the form of attribute macros
+//! * Callbacks to various PANDA events in the form of attribute macros
+//! * Callbacks for when guest syscalls happen
+//! * Bindings to various core PANDA plugins (hooks2, osi, etc)
+//! * Safe bindings to the core PANDA API
+//! * An API for driving PANDA via libpanda
 //! * Access to raw PANDA API bindings via panda_sys
 //!
 //! ### Feature flags:
@@ -106,6 +110,8 @@ pub use panda_macros::{
     mmio_after_read,
     mmio_before_write,
     monitor,
+    on_all_sys_enter,
+    on_all_sys_return,
     on_mmap_updated,
     on_process_end,
     on_process_start,

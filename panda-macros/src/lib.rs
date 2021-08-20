@@ -320,16 +320,103 @@ macro_rules! define_syscalls_callbacks {
                         callbacks {
                             $(
                                 fn $attr_name(
-                                    //cpu: &mut crate::sys::CPUState,
-                                    //pc: crate::sys::target_ulong,
                                     $($arg_name : $arg),*
                                 );
                             )*
-                            //fn on_sys_read_enter(fd: target_ulong, buf: target_ptr_t, count: target_ulong);
-                            //fn on_sys_write_enter(fd: target_ulong, buf: target_ptr_t, count: target_ulong);
+
+                            fn on_all_sys_enter(cpu: &mut CPUState, pc: target_ulong, callno: target_ulong);
+                            fn on_all_sys_return(cpu: &mut CPUState, pc: target_ulong, callno: target_ulong);
                         }
                     };
                 }
+            ).into()
+        }
+
+        /// Callback that runs when any syscall is entered
+        ///
+        /// ### Args
+        ///
+        /// * `cpu` - a reference to the currently executing [`CPUState`] object
+        /// * `pc` - the current program counter of the system when the syscall callback is hit
+        /// * `callno` - the syscall number called
+        ///
+        /// ### Example
+        /// ```rust
+        /// use panda::prelude::*;
+        ///
+        /// #[panda::on_all_sys_enter]
+        /// fn callback(cpu: &mut CPUState, pc: target_ulong, callno: target_ulong) {
+        ///     // do stuff
+        /// }
+        /// ```
+        ///
+        /// [`CPUState`]: https://docs.rs/panda-re/*/panda/prelude/struct.CPUState.html
+        #[proc_macro_attribute]
+        pub fn on_all_sys_enter(_: TokenStream, function: TokenStream) -> TokenStream {
+            let mut function = syn::parse_macro_input!(function as syn::ItemFn);
+            function.sig.abi = Some(syn::parse_quote!(extern "C"));
+            let func = &function.sig.ident;
+            let cfgs = crate::get_cfg_attrs(&function);
+
+            quote!(
+                #(
+                    #cfgs
+                 )*
+                ::panda::inventory::submit! {
+                    #![crate = ::panda]
+                    ::panda::PPPCallbackSetup(
+                        || {
+                            ::panda::plugins::syscalls2::SYSCALLS.add_callback_on_all_sys_enter(#func);
+                        }
+                    )
+                }
+
+                #function
+            ).into()
+        }
+
+        /// Callback that runs when any syscall returns.
+        ///
+        /// Note that some syscalls do not return and thus will not have this callback run.
+        ///
+        /// ### Args
+        ///
+        /// * `cpu` - a reference to the currently executing [`CPUState`] object
+        /// * `pc` - the current program counter of the system when the syscall callback is hit
+        /// * `callno` - the syscall number called
+        ///
+        /// ### Example
+        /// ```rust
+        /// use panda::prelude::*;
+        ///
+        /// #[panda::on_all_sys_return]
+        /// fn callback(cpu: &mut CPUState, pc: target_ulong, callno: target_ulong) {
+        ///     // do stuff
+        /// }
+        /// ```
+        ///
+        /// [`CPUState`]: https://docs.rs/panda-re/*/panda/prelude/struct.CPUState.html
+        #[proc_macro_attribute]
+        pub fn on_all_sys_return(_: TokenStream, function: TokenStream) -> TokenStream {
+            let mut function = syn::parse_macro_input!(function as syn::ItemFn);
+            function.sig.abi = Some(syn::parse_quote!(extern "C"));
+            let func = &function.sig.ident;
+            let cfgs = crate::get_cfg_attrs(&function);
+
+            quote!(
+                #(
+                    #cfgs
+                 )*
+                ::panda::inventory::submit! {
+                    #![crate = ::panda]
+                    ::panda::PPPCallbackSetup(
+                        || {
+                            ::panda::plugins::syscalls2::SYSCALLS.add_callback_on_all_sys_return(#func);
+                        }
+                    )
+                }
+
+                #function
             ).into()
         }
     };
