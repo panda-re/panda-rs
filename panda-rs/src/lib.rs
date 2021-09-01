@@ -81,6 +81,12 @@ pub mod prelude {
     pub use panda_macros::PandaArgs;
 }
 
+#[cfg(not(feature = "ppc"))]
+pub use panda_macros::{
+    on_all_sys_enter,
+    on_all_sys_return,
+};
+
 // callbacks
 pub use panda_macros::{
     after_block_exec,
@@ -110,8 +116,6 @@ pub use panda_macros::{
     mmio_after_read,
     mmio_before_write,
     monitor,
-    on_all_sys_enter,
-    on_all_sys_return,
     on_mmap_updated,
     on_process_end,
     on_process_start,
