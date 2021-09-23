@@ -1,7 +1,7 @@
-use std::iter;
+use darling::FromField;
 use proc_macro::TokenStream;
 use quote::quote;
-use darling::FromField;
+use std::iter;
 
 /// (**Required** Callback) Called when the plugin is being uninitialized
 ///
@@ -22,7 +22,7 @@ pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
     let args = if func.sig.inputs.is_empty() {
         None
     } else {
-        Some(quote!( unsafe { &mut *plugin } ))
+        Some(quote!(unsafe { &mut *plugin }))
     };
 
     let func_name = &func.sig.ident;
@@ -69,7 +69,8 @@ pub fn uninit(_: TokenStream, function: TokenStream) -> TokenStream {
         }
 
         #func
-    ).into()
+    )
+    .into()
 }
 
 #[derive(FromField)]
@@ -86,13 +87,19 @@ struct DeriveArgs {
 }
 
 fn derive_args_to_mappings(
-    DeriveArgs { about, default, ident, ty, required }: DeriveArgs
+    DeriveArgs {
+        about,
+        default,
+        ident,
+        ty,
+        required,
+    }: DeriveArgs,
 ) -> (syn::Stmt, syn::Ident) {
     let name = &ident;
     let default = if let Some(default) = default {
         match default {
             syn::Lit::Str(string) => quote!(::std::string::String::from(#string)),
-            default => quote!(#default)
+            default => quote!(#default),
         }
     } else {
         quote!(Default::default())
@@ -108,11 +115,13 @@ fn derive_args_to_mappings(
                 #required
             );
         ),
-        ident.unwrap()
+        ident.unwrap(),
     )
 }
 
-fn get_field_statements(fields: &syn::Fields) -> Result<(Vec<syn::Stmt>, Vec<syn::Ident>), darling::Error> {
+fn get_field_statements(
+    fields: &syn::Fields,
+) -> Result<(Vec<syn::Stmt>, Vec<syn::Ident>), darling::Error> {
     Ok(fields
         .iter()
         .map(DeriveArgs::from_field)
@@ -123,14 +132,26 @@ fn get_field_statements(fields: &syn::Fields) -> Result<(Vec<syn::Stmt>, Vec<syn
 }
 
 fn get_name(attrs: &[syn::Attribute]) -> Option<String> {
-    attrs.iter()
-        .find(|attr| attr.path.get_ident().map(|x| x.to_string() == "name").unwrap_or(false))
+    attrs
+        .iter()
+        .find(|attr| {
+            attr.path
+                .get_ident()
+                .map(|x| x.to_string() == "name")
+                .unwrap_or(false)
+        })
         .map(|attr| attr.parse_meta().ok())
         .flatten()
-        .map(|meta| if let syn::Meta::NameValue(syn::MetaNameValue { lit: syn::Lit::Str(s), .. }) = meta {
-            Some(s.value())
-        } else {
-            None
+        .map(|meta| {
+            if let syn::Meta::NameValue(syn::MetaNameValue {
+                lit: syn::Lit::Str(s),
+                ..
+            }) = meta
+            {
+                Some(s.value())
+            } else {
+                None
+            }
         })
         .flatten()
 }
@@ -141,18 +162,22 @@ pub fn derive_panda_args(input: TokenStream) -> TokenStream {
 
     let name = match get_name(&input.attrs) {
         Some(name) => name,
-        None => return quote!(compile_error!("Missing plugin name, add `#[name = ...]` above struct")).into(),
+        None => {
+            return quote!(compile_error!(
+                "Missing plugin name, add `#[name = ...]` above struct"
+            ))
+            .into()
+        }
     };
 
     let ident = &input.ident;
 
     match get_field_statements(&input.fields) {
         Ok((statements, fields)) => {
-            let format_args =
-                iter::repeat("{}={}")
-                    .take(statements.len())
-                    .collect::<Vec<_>>()
-                    .join(",");
+            let format_args = iter::repeat("{}={}")
+                .take(statements.len())
+                .collect::<Vec<_>>()
+                .join(",");
             quote!(
                 impl ::panda::PandaArgs for #ident {
                     fn from_panda_args() -> Self {
@@ -183,25 +208,29 @@ pub fn derive_panda_args(input: TokenStream) -> TokenStream {
                     }
                 }
             )
-        },
-        Err(err) => err.write_errors()
-    }.into()
+        }
+        Err(err) => err.write_errors(),
+    }
+    .into()
 }
 
 struct Idents(syn::Ident, syn::Ident);
 
 impl syn::parse::Parse for Idents {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
-        Ok(Idents(
-            input.parse()?,
-            input.parse()?
-        ))
+        Ok(Idents(input.parse()?, input.parse()?))
     }
 }
 
 fn get_cfg_attrs(func: &syn::ItemFn) -> Vec<syn::Attribute> {
-    func.attrs.iter()
-        .filter(|attr| attr.path.get_ident().map(|x| x.to_string() == "cfg").unwrap_or(false))
+    func.attrs
+        .iter()
+        .filter(|attr| {
+            attr.path
+                .get_ident()
+                .map(|x| x.to_string() == "cfg")
+                .unwrap_or(false)
+        })
         .map(|attr| attr.clone())
         .collect()
 }
@@ -420,6 +449,52 @@ macro_rules! define_syscalls_callbacks {
             ).into()
         }
     };
+}
+
+/// (Callback) Runs when proc_start_linux recieves the `AuxvValues` for a given process.
+///
+/// ### Args
+///
+/// * `cpu` - a reference to the currently executing [`CPUState`] object
+/// * `tb` - the current [`TranslationBlock`] at time of recieving
+/// * `auxv` - the auxillary vector ([`AuxvValues`]) of the program starting
+///
+/// ### Example
+/// ```rust
+/// use panda::prelude::*;
+/// use panda::plugins::proc_start_linux::AuxvValues;
+///
+/// #[panda::on_rec_auxv]
+/// fn callback(cpu: &mut CPUState, tb: &mut TranslationBlock, auxv: AuxvValues) {
+///     // do stuff
+/// }
+/// ```
+///
+/// [`CPUState`]: https://docs.rs/panda-re/*/panda/prelude/struct.CPUState.html
+/// [`TranslationBlock`]: https://docs.rs/panda-re/*/panda/prelude/struct.TranslationBlock.html
+/// [`AuxvValues`]: https://docs.rs/panda-re/*/panda/plugins/proc_start_linux/struct.AuxvValues.html
+#[proc_macro_attribute]
+pub fn on_rec_auxv(_: TokenStream, function: TokenStream) -> TokenStream {
+    let mut function = syn::parse_macro_input!(function as syn::ItemFn);
+    function.sig.abi = Some(syn::parse_quote!(extern "C"));
+    let func = &function.sig.ident;
+    let cfgs = crate::get_cfg_attrs(&function);
+
+    quote!(
+        #(
+            #cfgs
+         )*
+        ::panda::inventory::submit! {
+            #![crate = ::panda]
+            ::panda::PPPCallbackSetup(
+                || {
+                    ::panda::plugins::proc_start_linux::PROC_START_LINUX.add_callback_on_rec_auxv(#func);
+                }
+            )
+        }
+
+        #function
+    ).into()
 }
 
 macro_rules! define_hooks2_callbacks {
