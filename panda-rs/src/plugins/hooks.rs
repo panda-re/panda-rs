@@ -12,7 +12,7 @@ plugin_import! {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct Symbol {
     pub address: target_ulong,
     pub name: [u8; 256usize],
@@ -20,7 +20,7 @@ pub struct Symbol {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct HooksPandaCallback(panda_cb_type, *const ());
 
 type NormalHookType = extern "C" fn(env: &mut CPUState, tb: &mut TranslationBlock, hook: &mut Hook);
@@ -76,7 +76,7 @@ pub enum KernelMode {
 }
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct Hook {
     pub addr: target_ulong,
     pub asid: target_ulong,
@@ -109,6 +109,9 @@ impl IntoHookBuilder for NormalHookType {
         HookBuilder {
             hook: self,
             callback: HooksPandaCallback::from_start_block_exec(self),
+            only_kernel: None,
+            enabled: true,
+            asid: None,
         }
     }
 }
@@ -140,6 +143,46 @@ impl IntoHookBuilder for InvalidateOpHook {
 pub struct HookBuilder<T> {
     hook: T,
     callback: HooksPandaCallback,
+    only_kernel: Option<bool>,
+    enabled: bool,
+    asid: Option<target_ulong>,
+}
+
+impl<T> HookBuilder<T> {
+    /// Sets if kernel mode should be used. `true` for kernel-only hooking, `false` for user-only
+    /// hooking. By default the generated hook will hook either.
+    pub fn kernel(mut self, only_kernel: bool) -> Self {
+        self.only_kernel = Some(only_kernel);
+        self
+    }
+
+    /// Sets if the hook is enabled. Defaults to `true`.
+    pub fn enabled(mut self, enabled: bool) -> Self {
+        self.enabled = enabled;
+        self
+    }
+
+    /// Sets the asid to hook. Defaults to any.
+    pub fn asid(mut self, asid: target_ulong) -> Self {
+        self.asid = Some(asid);
+        self
+    }
+
+    /// Installs the hook at a given address
+    pub fn at_addr(self, addr: target_ulong) {
+        HOOKS.add_hook(&Hook {
+            addr,
+            asid: self.asid.unwrap_or(0),
+            enabled: self.enabled,
+            km: match self.only_kernel {
+                Some(true) => KernelMode::KernelOnly,
+                Some(false) => KernelMode::UserOnly,
+                None => KernelMode::Any,
+            },
+            cb: self.callback,
+            sym: unsafe { std::mem::zeroed() },
+        });
+    }
 }
 
 impl HookBuilder<NormalHookType> {
@@ -176,6 +219,9 @@ impl HookBuilderCallbackTypeNeeded<BeforeTranslateHook> {
         HookBuilder {
             hook: self.0,
             callback: HooksPandaCallback::from_before_block_translate(self.0),
+            only_kernel: None,
+            enabled: true,
+            asid: None,
         }
     }
 }
@@ -185,6 +231,9 @@ impl HookBuilderCallbackTypeNeeded<AfterBlockHook> {
         HookBuilder {
             hook: self.0,
             callback: HooksPandaCallback::from_after_block_exec(self.0),
+            only_kernel: None,
+            enabled: true,
+            asid: None,
         }
     }
 }
@@ -194,6 +243,9 @@ impl HookBuilderCallbackTypeNeeded<InvalidateOpHook> {
         HookBuilder {
             hook: self.0,
             callback: HooksPandaCallback::from_before_block_exec_invalidate_opt(self.0),
+            only_kernel: None,
+            enabled: true,
+            asid: None,
         }
     }
 }

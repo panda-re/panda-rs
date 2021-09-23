@@ -90,7 +90,7 @@ pub use panda_macros::{
     after_insn_translate, after_loadvm, after_machine_init, asid_changed, before_block_exec,
     before_block_exec_invalidate_opt, before_block_translate, before_cpu_exec_exit,
     before_handle_exception, before_handle_interrupt, before_loadvm, cpu_restore_state,
-    during_machine_init, guest_hypercall, hd_read, hd_write, init, insn_exec, insn_translate,
+    during_machine_init, guest_hypercall, hd_read, hd_write, hook, init, insn_exec, insn_translate,
     main_loop_wait, mmio_after_read, mmio_before_write, monitor, on_mmap_updated, on_process_end,
     on_process_start, on_rec_auxv, on_thread_end, on_thread_start, phys_mem_after_read,
     phys_mem_after_write, phys_mem_before_read, phys_mem_before_write, pre_shutdown,

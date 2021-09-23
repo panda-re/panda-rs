@@ -73,6 +73,33 @@ pub fn uninit(_: TokenStream, function: TokenStream) -> TokenStream {
     .into()
 }
 
+#[proc_macro_attribute]
+pub fn hook(_: TokenStream, func: TokenStream) -> TokenStream {
+    let mut function = syn::parse_macro_input!(func as syn::ItemFn);
+    function.sig.abi = Some(syn::parse_quote!(extern "C"));
+    let vis = &function.vis;
+    let func = &function.sig.ident;
+    let cfgs = crate::get_cfg_attrs(&function);
+
+    let args = &function.sig.inputs;
+    let ret = &function.sig.output;
+    let ty: syn::Type = syn::parse_quote! { extern "C" fn(  #args ) #ret };
+
+    quote!(
+        #( #cfgs )*
+        #vis mod #func {
+            use super::*;
+
+            pub fn hook() -> <#ty as ::panda::plugins::hooks::IntoHookBuilder>::BuilderType {
+                <#ty as ::panda::plugins::hooks::IntoHookBuilder>::hook(#func)
+            }
+        }
+
+        #function
+    )
+    .into()
+}
+
 #[derive(FromField)]
 #[darling(attributes(arg))]
 struct DeriveArgs {
