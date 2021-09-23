@@ -55,7 +55,7 @@ pub struct AuxvValues {
 }
 
 impl AuxvValues {
-    fn argv(&self) -> Vec<String> {
+    pub fn argv(&self) -> Vec<String> {
         self.argv[..self.argc as usize]
             .iter()
             .map(|arg| {
@@ -65,7 +65,7 @@ impl AuxvValues {
             .collect()
     }
 
-    fn envp(&self) -> Vec<String> {
+    pub fn envp(&self) -> Vec<String> {
         self.envp[..self.envc as usize]
             .iter()
             .map(|env| {
@@ -75,7 +75,7 @@ impl AuxvValues {
             .collect()
     }
 
-    fn execfn(&self) -> String {
+    pub fn execfn(&self) -> String {
         let execfn = &self.execfn;
         String::from_utf8_lossy(&execfn[..execfn.iter().position(|x| *x == 0).unwrap()])
             .into_owned()
