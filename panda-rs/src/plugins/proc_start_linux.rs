@@ -4,7 +4,7 @@
 //!
 //! * [`on_rec_auxv`](crate::on_rec_auxv)
 use crate::plugin_import;
-use std::os::raw::{c_char, c_int};
+use std::os::raw::c_int;
 
 use crate::sys::{target_ulong, CPUState, TranslationBlock};
 
@@ -21,18 +21,18 @@ pub const MAX_NUM_ARGS: u32 = 10;
 pub const MAX_NUM_ENV: u32 = 20;
 
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 pub struct AuxvValues {
     pub argc: c_int,
     pub argv_ptr_ptr: target_ulong,
     pub arg_ptr: [target_ulong; 10usize],
-    pub argv: [[c_char; 256usize]; 10usize],
+    pub argv: [[u8; 256usize]; 10usize],
     pub envc: c_int,
     pub env_ptr_ptr: target_ulong,
     pub env_ptr: [target_ulong; 20usize],
-    pub envp: [[c_char; 256usize]; 20usize],
+    pub envp: [[u8; 256usize]; 20usize],
     pub execfn_ptr: target_ulong,
-    pub execfn: [c_char; 256usize],
+    pub execfn: [u8; 256usize],
     pub phdr: target_ulong,
     pub entry: target_ulong,
     pub ehdr: target_ulong,
@@ -52,4 +52,78 @@ pub struct AuxvValues {
     pub random: target_ulong,
     pub platform: target_ulong,
     pub program_header: target_ulong,
+}
+
+impl AuxvValues {
+    fn argv(&self) -> Vec<String> {
+        self.argv[..self.argc as usize]
+            .iter()
+            .map(|arg| {
+                String::from_utf8_lossy(&arg[..arg.iter().position(|x| *x == 0).unwrap()])
+                    .into_owned()
+            })
+            .collect()
+    }
+
+    fn envp(&self) -> Vec<String> {
+        self.envp[..self.envc as usize]
+            .iter()
+            .map(|env| {
+                String::from_utf8_lossy(&env[..env.iter().position(|x| *x == 0).unwrap()])
+                    .into_owned()
+            })
+            .collect()
+    }
+
+    fn execfn(&self) -> String {
+        let execfn = &self.execfn;
+        String::from_utf8_lossy(&execfn[..execfn.iter().position(|x| *x == 0).unwrap()])
+            .into_owned()
+    }
+}
+
+use std::fmt;
+
+struct HexDebug<D: fmt::Debug>(D);
+
+impl<D: fmt::Debug> fmt::Debug for HexDebug<D> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:#x?}", self.0)
+    }
+}
+
+impl fmt::Debug for AuxvValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("AuxvValues")
+            .field("argc", &self.argc)
+            .field("argv_ptr_ptr", &HexDebug(self.argv_ptr_ptr))
+            .field("arg_ptr", &HexDebug(&self.arg_ptr[..self.argc as usize]))
+            .field("argv", &self.argv())
+            .field("envc", &self.envc)
+            .field("env_ptr_ptr", &HexDebug(self.env_ptr_ptr))
+            .field("env_ptr", &HexDebug(&self.env_ptr[..self.envc as usize]))
+            .field("envp", &self.envp())
+            .field("execfn_ptr", &HexDebug(self.execfn_ptr))
+            .field("execfn", &self.execfn())
+            .field("phdr", &HexDebug(self.phdr))
+            .field("entry", &HexDebug(self.entry))
+            .field("ehdr", &HexDebug(self.ehdr))
+            .field("hwcap", &self.hwcap)
+            .field("hwcap2", &self.hwcap2)
+            .field("pagesz", &HexDebug(self.pagesz))
+            .field("clktck", &self.clktck)
+            .field("phent", &self.phent)
+            .field("phnum", &self.phnum)
+            .field("base", &HexDebug(self.base))
+            .field("flags", &self.flags)
+            .field("uid", &self.uid)
+            .field("euid", &self.euid)
+            .field("gid", &self.gid)
+            .field("egid", &self.egid)
+            .field("secure", &self.secure)
+            .field("random", &HexDebug(self.random))
+            .field("platform", &HexDebug(self.platform))
+            .field("program_header", &HexDebug(self.program_header))
+            .finish()
+    }
 }
