@@ -1,11 +1,12 @@
-use std::path::Path;
-use std::ffi::CString;
-use libloading::Symbol;
 use crate::sys::panda_require;
+use libloading::Symbol;
+use std::ffi::CString;
+use std::path::Path;
 
 pub mod glib;
-pub mod osi;
+pub mod hooks;
 pub mod hooks2;
+pub mod osi;
 pub mod proc_start_linux;
 
 #[cfg(not(feature = "ppc"))]
@@ -170,26 +171,24 @@ const PLUGIN_DIR: &str = "ppc-softmmu/panda/plugins";
 
 impl Plugin {
     pub fn new(name: &str) -> Self {
-        std::env::set_var("PANDA_DIR", std::env::var("PANDA_PATH").expect("Missing PANDA_PATH"));
+        std::env::set_var(
+            "PANDA_DIR",
+            std::env::var("PANDA_PATH").expect("Missing PANDA_PATH"),
+        );
         let c_name = CString::new(name).unwrap();
         unsafe {
             panda_require(c_name.as_ptr());
         }
-        let path = 
-            Path::new(&std::env::var("PANDA_PATH").unwrap())
-                .join(&std::env::var("PANDA_PLUGIN_DIR").unwrap_or(PLUGIN_DIR.to_owned()))
-                .join(&format!("panda_{}.so", name));
+        let path = Path::new(&std::env::var("PANDA_PATH").unwrap())
+            .join(&std::env::var("PANDA_PLUGIN_DIR").unwrap_or(PLUGIN_DIR.to_owned()))
+            .join(&format!("panda_{}.so", name));
         Self {
-            lib: libloading::Library::new(
-                path
-            ).expect("Failed to load plugin")
+            lib: libloading::Library::new(path).expect("Failed to load plugin"),
         }
     }
 
     pub fn get<T>(&self, sym: &str) -> Symbol<T> {
         let symbol: Vec<_> = sym.bytes().chain(std::iter::once(0)).collect();
-        unsafe {
-            self.lib.get(&symbol).expect("Could not find symbol")
-        }
+        unsafe { self.lib.get(&symbol).expect("Could not find symbol") }
     }
 }

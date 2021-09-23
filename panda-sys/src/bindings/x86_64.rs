@@ -218,6 +218,7 @@ pub const CONFIG_POSIX: u32 = 1;
 pub const CONFIG_LINUX: u32 = 1;
 pub const CONFIG_SLIRP: u32 = 1;
 pub const CONFIG_SMBD_COMMAND: &'static [u8; 15usize] = b"/usr/sbin/smbd\0";
+pub const CONFIG_VDE: u32 = 1;
 pub const CONFIG_L2TPV3: u32 = 1;
 pub const CONFIG_LIBCAP: u32 = 1;
 pub const CONFIG_OSS: u32 = 1;
@@ -226,13 +227,10 @@ pub const CONFIG_VNC_SASL: u32 = 1;
 pub const CONFIG_VNC_JPEG: u32 = 1;
 pub const CONFIG_VNC_PNG: u32 = 1;
 pub const CONFIG_FNMATCH: u32 = 1;
-pub const CONFIG_XFS: u32 = 1;
 pub const QEMU_VERSION: &'static [u8; 6usize] = b"2.9.1\0";
 pub const QEMU_VERSION_MAJOR: u32 = 2;
 pub const QEMU_VERSION_MINOR: u32 = 9;
 pub const QEMU_VERSION_MICRO: u32 = 1;
-pub const CONFIG_SDL: u32 = 1;
-pub const CONFIG_SDLABI: f64 = 2.0;
 pub const CONFIG_CURSES: u32 = 1;
 pub const CONFIG_UTIMENSAT: u32 = 1;
 pub const CONFIG_PIPE2: u32 = 1;
@@ -261,9 +259,6 @@ pub const CONFIG_INOTIFY1: u32 = 1;
 pub const CONFIG_BRLAPI: u32 = 1;
 pub const CONFIG_BLUEZ: u32 = 1;
 pub const CONFIG_HAS_GLIB_SUBPROCESS_TESTS: u32 = 1;
-pub const CONFIG_GTK: u32 = 1;
-pub const CONFIG_GTKABI: f64 = 3.0;
-pub const CONFIG_GTK_GL: u32 = 1;
 pub const CONFIG_TLS_PRIORITY: &'static [u8; 7usize] = b"NORMAL\0";
 pub const CONFIG_GNUTLS: u32 = 1;
 pub const CONFIG_GNUTLS_RND: u32 = 1;
@@ -294,8 +289,6 @@ pub const CONFIG_SPICE: u32 = 1;
 pub const CONFIG_SMARTCARD: u32 = 1;
 pub const CONFIG_USB_LIBUSB: u32 = 1;
 pub const CONFIG_USB_REDIR: u32 = 1;
-pub const CONFIG_OPENGL: u32 = 1;
-pub const CONFIG_OPENGL_DMABUF: u32 = 1;
 pub const CONFIG_AVX2_OPT: u32 = 1;
 pub const CONFIG_LZO: u32 = 1;
 pub const CONFIG_BZIP2: u32 = 1;
@@ -38293,7 +38286,9 @@ pub const panda_cb_type_PANDA_CB_UNASSIGNED_IO_READ: panda_cb_type = 44;
 pub const panda_cb_type_PANDA_CB_UNASSIGNED_IO_WRITE: panda_cb_type = 45;
 pub const panda_cb_type_PANDA_CB_BEFORE_HANDLE_EXCEPTION: panda_cb_type = 46;
 pub const panda_cb_type_PANDA_CB_BEFORE_HANDLE_INTERRUPT: panda_cb_type = 47;
-pub const panda_cb_type_PANDA_CB_LAST: panda_cb_type = 48;
+pub const panda_cb_type_PANDA_CB_START_BLOCK_EXEC: panda_cb_type = 48;
+pub const panda_cb_type_PANDA_CB_END_BLOCK_EXEC: panda_cb_type = 49;
+pub const panda_cb_type_PANDA_CB_LAST: panda_cb_type = 50;
 pub type panda_cb_type = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -38530,6 +38525,10 @@ pub union panda_cb {
     pub before_handle_interrupt: ::std::option::Option<
         unsafe extern "C" fn(cpu: *mut CPUState, interrupt_request: i32) -> i32,
     >,
+    pub start_block_exec:
+        ::std::option::Option<unsafe extern "C" fn(cpu: *mut CPUState, tb: *mut TranslationBlock)>,
+    pub end_block_exec:
+        ::std::option::Option<unsafe extern "C" fn(cpu: *mut CPUState, tb: *mut TranslationBlock)>,
     pub cbaddr: ::std::option::Option<unsafe extern "C" fn()>,
 }
 pub type panda_cb_list = _panda_cb_list;
@@ -38635,7 +38634,7 @@ extern "C" {
     pub static mut panda_use_memcb: bool;
 }
 extern "C" {
-    pub static mut panda_cbs: [*mut panda_cb_list; 48usize];
+    pub static mut panda_cbs: [*mut panda_cb_list; 50usize];
 }
 extern "C" {
     pub static mut panda_plugins_to_unload: [bool; 16usize];
@@ -40247,6 +40246,7 @@ pub type Panda__AsidTrace = _Panda__AsidTrace;
 pub type Panda__Module = _Panda__Module;
 pub type Panda__LoadedLibs = _Panda__LoadedLibs;
 pub type Panda__DwarfCall = _Panda__DwarfCall;
+pub type Panda__ProcTrace = _Panda__ProcTrace;
 pub type Panda__SignalEvent = _Panda__SignalEvent;
 pub type Panda__StructData = _Panda__StructData;
 pub type Panda__NamedData = _Panda__NamedData;
@@ -40361,6 +40361,18 @@ pub struct _Panda__DwarfCall {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
+pub struct _Panda__ProcTrace {
+    pub base: ProtobufCMessage,
+    pub pid: u32,
+    pub create_time: u64,
+    pub ppid: u32,
+    pub asid: u64,
+    pub name: *mut ::std::os::raw::c_char,
+    pub tid: u32,
+    pub start_instr: u64,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct _Panda__SignalEvent {
     pub base: ProtobufCMessage,
     pub sig: i32,
@@ -40416,7 +40428,7 @@ pub struct _Panda__Syscall {
     pub ppid: u32,
     pub tid: u32,
     pub create_time: u64,
-    pub retcode: u64,
+    pub retcode: i64,
     pub call_name: *mut ::std::os::raw::c_char,
     pub n_args: size_t,
     pub args: *mut *mut Panda__NamedData,
@@ -40575,6 +40587,7 @@ pub struct _Panda__LogEntry {
     pub asid_libraries: *mut Panda__LoadedLibs,
     pub dwarf_call: *mut Panda__DwarfCall,
     pub dwarf_ret: *mut Panda__DwarfCall,
+    pub proc_trace: *mut Panda__ProcTrace,
     pub signal_event: *mut Panda__SignalEvent,
     pub syscall: *mut Panda__Syscall,
     pub taint_query_pri: *mut Panda__TaintQueryPri,
@@ -40845,6 +40858,34 @@ extern "C" {
 extern "C" {
     pub fn panda__dwarf_call__free_unpacked(
         message: *mut Panda__DwarfCall,
+        allocator: *mut ProtobufCAllocator,
+    );
+}
+extern "C" {
+    pub fn panda__proc_trace__init(message: *mut Panda__ProcTrace);
+}
+extern "C" {
+    pub fn panda__proc_trace__get_packed_size(message: *const Panda__ProcTrace) -> size_t;
+}
+extern "C" {
+    pub fn panda__proc_trace__pack(message: *const Panda__ProcTrace, out: *mut u8) -> size_t;
+}
+extern "C" {
+    pub fn panda__proc_trace__pack_to_buffer(
+        message: *const Panda__ProcTrace,
+        buffer: *mut ProtobufCBuffer,
+    ) -> size_t;
+}
+extern "C" {
+    pub fn panda__proc_trace__unpack(
+        allocator: *mut ProtobufCAllocator,
+        len: size_t,
+        data: *const u8,
+    ) -> *mut Panda__ProcTrace;
+}
+extern "C" {
+    pub fn panda__proc_trace__free_unpacked(
+        message: *mut Panda__ProcTrace,
         allocator: *mut ProtobufCAllocator,
     );
 }
@@ -41495,6 +41536,12 @@ pub type Panda__DwarfCall_Closure = ::std::option::Option<
         closure_data: *mut ::std::os::raw::c_void,
     ),
 >;
+pub type Panda__ProcTrace_Closure = ::std::option::Option<
+    unsafe extern "C" fn(
+        message: *const Panda__ProcTrace,
+        closure_data: *mut ::std::os::raw::c_void,
+    ),
+>;
 pub type Panda__SignalEvent_Closure = ::std::option::Option<
     unsafe extern "C" fn(
         message: *const Panda__SignalEvent,
@@ -41635,6 +41682,9 @@ extern "C" {
 }
 extern "C" {
     pub static panda__dwarf_call__descriptor: ProtobufCMessageDescriptor;
+}
+extern "C" {
+    pub static panda__proc_trace__descriptor: ProtobufCMessageDescriptor;
 }
 extern "C" {
     pub static panda__signal_event__descriptor: ProtobufCMessageDescriptor;
