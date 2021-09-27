@@ -48,7 +48,7 @@ define_callback_attributes!(
         true if we should invalidate the current translation block
         and retranslate, false otherwise.
     "
-    (before_block_exec_invalidate_opt, panda_cb_type_PANDA_CB_BEFORE_BLOCK_EXEC_INVALIDATE_OPT, (&mut CPUState, &mut TranslationBlock)),
+    (before_block_exec_invalidate_opt, panda_cb_type_PANDA_CB_BEFORE_BLOCK_EXEC_INVALIDATE_OPT, (&mut CPUState, &mut TranslationBlock) -> bool),
     "Called before execution of every basic block.
 
     Callback ID: PANDA_CB_BEFORE_BLOCK_EXEC
@@ -138,7 +138,7 @@ define_callback_attributes!(
        Notes:
         See `insn_translate`, callbacks are registered via PANDA_CB_AFTER_INSN_EXEC
     "
-    (after_insn_translate, panda_cb_type_PANDA_CB_AFTER_INSN_TRANSLATE, (&mut CPUState, target_ptr_t)),
+    (after_insn_translate, panda_cb_type_PANDA_CB_AFTER_INSN_TRANSLATE, (&mut CPUState, target_ptr_t) -> bool),
     "Called after execution of an instruction identified by the
         PANDA_CB_AFTER_INSN_TRANSLATE callback
 
@@ -368,7 +368,7 @@ define_callback_attributes!(
         processes the hypercall, it should return true so the execution
         of the normal instruction is skipped.
     "
-    (guest_hypercall, panda_cb_type_PANDA_CB_GUEST_HYPERCALL, (&mut CPUState)),
+    (guest_hypercall, panda_cb_type_PANDA_CB_GUEST_HYPERCALL, (&mut CPUState) -> bool),
     "Called when someone uses the plugin_cmd monitor command.
 
     Callback ID: PANDA_CB_MONITOR
@@ -446,7 +446,7 @@ define_callback_attributes!(
         This should break plugins which rely on it to detect context
         switches in any other architecture.
     "
-    (asid_changed, panda_cb_type_PANDA_CB_ASID_CHANGED, (&mut CPUState, target_ptr_t, target_ptr_t)),
+    (asid_changed, panda_cb_type_PANDA_CB_ASID_CHANGED, (&mut CPUState, target_ptr_t, target_ptr_t) -> bool),
     "In replay only. Some kind of data transfer involving hard drive.
 
     Callback ID:     PANDA_CB_REPLAY_HD_TRANSFER,
@@ -747,7 +747,7 @@ define_callback_attributes!(
          True if value read was changed by a PANDA plugin and should be returned
          False if error-logic (invalid write) should be run
      "
-    (unassigned_io_read, panda_cb_type_PANDA_CB_UNASSIGNED_IO_READ, (&mut CPUState, target_ptr_t, hwaddr, usize, u64)),
+    (unassigned_io_read, panda_cb_type_PANDA_CB_UNASSIGNED_IO_READ, (&mut CPUState, target_ptr_t, hwaddr, usize, u64) -> bool),
     "Called when the guest attempts to write to an unmapped peripheral via MMIO
 
     Callback ID:     PANDA_CB_UNASSIGNED_IO_WRITE
@@ -762,7 +762,7 @@ define_callback_attributes!(
          True if the write should be allowed without error
          False if normal behavior should be used (error-logic)
      "
-    (unassigned_io_write, panda_cb_type_PANDA_CB_UNASSIGNED_IO_WRITE, (&mut CPUState, target_ptr_t, hwaddr, usize, u64)),
+    (unassigned_io_write, panda_cb_type_PANDA_CB_UNASSIGNED_IO_WRITE, (&mut CPUState, target_ptr_t, hwaddr, usize, u64) -> bool),
     "Called just before we are about to handle an exception.
     
     Callback ID:     PANDA_CB_BEFORE_HANDLE_EXCEPTION 
