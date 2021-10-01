@@ -161,12 +161,7 @@ fn get_field_statements(
 fn get_name(attrs: &[syn::Attribute]) -> Option<String> {
     attrs
         .iter()
-        .find(|attr| {
-            attr.path
-                .get_ident()
-                .map(|x| x.to_string() == "name")
-                .unwrap_or(false)
-        })
+        .find(|attr| attr.path.get_ident().map(|x| *x == "name").unwrap_or(false))
         .map(|attr| attr.parse_meta().ok())
         .flatten()
         .map(|meta| {
@@ -252,13 +247,8 @@ impl syn::parse::Parse for Idents {
 fn get_cfg_attrs(func: &syn::ItemFn) -> Vec<syn::Attribute> {
     func.attrs
         .iter()
-        .filter(|attr| {
-            attr.path
-                .get_ident()
-                .map(|x| x.to_string() == "cfg")
-                .unwrap_or(false)
-        })
-        .map(|attr| attr.clone())
+        .filter(|attr| attr.path.get_ident().map(|x| *x == "cfg").unwrap_or(false))
+        .cloned()
         .collect()
 }
 
@@ -284,6 +274,7 @@ macro_rules! define_callback_attributes {
                 pub fn $attr_name(_: TokenStream, function: TokenStream) -> TokenStream {
                     let mut function = syn::parse_macro_input!(function as syn::ItemFn);
                     function.sig.abi = Some(syn::parse_quote!(extern "C"));
+                    let vis = &function.vis;
                     let func = &function.sig.ident;
                     let cfgs = crate::get_cfg_attrs(&function);
 
@@ -304,6 +295,39 @@ macro_rules! define_callback_attributes {
                                 ::panda::sys::$const_name,
                                 #func as *const ()
                             )
+                        }
+
+                        #vis mod #func {
+                            pub fn enable() {
+                                unsafe {
+                                    ::panda::sys::panda_enable_callback(
+                                        ::panda::sys::panda_get_plugin_by_name(
+                                            ::std::concat!(
+                                                ::std::env!("CARGO_PKG_NAME"),
+                                                "\0"
+                                            ).as_ptr() as _
+                                        ),
+                                        ::panda::sys::$const_name,
+                                        ::std::mem::transmute(super::#func as *const ())
+                                    );
+                                }
+                            }
+
+                            pub fn disable() {
+                                println!("plugin: {}", env!("CARGO_PKG_NAME"));
+                                unsafe {
+                                    ::panda::sys::panda_disable_callback(
+                                        ::panda::sys::panda_get_plugin_by_name(
+                                            ::std::concat!(
+                                                ::std::env!("CARGO_PKG_NAME"),
+                                                "\0"
+                                            ).as_ptr() as _
+                                        ),
+                                        ::panda::sys::$const_name,
+                                        ::std::mem::transmute(super::#func as *const ())
+                                    );
+                                }
+                            }
                         }
 
                         #function

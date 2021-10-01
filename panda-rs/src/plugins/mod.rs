@@ -4,6 +4,7 @@ use std::ffi::CString;
 use std::path::Path;
 
 pub mod glib;
+pub mod guest_plugin_manager;
 pub mod hooks;
 pub mod hooks2;
 pub mod osi;

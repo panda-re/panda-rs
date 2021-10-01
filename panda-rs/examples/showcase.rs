@@ -1,6 +1,5 @@
-use panda::prelude::*;
 use panda::plugins::{osi::OSI, syscalls2::SYSCALLS};
-use 
+use panda::prelude::*;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static NUM_BB: AtomicU64 = AtomicU64::new(0);
@@ -28,10 +27,8 @@ fn sys_write_test(cpu: &mut CPUState, _pc: target_ulong, _fd: u32, buf: target_u
 fn on_sys_enter(cpu: &mut CPUState, pc: target_ulong, callno: target_ulong) {
     println!("pc: {:#x?} | syscall: {}", pc, callno);
 
-    // remove the hook once the first syscall has been printed out 
-    SYSCALLS.remove_callback_on_all_sys_enter(
-        on_sys_enter
-    );
+    // remove the hook once the first syscall has been printed out
+    SYSCALLS.remove_callback_on_all_sys_enter(on_sys_enter);
 }
 
 #[panda::init]
@@ -48,21 +45,23 @@ fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
         println!("pc: {:X}", tb.pc);
         let proc = OSI.get_current_process(cpu);
         println!("pid: {:X}", (*proc).pid);
+
+        if (*proc).pid == 0x1f {
+            every_basic_block::disable();
+        }
     }
 }
 
 #[derive(PandaArgs)]
 #[name = "stringsearch"]
 struct StringSearch {
-    str: String
+    str: String,
 }
 
 fn main() {
     Panda::new()
         .generic("x86_64")
         .replay("test")
-        .plugin_args(&StringSearch {
-            str: "test".into()
-        })
+        .plugin_args(&StringSearch { str: "test".into() })
         .run();
 }
