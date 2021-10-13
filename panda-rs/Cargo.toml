@@ -50,5 +50,6 @@ aarch64 = ["panda-re-sys/aarch64", "panda-re-macros/aarch64"]
 ppc = ["panda-re-sys/ppc", "panda-re-macros/ppc"]
 mips = ["panda-re-sys/mips", "panda-re-macros/mips"]
 mipsel = ["panda-re-sys/mipsel", "panda-re-macros/mipsel"]
+mips64 = ["panda-re-sys/mips64", "panda-re-macros/mips64"]
 
 default = ["x86_64"]

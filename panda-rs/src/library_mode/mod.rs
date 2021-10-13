@@ -1,10 +1,10 @@
 mod qcows;
-use std::fmt;
-use panda_sys::{panda_set_library_mode, panda_init, panda_run};
-use std::os::raw::c_char;
+use super::{inventory, sys, Callback, PPPCallbackSetup, PandaArgs};
+use panda_sys::{panda_init, panda_run, panda_set_library_mode};
 use std::ffi::CString;
+use std::fmt;
 use std::mem::transmute;
-use super::{inventory, Callback, PPPCallbackSetup, sys, PandaArgs};
+use std::os::raw::c_char;
 
 /// Architecture of the guest system
 #[allow(non_camel_case_types)]
@@ -20,18 +20,23 @@ pub enum Arch {
 // TODO: tie architecture to architecture being compiled for?
 impl fmt::Display for Arch {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", match self {
-            Self::i386 => "i386",
-            Self::x86_64 => "x86_64",
-            Self::Arm => "arm",
-            Self::Mips => "mips",
-            Self::AArch64 => "aarch64",
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::i386 => "i386",
+                Self::x86_64 => "x86_64",
+                Self::Arm => "arm",
+                Self::Mips => "mips",
+                Self::AArch64 => "aarch64",
+            }
+        )
     }
 }
 
 /// Builder for creating PANDA instances. Only for use in libpanda mode.
 #[derive(Default)]
+#[allow(dead_code)]
 pub struct Panda {
     expect_prompt: Option<String>,
     generic_qcow: Option<String>,
@@ -160,7 +165,7 @@ impl Panda {
 
         self
     }
-    
+
     /// Use generic PANDA Qcow for run
     ///
     /// ### Example
@@ -172,10 +177,10 @@ impl Panda {
     /// ```
     pub fn generic<S: Into<String>>(&mut self, generic: S) -> &mut Self {
         self.generic_qcow = Some(generic.into());
-        
+
         self
     }
-    
+
     /// Run the given replay in the PANDA instance. Equivalent to `-replay [name]` from the PANDA
     /// command line.
     ///
@@ -188,7 +193,7 @@ impl Panda {
     /// ```
     pub fn replay<S: Into<String>>(&mut self, replay: S) -> &mut Self {
         self.replay = Some(replay.into());
-        
+
         self
     }
 
@@ -204,7 +209,7 @@ impl Panda {
     /// struct StringSearch {
     ///     str: String
     /// }
-    /// 
+    ///
     /// fn main() {
     ///     Panda::new()
     ///         .generic("x86_64")
@@ -216,27 +221,28 @@ impl Panda {
     /// }
     /// ```
     pub fn plugin_args<T: PandaArgs>(&mut self, args: &T) -> &mut Self {
-        self.arg("-panda")
-            .arg(args.to_panda_args_str())
+        self.arg("-panda").arg(args.to_panda_args_str())
     }
 
     fn get_args(&self) -> Vec<String> {
-        let generic_info =
-            self.generic_qcow
-                .as_ref()
-                .map(|generic| qcows::get_supported_image(generic));
+        let generic_info = self
+            .generic_qcow
+            .as_ref()
+            .map(|generic| qcows::get_supported_image(generic));
 
-        let qcow_path = self.qcow.clone().map(Some).unwrap_or_else(||{
+        let qcow_path = self.qcow.clone().map(Some).unwrap_or_else(|| {
             self.generic_qcow
                 .as_ref()
                 .map(|generic| qcows::get_generic_path(generic).display().to_string())
         });
-        
-        let arch = self.arch
+
+        let _arch = self
+            .arch
             .or_else(|| generic_info.as_ref().map(|x| x.arch))
             .unwrap_or(Arch::x86_64);
 
-        let mem = self.mem
+        let mem = self
+            .mem
             .as_ref()
             .map(|x| &x[..])
             .or_else(|| generic_info.as_ref().map(|x| x.default_mem))
@@ -307,13 +313,13 @@ impl Panda {
                 sys::panda_register_callback(
                     self as *mut _ as _,
                     cb.cb_type,
-                    ::core::mem::transmute(cb.fn_pointer)
+                    ::core::mem::transmute(cb.fn_pointer),
                 );
             }
 
             panda_set_library_mode(true);
             panda_init(args_ptrs.len() as i32, transmute(args_ptrs.as_ptr()), empty);
-            
+
             for cb in inventory::iter::<PPPCallbackSetup> {
                 cb.0();
             }

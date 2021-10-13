@@ -10,7 +10,7 @@ pub mod hooks2;
 pub mod osi;
 pub mod proc_start_linux;
 
-#[cfg(not(feature = "ppc"))]
+#[cfg(not(any(feature = "ppc", feature = "mips64")))]
 pub mod syscalls2;
 
 #[macro_export]
@@ -166,6 +166,9 @@ const PLUGIN_DIR: &str = "mips-softmmu/panda/plugins";
 
 #[cfg(feature = "mipsel")]
 const PLUGIN_DIR: &str = "mipsel-softmmu/panda/plugins";
+
+#[cfg(feature = "mips64")]
+const PLUGIN_DIR: &str = "mips64-softmmu/panda/plugins";
 
 #[cfg(feature = "ppc")]
 const PLUGIN_DIR: &str = "ppc-softmmu/panda/plugins";
