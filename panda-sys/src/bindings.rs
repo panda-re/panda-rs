@@ -32,3 +32,8 @@ pub use mips::*;
 mod mipsel;
 #[cfg(feature = "mipsel")]
 pub use mipsel::*;
+
+#[cfg(feature = "mips64")]
+mod mipsel;
+#[cfg(feature = "mips64")]
+pub use mipsel::*;

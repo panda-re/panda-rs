@@ -74,4 +74,7 @@ pub(crate) mod arch {
 
     #[cfg(feature = "aarch64")]
     const ARCH: &str = "aarch64";
+
+    #[cfg(feature = "mips64")]
+    const ARCH: &str = "mips64";
 }
