@@ -28,11 +28,11 @@ macro_rules! if_not_any_two_features {
     ($($features:literal),* {  }) => {};
 }
 
-if_any_two_features!("x86_64", "i386", "arm", "ppc", "mips", "mipsel" {
+if_any_two_features!("x86_64", "i386", "arm", "ppc", "mips", "mipsel", "mips64" {
     compile_error!("Cannot enable two features at once, make sure you are using `default-features = false`");
 });
 
-if_not_any_two_features!("x86_64", "i386", "arm", "ppc", "mips", "mipsel" {
+if_not_any_two_features!("x86_64", "i386", "arm", "ppc", "mips", "mipsel", "mips64" {
 
     #[allow(nonstandard_style)]
     #[allow(improper_ctypes)] // TODO!!! need to actually fix these FFI issues...
