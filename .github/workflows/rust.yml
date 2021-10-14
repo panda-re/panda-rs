@@ -26,9 +26,13 @@ jobs:
       run: cd panda-rs && cargo build --verbose --no-default-features --features=i386
     - name: Build ARM
       run: cd panda-rs && cargo build --verbose --no-default-features --features=arm
+    - name: Build 64-bit ARM
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=aarch64
     - name: Build Mips
       run: cd panda-rs && cargo build --verbose --no-default-features --features=mips
     - name: Build Mips (Little Endian)
       run: cd panda-rs && cargo build --verbose --no-default-features --features=mipsel
+    - name: Build 64-bit Mips
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=mips64
     - name: Build PowerPC
       run: cd panda-rs && cargo build --verbose --no-default-features --features=ppc
