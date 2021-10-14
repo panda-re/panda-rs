@@ -51,6 +51,7 @@ pub(crate) mod arch {
     /// * ppc
     /// * mips
     /// * mipsel
+    /// * mips64
     /// * aarch64
     pub const ARCH_NAME: &str = ARCH;
 
