@@ -54,6 +54,7 @@ mod callbacks;
 pub use callbacks::*;
 
 /// For internal use. Access to inventory for managing callbacks.
+#[doc(hidden)]
 pub use inventory;
 
 /// Helpers for getting plugin arguments from panda
