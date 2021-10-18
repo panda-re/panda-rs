@@ -1,5 +1,5 @@
 mod qcows;
-use super::{inventory, sys, Callback, PPPCallbackSetup, PandaArgs};
+use super::{inventory, sys, InternalCallback, PPPCallbackSetup, PandaArgs};
 use panda_sys::{panda_init, panda_run, panda_set_library_mode};
 use std::ffi::CString;
 use std::fmt;
@@ -309,7 +309,7 @@ impl Panda {
         let x = &mut 0i8;
         let empty = &mut (x as *mut c_char);
         unsafe {
-            for cb in inventory::iter::<Callback> {
+            for cb in inventory::iter::<InternalCallback> {
                 sys::panda_register_callback(
                     self as *mut _ as _,
                     cb.cb_type,

@@ -33,7 +33,7 @@ pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
 
             #[no_mangle]
             unsafe extern "C" fn init_plugin(plugin: *mut ::panda::PluginHandle) {
-                for cb in ::panda::inventory::iter::<::panda::Callback> {
+                for cb in ::panda::inventory::iter::<::panda::InternalCallback> {
                     ::panda::sys::panda_register_callback(plugin as _, cb.cb_type, ::core::mem::transmute(cb.fn_pointer));
                 }
 
@@ -291,7 +291,7 @@ macro_rules! define_callback_attributes {
 
                         ::panda::inventory::submit! {
                             #![crate = ::panda]
-                            ::panda::Callback::new(
+                            ::panda::InternalCallback::new(
                                 ::panda::sys::$const_name,
                                 #func as *const ()
                             )

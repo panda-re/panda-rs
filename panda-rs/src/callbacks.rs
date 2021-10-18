@@ -6,14 +6,18 @@ pub struct PluginHandle;
 
 /// A typeless PANDA callback used internally by callback attributes. Not recommended for direct
 /// use.
-pub struct Callback {
+#[doc(hidden)]
+pub struct InternalCallback {
     pub cb_type: panda_cb_type,
     pub fn_pointer: *const (),
 }
 
-impl Callback {
+impl InternalCallback {
     pub fn new(cb_type: panda_cb_type, fn_pointer: *const ()) -> Self {
-        Self { cb_type, fn_pointer }
+        Self {
+            cb_type,
+            fn_pointer,
+        }
     }
 }
 
@@ -32,8 +36,9 @@ impl Callback {
 /// ```
 pub struct UninitCallback(pub fn(&mut PluginHandle));
 
+#[doc(hidden)]
 pub struct PPPCallbackSetup(pub fn());
 
-inventory::collect!(Callback);
+inventory::collect!(InternalCallback);
 inventory::collect!(UninitCallback);
 inventory::collect!(PPPCallbackSetup);
