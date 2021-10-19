@@ -1,6 +1,6 @@
 [package]
 name = "panda-re"
-version = "0.14.0"
+version = "0.15.0"
 authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>", "tnballo <tnballo@users.noreply.github.com>"]
 edition = "2018"
 description = "The official library for interfacing with PANDA (Platform for Architecture-Neutral Dynamic Analysis)"
@@ -28,8 +28,8 @@ name = "unicorn_aarch64"
 required-features = ["libpanda", "aarch64"]
 
 [dependencies]
-panda-re-sys = { version = "0.5", path = "../panda-sys" }
-panda-re-macros = { version = "0.10", path = "../panda-macros" }
+panda-re-sys = { version = "0.6", path = "../panda-sys" }
+panda-re-macros = { version = "0.11", path = "../panda-macros" }
 inventory = "0.1.8"
 dirs = "3.0.1"
 lazy_static = "1.4.0"
