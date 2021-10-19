@@ -67,6 +67,12 @@ pub use panda_sys as sys;
 #[doc(inline)]
 pub use panda_macros as cbs;
 
+#[doc(hidden)]
+pub use {lazy_static, paste};
+
+#[doc(hidden)]
+extern crate self as panda;
+
 /// Callbacks for linux syscalls (from syscalls2)
 pub mod on_sys;
 

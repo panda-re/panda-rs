@@ -90,7 +90,7 @@ macro_rules! plugin_import {
              )*
 
             $($(
-                ::paste::paste!{
+                $crate::paste::paste!{
                     pub fn [<add_callback_ $cb_fn_name>](
                         &self,
                         callback: extern "C" fn(
@@ -112,7 +112,7 @@ macro_rules! plugin_import {
                     }
                 }
 
-                ::paste::paste!{
+                $crate::paste::paste!{
                     pub fn [<remove_callback_ $cb_fn_name>](
                         &self,
                         callback: extern "C" fn(
@@ -136,7 +136,7 @@ macro_rules! plugin_import {
             )*)?
         }
 
-        lazy_static::lazy_static!{
+        $crate::lazy_static::lazy_static!{
             $(
                 #[ $type_meta ]
             )*
