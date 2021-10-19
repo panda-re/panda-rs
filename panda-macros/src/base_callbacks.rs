@@ -12,7 +12,7 @@ define_callback_attributes!(
     Return value:
      none
     "
-    (before_block_translate, panda_cb_type_PANDA_CB_BEFORE_BLOCK_TRANSLATE, (&mut CPUState, target_ptr_t)),
+    (before_block_translate, panda_cb_type_PANDA_CB_BEFORE_BLOCK_TRANSLATE, (cpu: &mut CPUState, pc: target_ptr_t)),
     "Called after execution of every basic block.
     If exitCode > TB_EXIT_IDX1, then the block exited early.
 
@@ -30,7 +30,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (after_block_translate, panda_cb_type_PANDA_CB_AFTER_BLOCK_TRANSLATE, (&mut CPUState, &mut TranslationBlock)),
+    (after_block_translate, panda_cb_type_PANDA_CB_AFTER_BLOCK_TRANSLATE, (cpu: &mut CPUState, tb: &mut TranslationBlock)),
     "Called before execution of every basic block, with the option
         to invalidate the TB.
 
@@ -48,7 +48,7 @@ define_callback_attributes!(
         true if we should invalidate the current translation block
         and retranslate, false otherwise.
     "
-    (before_block_exec_invalidate_opt, panda_cb_type_PANDA_CB_BEFORE_BLOCK_EXEC_INVALIDATE_OPT, (&mut CPUState, &mut TranslationBlock) -> bool),
+    (before_block_exec_invalidate_opt, panda_cb_type_PANDA_CB_BEFORE_BLOCK_EXEC_INVALIDATE_OPT, (cpu: &mut CPUState, tb: &mut TranslationBlock) -> bool),
     "Called before execution of every basic block.
 
     Callback ID: PANDA_CB_BEFORE_BLOCK_EXEC
@@ -62,7 +62,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (before_block_exec, panda_cb_type_PANDA_CB_BEFORE_BLOCK_EXEC, (&mut CPUState, &mut TranslationBlock)),
+    (before_block_exec, panda_cb_type_PANDA_CB_BEFORE_BLOCK_EXEC, (cpu: &mut CPUState, tb: &mut TranslationBlock)),
     "Called after execution of every basic block.
         If exitCode > TB_EXIT_IDX1, then the block exited early.
 
@@ -78,7 +78,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (after_block_exec, panda_cb_type_PANDA_CB_AFTER_BLOCK_EXEC, (&mut CPUState, &mut TranslationBlock, u8)),
+    (after_block_exec, panda_cb_type_PANDA_CB_AFTER_BLOCK_EXEC, (cpu: &mut CPUState, tb: &mut TranslationBlock, exit_code: u8)),
     "Called before the translation of each instruction.
 
     Callback ID: PANDA_CB_INSN_TRANSLATE
@@ -99,7 +99,7 @@ define_callback_attributes!(
         If you do want to instrument every single instruction, just return
         true. See the documentation for PANDA_CB_INSN_EXEC for more detail.
     "
-    (insn_translate, panda_cb_type_PANDA_CB_INSN_TRANSLATE, (&mut CPUState, target_ptr_t) -> bool),
+    (insn_translate, panda_cb_type_PANDA_CB_INSN_TRANSLATE, (cpu: &mut CPUState, pc: target_ptr_t) -> bool),
     "Called before execution of any instruction identified by the
         PANDA_CB_INSN_TRANSLATE callback.
 
@@ -120,7 +120,7 @@ define_callback_attributes!(
         This is fairly expensive, which is why it's only enabled via
         the PANDA_CB_INSN_TRANSLATE callback.
     "
-    (insn_exec, panda_cb_type_PANDA_CB_INSN_EXEC, (&mut CPUState, target_ptr_t)),
+    (insn_exec, panda_cb_type_PANDA_CB_INSN_EXEC, (cpu: &mut CPUState, pc: target_ptr_t)),
     "Called after the translation of each instruction.
 
     Callback ID: PANDA_CB_AFTER_INSN_TRANSLATE
@@ -138,7 +138,7 @@ define_callback_attributes!(
        Notes:
         See `insn_translate`, callbacks are registered via PANDA_CB_AFTER_INSN_EXEC
     "
-    (after_insn_translate, panda_cb_type_PANDA_CB_AFTER_INSN_TRANSLATE, (&mut CPUState, target_ptr_t) -> bool),
+    (after_insn_translate, panda_cb_type_PANDA_CB_AFTER_INSN_TRANSLATE, (cpu: &mut CPUState, pc: target_ptr_t) -> bool),
     "Called after execution of an instruction identified by the
         PANDA_CB_AFTER_INSN_TRANSLATE callback
 
@@ -156,7 +156,7 @@ define_callback_attributes!(
        Notes:
         See `insn_exec`. Enabled via the PANDA_CB_AFTER_INSN_TRANSLATE callback.
     "
-    (after_insn_exec, panda_cb_type_PANDA_CB_AFTER_INSN_EXEC, (&mut CPUState, target_ptr_t)),
+    (after_insn_exec, panda_cb_type_PANDA_CB_AFTER_INSN_EXEC, (cpu: &mut CPUState, pc: target_ptr_t)),
     "Called before memory is read.
 
     Callback ID: PANDA_CB_VIRT_MEM_BEFORE_READ
@@ -172,7 +172,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (virt_mem_before_read, panda_cb_type_PANDA_CB_VIRT_MEM_BEFORE_READ, (&mut CPUState, target_ptr_t, target_ptr_t, usize)),
+    (virt_mem_before_read, panda_cb_type_PANDA_CB_VIRT_MEM_BEFORE_READ, (cpu: &mut CPUState, pc: target_ptr_t, addr: target_ptr_t, size: usize)),
     "Called before memory is written.
 
     Callback ID: PANDA_CB_VIRT_MEM_BEFORE_WRITE
@@ -189,7 +189,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (virt_mem_before_write, panda_cb_type_PANDA_CB_VIRT_MEM_BEFORE_WRITE, (&mut CPUState, target_ptr_t, target_ptr_t, usize, *mut u8)),
+    (virt_mem_before_write, panda_cb_type_PANDA_CB_VIRT_MEM_BEFORE_WRITE, (cpu: &mut CPUState, pc: target_ptr_t, addr: target_ptr_t, size: usize, buf: *mut u8)),
     "Called after memory is read.
 
     Callback ID: PANDA_CB_PHYS_MEM_BEFORE_READ
@@ -205,7 +205,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (phys_mem_before_read, panda_cb_type_PANDA_CB_PHYS_MEM_BEFORE_READ, (&mut CPUState, target_ptr_t, target_ptr_t, usize)),
+    (phys_mem_before_read, panda_cb_type_PANDA_CB_PHYS_MEM_BEFORE_READ, (cpu: &mut CPUState, pc: target_ptr_t, addr: target_ptr_t, size: usize)),
     "Called before memory is written.
 
     Callback ID: PANDA_CB_PHYS_MEM_BEFORE_WRITE
@@ -222,7 +222,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (phys_mem_before_write, panda_cb_type_PANDA_CB_PHYS_MEM_BEFORE_WRITE, (&mut CPUState, target_ptr_t, target_ptr_t, usize, *mut u8)),
+    (phys_mem_before_write, panda_cb_type_PANDA_CB_PHYS_MEM_BEFORE_WRITE, (cpu: &mut CPUState, pc: target_ptr_t, addr: target_ptr_t, size: usize, buf: *mut u8)),
     "Called after memory is read.
 
     Callback ID: PANDA_CB_VIRT_MEM_AFTER_READ
@@ -239,7 +239,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (virt_mem_after_read, panda_cb_type_PANDA_CB_VIRT_MEM_AFTER_READ, (&mut CPUState, target_ptr_t, target_ptr_t, usize, *mut u8)),
+    (virt_mem_after_read, panda_cb_type_PANDA_CB_VIRT_MEM_AFTER_READ, (cpu: &mut CPUState, pc: target_ptr_t, addr: target_ptr_t, size: usize, buf: *mut u8)),
     "Called after memory is written.
 
     Callback ID: PANDA_CB_VIRT_MEM_AFTER_WRITE
@@ -256,7 +256,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (virt_mem_after_write, panda_cb_type_PANDA_CB_VIRT_MEM_AFTER_WRITE, (&mut CPUState, target_ptr_t, target_ptr_t, usize, *mut u8)),
+    (virt_mem_after_write, panda_cb_type_PANDA_CB_VIRT_MEM_AFTER_WRITE, (cpu: &mut CPUState, pc: target_ptr_t, addr: target_ptr_t, size: usize, buf: *mut u8)),
 
     "Called after memory is read.
 
@@ -274,7 +274,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (phys_mem_after_read, panda_cb_type_PANDA_CB_PHYS_MEM_AFTER_READ, (&mut CPUState, target_ptr_t, target_ptr_t, usize, *mut u8)),
+    (phys_mem_after_read, panda_cb_type_PANDA_CB_PHYS_MEM_AFTER_READ, (cpu: &mut CPUState, pc: target_ptr_t, addr: target_ptr_t, size: usize, buf: *mut u8)),
     "Called after memory is written.
 
     Callback ID: PANDA_CB_PHYS_MEM_AFTER_WRITE
@@ -291,7 +291,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (phys_mem_after_write, panda_cb_type_PANDA_CB_PHYS_MEM_AFTER_WRITE, (&mut CPUState, target_ptr_t, target_ptr_t, usize, *mut u8)),
+    (phys_mem_after_write, panda_cb_type_PANDA_CB_PHYS_MEM_AFTER_WRITE, (cpu: &mut CPUState, pc: target_ptr_t, addr: target_ptr_t, size: usize, buf: *mut u8)),
     "Called after MMIO memory is read.
 
     Callback ID: PANDA_CB_MMIO_AFTER_READ
@@ -308,7 +308,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (mmio_after_read, panda_cb_type_PANDA_CB_MMIO_AFTER_READ, (&mut CPUState, target_ptr_t, target_ptr_t, usize, *mut u64)),
+    (mmio_after_read, panda_cb_type_PANDA_CB_MMIO_AFTER_READ, (cpu: &mut CPUState, phys_addr: target_ptr_t, virt_addr: target_ptr_t, size: usize, value: *mut u64)),
     "Called after MMIO memory is written to.
 
     Callback ID: PANDA_CB_MMIO_BEFORE_WRITE
@@ -325,7 +325,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (mmio_before_write, panda_cb_type_PANDA_CB_MMIO_BEFORE_WRITE, (&mut CPUState, target_ptr_t, target_ptr_t, usize, *mut u64)),
+    (mmio_before_write, panda_cb_type_PANDA_CB_MMIO_BEFORE_WRITE, (cpu: &mut CPUState, phys_addr: target_ptr_t, virt_addr: target_ptr_t, size: usize, value: *mut u64)),
     "Called when there is a hard drive read
 
     Callback ID: PANDA_CB_HD_READ
@@ -335,7 +335,7 @@ define_callback_attributes!(
        Arguments
        CPUState *env
     "
-    (hd_read, panda_cb_type_PANDA_CB_HD_READ, (&mut CPUState)),
+    (hd_read, panda_cb_type_PANDA_CB_HD_READ, (cpu: &mut CPUState)),
     "Called when there is a hard drive write
 
     Callback ID: PANDA_CB_HD_WRITE
@@ -345,7 +345,7 @@ define_callback_attributes!(
        Arguments
        CPUState *env
     "
-    (hd_write, panda_cb_type_PANDA_CB_HD_WRITE, (&mut CPUState)),
+    (hd_write, panda_cb_type_PANDA_CB_HD_WRITE, (cpu: &mut CPUState)),
     "Called when a program inside the guest makes a hypercall to pass
         information from inside the guest to a plugin
 
@@ -368,7 +368,7 @@ define_callback_attributes!(
         processes the hypercall, it should return true so the execution
         of the normal instruction is skipped.
     "
-    (guest_hypercall, panda_cb_type_PANDA_CB_GUEST_HYPERCALL, (&mut CPUState) -> bool),
+    (guest_hypercall, panda_cb_type_PANDA_CB_GUEST_HYPERCALL, (cpu: &mut CPUState) -> bool),
     "Called when someone uses the plugin_cmd monitor command.
 
     Callback ID: PANDA_CB_MONITOR
@@ -394,7 +394,7 @@ define_callback_attributes!(
         monitor commands are uniquely named, e.g. by using the plugin name
         as a prefix (\"sample_do_foo\" rather than \"do_foo\").
     "
-    (monitor, panda_cb_type_PANDA_CB_MONITOR, (&mut Monitor, *const u8)),
+    (monitor, panda_cb_type_PANDA_CB_MONITOR, (monitor: &mut Monitor, cmd: *const u8)),
     "Called inside of cpu_restore_state(), when there is a CPU
         fault/exception.
 
@@ -409,7 +409,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (cpu_restore_state, panda_cb_type_PANDA_CB_CPU_RESTORE_STATE, (&mut CPUState, &mut TranslationBlock)),
+    (cpu_restore_state, panda_cb_type_PANDA_CB_CPU_RESTORE_STATE, (cpu: &mut CPUState, tb: &mut TranslationBlock)),
     "Called at start of replay, before loadvm is called. This allows
         us to hook devices' loadvm handlers. Remember to unregister the
         existing handler for the device first. See the example in the
@@ -446,7 +446,7 @@ define_callback_attributes!(
         This should break plugins which rely on it to detect context
         switches in any other architecture.
     "
-    (asid_changed, panda_cb_type_PANDA_CB_ASID_CHANGED, (&mut CPUState, target_ptr_t, target_ptr_t) -> bool),
+    (asid_changed, panda_cb_type_PANDA_CB_ASID_CHANGED, (cpu: &mut CPUState, old_asid: target_ptr_t, new_asid: target_ptr_t) -> bool),
     "In replay only. Some kind of data transfer involving hard drive.
 
     Callback ID:     PANDA_CB_REPLAY_HD_TRANSFER,
@@ -470,7 +470,7 @@ define_callback_attributes!(
         In replay the transfer doesn't really happen. We are *at* the point at
         which it happened, really.
     "
-    (replay_hd_transfer, panda_cb_type_PANDA_CB_REPLAY_HD_TRANSFER, (&mut CPUState, u32, target_ptr_t, target_ptr_t, usize)),
+    (replay_hd_transfer, panda_cb_type_PANDA_CB_REPLAY_HD_TRANSFER, (cpu: &mut CPUState, kind: u32, src: target_ptr_t, dest: target_ptr_t, num_bytes: usize)),
     "In replay only, some kind of data transfer within the network card
        (currently, only the E1000 is supported).
 
@@ -495,7 +495,7 @@ define_callback_attributes!(
         Also, the src_addr and dest_addr may be for either host (ie. a location
         in the emulated network device) or guest, depending upon the type.
     "
-    (replay_net_transfer, panda_cb_type_PANDA_CB_REPLAY_NET_TRANSFER, (&mut CPUState, u32, u64, u64, usize)),
+    (replay_net_transfer, panda_cb_type_PANDA_CB_REPLAY_NET_TRANSFER, (cpu: &mut CPUState, kind: u32, src: u64, dest: u64, size: usize)),
     "In replay only, called when a byte is received on the serial port.
 
     Callback ID:     PANDA_CB_REPLAY_SERIAL_RECEIVE,
@@ -510,7 +510,7 @@ define_callback_attributes!(
        Return value:
         unused
     "
-    (replay_serial_receive, panda_cb_type_PANDA_CB_REPLAY_SERIAL_RECEIVE, (&mut CPUState, target_ptr_t, u8)),
+    (replay_serial_receive, panda_cb_type_PANDA_CB_REPLAY_SERIAL_RECEIVE, (cpu: &mut CPUState, fifo_addr: target_ptr_t, value: u8)),
     "In replay only, called when a byte read from the serial RX FIFO
 
     Callback ID:     PANDA_CB_REPLAY_SERIAL_READ,
@@ -526,7 +526,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (replay_serial_read, panda_cb_type_PANDA_CB_REPLAY_SERIAL_READ, (&mut CPUState, target_ptr_t, u32, u8)),
+    (replay_serial_read, panda_cb_type_PANDA_CB_REPLAY_SERIAL_READ, (cpu: &mut CPUState, fifo_addr: target_ptr_t, port_addr: u32, value: u8)),
     "In replay only, called when a byte is sent on the serial port.
 
     Callback ID:     PANDA_CB_REPLAY_SERIAL_SEND,
@@ -541,7 +541,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (replay_serial_send, panda_cb_type_PANDA_CB_REPLAY_SERIAL_SEND, (&mut CPUState, target_ptr_t, u8)),
+    (replay_serial_send, panda_cb_type_PANDA_CB_REPLAY_SERIAL_SEND, (cpu: &mut CPUState, fifo_addr: target_ptr_t, value: u8)),
     "In replay only, called when a byte written to the serial TX FIFO
 
     Callback ID:     PANDA_CB_REPLAY_SERIAL_WRITE,
@@ -558,7 +558,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (replay_serial_write, panda_cb_type_PANDA_CB_REPLAY_SERIAL_WRITE, (&mut CPUState, target_ptr_t, u32, u8)),
+    (replay_serial_write, panda_cb_type_PANDA_CB_REPLAY_SERIAL_WRITE, (cpu: &mut CPUState, fifo_addr: target_ptr_t, port_addr: u32, value: u8)),
     "In replay only. We are about to dma between qemu buffer and
         guest memory.
 
@@ -576,7 +576,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (replay_before_dma, panda_cb_type_PANDA_CB_REPLAY_BEFORE_DMA, (&mut CPUState, *const u8, hwaddr, usize, bool)),
+    (replay_before_dma, panda_cb_type_PANDA_CB_REPLAY_BEFORE_DMA, (cpu: &mut CPUState, buf: *const u8, addr: hwaddr, size: usize, is_write: bool)),
     "In replay only, we are about to dma between qemu buffer and guest memory
 
     Callback ID:     PANDA_CB_REPLAY_AFTER_DMA,
@@ -593,7 +593,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (replay_after_dma, panda_cb_type_PANDA_CB_REPLAY_AFTER_DMA, (&mut CPUState, *mut u8, hwaddr, usize, bool)),
+    (replay_after_dma, panda_cb_type_PANDA_CB_REPLAY_AFTER_DMA, (cpu: &mut CPUState, buf: *mut u8, addr: hwaddr, size: usize, is_write: bool)),
     "In replay only, we have a packet (incoming / outgoing) in hand.
 
     Callback ID:   PANDA_CB_REPLAY_HANDLE_PACKET,
@@ -626,7 +626,7 @@ define_callback_attributes!(
         real impact is minimal (virtually nobody uses 32bit builds),
         the fix has a very low priority in the bugfix list.
     "
-    (replay_handle_packet, panda_cb_type_PANDA_CB_REPLAY_HANDLE_PACKET, (&mut CPUState, *mut u8, usize, u8, u64)),
+    (replay_handle_packet, panda_cb_type_PANDA_CB_REPLAY_HANDLE_PACKET, (cpu: &mut CPUState, buf: *mut u8, size: usize, direction: u8, buf_addr_rc: u64)),
     "Called after cpu_exec calls cpu_exec_enter function.
 
     Callback ID: PANDA_CB_AFTER_CPU_EXEC_ENTER
@@ -639,7 +639,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (after_cpu_exec_enter, panda_cb_type_PANDA_CB_AFTER_CPU_EXEC_ENTER, (&mut CPUState)),
+    (after_cpu_exec_enter, panda_cb_type_PANDA_CB_AFTER_CPU_EXEC_ENTER, (cpu: &mut CPUState)),
     "Called before cpu_exec calls cpu_exec_exit function.
 
     Callback ID: PANDA_CB_BEFORE_CPU_EXEC_EXIT
@@ -653,7 +653,7 @@ define_callback_attributes!(
        Return value:
         none
     "
-    (before_cpu_exec_exit, panda_cb_type_PANDA_CB_BEFORE_CPU_EXEC_EXIT, (&mut CPUState, bool)),
+    (before_cpu_exec_exit, panda_cb_type_PANDA_CB_BEFORE_CPU_EXEC_EXIT, (cpu: &mut CPUState, ran_block: bool)),
     "Called right after the machine has been initialized, but before
         any guest code runs.
 
@@ -672,7 +672,7 @@ define_callback_attributes!(
         access to the RAM, CPU object, etc. E.g. for the taint2 plugin,
         this is the appropriate place to call taint2_enable_taint().
     "
-    (after_machine_init, panda_cb_type_PANDA_CB_AFTER_MACHINE_INIT, (&mut CPUState)),
+    (after_machine_init, panda_cb_type_PANDA_CB_AFTER_MACHINE_INIT, (cpu: &mut CPUState)),
     "Called right after a snapshot has been loaded (either with loadvm or replay initialization),
         but before any guest code runs.
 
@@ -685,7 +685,7 @@ define_callback_attributes!(
         none
 
     "
-    (after_loadvm, panda_cb_type_PANDA_CB_AFTER_LOADVM, (&mut CPUState)),
+    (after_loadvm, panda_cb_type_PANDA_CB_AFTER_LOADVM, (cpu: &mut CPUState)),
     "Called at the top of the loop that manages emulation.
 
     Callback ID:     PANDA_CB_TOP_LOOP
@@ -698,7 +698,7 @@ define_callback_attributes!(
        Return value:
         unused
      "
-    (top_loop, panda_cb_type_PANDA_CB_TOP_LOOP, (&mut CPUState)),
+    (top_loop, panda_cb_type_PANDA_CB_TOP_LOOP, (cpu: &mut CPUState)),
     "Called in the middle of machine initialization
 
     Callback ID:     PANDA_CB_DURING_MACHINE_INIT
@@ -709,7 +709,7 @@ define_callback_attributes!(
        Return value:
          None
      "
-    (during_machine_init, panda_cb_type_PANDA_CB_DURING_MACHINE_INIT, (&mut MachineState)),
+    (during_machine_init, panda_cb_type_PANDA_CB_DURING_MACHINE_INIT, (machine: &mut MachineState)),
     "Called in IO thread in place where monitor cmds are processed
 
     Callback ID:     PANDA_CB_MAIN_LOOP_WAIT
@@ -747,7 +747,7 @@ define_callback_attributes!(
          True if value read was changed by a PANDA plugin and should be returned
          False if error-logic (invalid write) should be run
      "
-    (unassigned_io_read, panda_cb_type_PANDA_CB_UNASSIGNED_IO_READ, (&mut CPUState, target_ptr_t, hwaddr, usize, u64) -> bool),
+    (unassigned_io_read, panda_cb_type_PANDA_CB_UNASSIGNED_IO_READ, (cpu: &mut CPUState, pc: target_ptr_t, addr: hwaddr, size: usize, val: u64) -> bool),
     "Called when the guest attempts to write to an unmapped peripheral via MMIO
 
     Callback ID:     PANDA_CB_UNASSIGNED_IO_WRITE
@@ -762,7 +762,7 @@ define_callback_attributes!(
          True if the write should be allowed without error
          False if normal behavior should be used (error-logic)
      "
-    (unassigned_io_write, panda_cb_type_PANDA_CB_UNASSIGNED_IO_WRITE, (&mut CPUState, target_ptr_t, hwaddr, usize, u64) -> bool),
+    (unassigned_io_write, panda_cb_type_PANDA_CB_UNASSIGNED_IO_WRITE, (cpu: &mut CPUState, pc: target_ptr_t, addr: hwaddr, size: usize, val: u64) -> bool),
     "Called just before we are about to handle an exception.
     
     Callback ID:     PANDA_CB_BEFORE_HANDLE_EXCEPTION 
@@ -781,6 +781,6 @@ define_callback_attributes!(
        the new exception index, which will replace
        cpu->exception_index
      "
-    (before_handle_exception, panda_cb_type_PANDA_CB_BEFORE_HANDLE_EXCEPTION, (&mut CPUState, i32)),
-    (before_handle_interrupt, panda_cb_type_PANDA_CB_BEFORE_HANDLE_INTERRUPT, (&mut CPUState, i32))
+    (before_handle_exception, panda_cb_type_PANDA_CB_BEFORE_HANDLE_EXCEPTION, (cpu: &mut CPUState, exception_index: i32)),
+    (before_handle_interrupt, panda_cb_type_PANDA_CB_BEFORE_HANDLE_INTERRUPT, (cpu: &mut CPUState, exception_index: i32))
 );

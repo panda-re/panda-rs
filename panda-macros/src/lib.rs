@@ -33,6 +33,8 @@ pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
 
             #[no_mangle]
             unsafe extern "C" fn init_plugin(plugin: *mut ::panda::PluginHandle) {
+                ::panda::set_plugin_ref(plugin);
+
                 for cb in ::panda::inventory::iter::<::panda::InternalCallback> {
                     ::panda::sys::panda_register_callback(plugin as _, cb.cb_type, ::core::mem::transmute(cb.fn_pointer));
                 }
@@ -255,7 +257,7 @@ fn get_cfg_attrs(func: &syn::ItemFn) -> Vec<syn::Attribute> {
 macro_rules! define_callback_attributes {
     ($(
         $($doc:literal)*
-        ($attr_name:ident, $const_name:ident, ($($arg:ty),*) $(-> $ret:ty)?)
+        ($attr_name:ident, $const_name:ident, ($($arg_name:ident : $arg:ty),*) $(-> $ret:ty)?)
     ),*) => {
         $(
             doc_comment::doc_comment!{
@@ -335,6 +337,58 @@ macro_rules! define_callback_attributes {
                 }
             }
         )*
+
+        #[proc_macro]
+        pub fn define_closure_callbacks(_: TokenStream) -> TokenStream {
+            quote!(
+                impl Callback {
+                    $(
+                        /// Installs the given callback, assigning it to this `Callback`'s
+                        /// slot. Any callbacks previously stored in that slot will be
+                        /// freed.
+                        pub fn $attr_name<F>(self, callback: F)
+                            where F: FnMut($($arg),*) $(-> $ret)? + 'static
+                        {
+                            unsafe extern "C" fn trampoline(context: *mut c_void, $($arg_name: $arg),*) $(-> $ret)? {
+                                let closure: &mut &mut (
+                                    dyn FnMut($($arg),*) $(-> $ret)?
+                                ) = unsafe { std::mem::transmute(
+                                    context as *mut *mut c_void
+                                )};
+                                closure($($arg_name),*)
+                            }
+
+                            unsafe fn drop_fn(this: *mut *mut c_void) {
+                                let _: Box<Box<dyn FnMut($($arg),*) $(-> $ret)?>> = unsafe {
+                                    std::mem::transmute(this)
+                                };
+                            }
+
+                            let closure_ref: *mut *mut c_void = unsafe {
+                                let x: Box<Box<
+                                    dyn FnMut($($arg),*) $(-> $ret)?
+                                >> = Box::new(
+                                    Box::new(callback) as Box<_>
+                                );
+
+                                std::mem::transmute(x)
+                            };
+
+                            install_closure_callback(self.0, ClosureCallback {
+                                closure_ref,
+                                drop_fn,
+                                trampoline: sys::panda_cb_with_context {
+                                    $attr_name: Some(unsafe {
+                                        std::mem::transmute(trampoline as *const c_void)
+                                    })
+                                },
+                                cb_kind: sys::$const_name,
+                            });
+                        }
+                    )*
+                }
+            ).into()
+        }
     }
 }
 
