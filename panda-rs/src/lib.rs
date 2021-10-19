@@ -25,6 +25,18 @@
 //! instead of linking as a PANDA plugin. This creates a executable that requires libpanda to run.
 //! To compile in libpanda mode, make sure the `PANDA_PATH` environment variable is set to your
 //! PANDA `build` folder.
+//!
+//! ## Helpful Links
+//!
+//! | Important |    Popular Callbacks    | Popular Plugins |
+//! |:---------:|:-----------------------:|:---------------:|
+//! | [`init`]  | [`before_block_exec`]   | [`osi`](plugins::osi) |
+//! | [`Panda`] | [`virt_mem_after_read`] | [`proc_start_linux`](plugins::proc_start_linux) |
+//! | [`hook`]  | [`virt_mem_after_write`]| [`hooks2`](plugins::hooks2) |
+//! | [`on_sys`]| [`asid_changed`]        | [`guest_plugin_manager`](plugins::guest_plugin_manager) |
+//! | [`uninit`]| [`before_block_exec_invalidate_opt`] ||
+//! | [`regs`]  | [`insn_translate`]      ||
+//! | [`PandaArgs`] | [`insn_exec`] ||
 
 /// Raw bindings to the PANDA API
 #[doc(inline)]

@@ -20,6 +20,12 @@ pub const MAX_PATH_LEN: u32 = 256;
 pub const MAX_NUM_ARGS: u32 = 10;
 pub const MAX_NUM_ENV: u32 = 20;
 
+/// A struct representing the contents of the Auxilary Vector, the
+/// information provided by the kernel when starting up a new process.
+///
+/// Resources on the auxilary vector:
+/// * <https://lwn.net/Articles/519085/>
+/// * <http://articles.manugarg.com/aboutelfauxiliaryvectors.html>
 #[repr(C)]
 #[derive(Clone)]
 pub struct AuxvValues {

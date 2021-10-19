@@ -1,3 +1,36 @@
+//! Bindings for the PANDA 'hooks' plugin, enabling the ability
+//! to add callbacks for when a certain instruction is hit.
+//!
+//! Recommended usage is via the [`#[panda::hook]`](crate::hook) macro.
+//!
+//! ## Example
+//!
+//! ```
+//! use panda::plugins::proc_start_linux::AuxvValues;
+//! use panda::plugins::hooks::Hook;
+//! use panda::prelude::*;
+//!
+//! #[panda::hook]
+//! fn entry_hook(_: &mut CPUState, _: &mut TranslationBlock, _: u8, hook: &mut Hook) {
+//!     println!("\n\nHit entry hook!\n");
+//!
+//!     // only run hook once
+//!     hook.enabled = false;
+//! }
+//!
+//! #[panda::on_rec_auxv]
+//! fn on_proc_start(_: &mut CPUState, _: &mut TranslationBlock, auxv: &AuxvValues) {
+//!     // when a process starts, hook the entrypoint
+//!     entry_hook::hook()
+//!         .after_block_exec()
+//!         .at_addr(auxv.entry)
+//! }
+//!
+//! Panda::new()
+//!     .generic("x86_64")
+//!     .replay("test")
+//!     .run();
+//! ```
 use crate::plugin_import;
 use crate::prelude::*;
 use crate::sys::{self, panda_cb_type};
@@ -75,14 +108,29 @@ pub enum KernelMode {
     UserOnly = 2,
 }
 
+/// A hook provided by the hooks plugin, describing the address,
+/// asid/process, symbol, etc to hook.
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct Hook {
+    /// The address to hook
     pub addr: target_ulong,
+
+    /// The address space identifier to hook, with zero representing any asid.
+    /// Defaults to zero.
     pub asid: target_ulong,
+
+    /// The callback to trigger when the hook is hit
     pub cb: HooksPandaCallback,
+
+    /// Whether to hook in kernel mode only, user mode only, or neither.
+    /// Defaults to neither.
     pub km: KernelMode,
+
+    /// Whether the hook is enabled. Defaults to `true`
     pub enabled: bool,
+
+    /// The symbol of the function to hook
     pub sym: Symbol,
 }
 

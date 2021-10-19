@@ -75,6 +75,67 @@ pub fn uninit(_: TokenStream, function: TokenStream) -> TokenStream {
     .into()
 }
 
+/// An attribute to declare a function for hooking using the PANDA 'hooks' plugin,
+/// enabling the ability to add callbacks for when a specifc instruction is hit,
+/// with control over the address space, kernel mode, and callback type to use.
+///
+/// ## Example
+///
+/// ```
+/// use panda::plugins::proc_start_linux::AuxvValues;
+/// use panda::plugins::hooks::Hook;
+/// use panda::prelude::*;
+///
+/// #[panda::hook]
+/// fn entry_hook(_: &mut CPUState, _: &mut TranslationBlock, _: u8, hook: &mut Hook) {
+///     println!("\n\nHit entry hook!\n");
+///
+///     // only run hook once
+///     hook.enabled = false;
+/// }
+///
+/// #[panda::on_rec_auxv]
+/// fn on_proc_start(_: &mut CPUState, _: &mut TranslationBlock, auxv: &AuxvValues) {
+///     // when a process starts, hook the entrypoint
+///     entry_hook::hook()
+///         .after_block_exec()
+///         .at_addr(auxv.entry)
+/// }
+///
+/// Panda::new()
+///     .generic("x86_64")
+///     .replay("test")
+///     .run();
+/// ```
+///
+/// ## Supported Callback Types
+///
+/// ### Standard callbacks
+///
+/// These callbacks take the form of:
+///
+/// ```
+/// #[panda::hook]
+/// fn my_callback(cpu: &mut CPUState, tb: &mut TranslationBlock, hook: &mut Hook);
+/// ```
+///
+/// |         Callback        | Info |
+/// |:------------------------|------|
+/// | `before_tcg_codegen`    | Callback at the start of the tcg IR being generated |
+/// | `after_block_translate` | Callback after the block the hooked instruction is in gets translated |
+/// | `before_block_exec`     | Callback before the block the given instruction is in gets run |
+/// | `start_block_exec`      | Callback at the first instruction in the block the instruction is in |
+/// | `end_block_exec`        | Callback after the last instruction in the block the hooked instruction is in |
+///
+/// ### Other Callbacks
+///
+/// These callbacks each have their own unique required function signature.
+///
+/// |          Callback        | Required Signature | Info |
+/// |:-------------------------|--------------------|------|
+/// | `before_block_translate` | `fn(cpu: &mut CPUState, pc: target_ptr_t, hook: &mut Hook)` | Callback that runs before the block the hooked instruction is translated to tcg |
+/// | `after_block_exec`       | `fn(cpu: &mut CPUState, tb: &mut TranslationBlock, exitCode: u8, hook: &mut Hook)` | Callback that runs after the given block is executed |
+/// | `before_block_exec_invalidate_opt` | `fn(env: &mut CPUState, tb: &mut TranslationBlock, hook: &mut Hook) -> bool` | Callback on translate to provide the option to invalidate the block the hooked instruction is generated in |
 #[proc_macro_attribute]
 pub fn hook(_: TokenStream, func: TokenStream) -> TokenStream {
     let mut function = syn::parse_macro_input!(func as syn::ItemFn);
@@ -561,7 +622,14 @@ macro_rules! define_syscalls_callbacks {
     };
 }
 
-/// (Callback) Runs when proc_start_linux recieves the `AuxvValues` for a given process.
+/// (Callback) Runs when proc_start_linux recieves the [`AuxvValues`] for a given process.
+///
+/// Can be treated as a "on program start" callback, but one which provides a lot of
+/// info about the contents of the initial program state and how it is being loaded.
+/// The state at time of callback is before the C runtime is initialized, and before
+/// the entrypoint is jumped to.
+///
+/// See [`AuxvValues`] to get a better understanding of the values provided.
 ///
 /// ### Args
 ///
@@ -575,8 +643,8 @@ macro_rules! define_syscalls_callbacks {
 /// use panda::plugins::proc_start_linux::AuxvValues;
 ///
 /// #[panda::on_rec_auxv]
-/// fn callback(cpu: &mut CPUState, tb: &mut TranslationBlock, auxv: AuxvValues) {
-///     // do stuff
+/// fn on_proc_start(cpu: &mut CPUState, tb: &mut TranslationBlock, auxv: AuxvValues) {
+///     // do stuff when a process starts
 /// }
 /// ```
 ///
