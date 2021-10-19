@@ -14,6 +14,32 @@ use crate::{sys, PluginHandle};
 
 /// A reference to a given callback slot which can be used to install,
 /// enable, disable, or otherwise reference, a closure-based callback.
+///
+/// Since this is a reference to a callback slot and does not include storage
+/// for the callback itself, it can be trivially copied, as well as included in
+/// the callback itself (for the purposes of enabling/disabling).
+///
+/// ## Example
+///
+/// ```
+/// use panda::prelude::*;
+/// use panda::Callback;
+///
+/// let mut count = 0;
+/// let bb_callback = Callback::new();
+/// bb_callback.before_block_exec(move |_, _| {
+///     count += 1;
+///     println!("Basic block #{}", count);
+///
+///     if count > 5 {
+///         bb_callback.disable();
+///     }
+/// });
+///
+/// Panda::new()
+///    .generic("x86_64")
+///    .run();
+/// ```
 #[repr(transparent)]
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Callback(u64);
