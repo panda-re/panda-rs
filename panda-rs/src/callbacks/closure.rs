@@ -21,35 +21,40 @@ pub struct Callback(u64);
 static CURRENT_CALLBACK_ID: AtomicU64 = AtomicU64::new(0);
 
 impl Callback {
+    /// Create a new callback slot which can then be used to install or modify
+    /// a given callback.
     pub fn new() -> Self {
         Self(CURRENT_CALLBACK_ID.fetch_add(1, Ordering::SeqCst))
     }
 
+    /// Enable the callback assigned to the given slot, if any.
     pub fn enable(&self) {
         let callbacks = CALLBACKS.read().unwrap();
-        let callback = callbacks.get(&self.0).unwrap();
-
-        unsafe {
-            sys::panda_enable_callback_with_context(
-                get_plugin_ref(),
-                callback.cb_kind,
-                callback.trampoline,
-                callback.closure_ref as *mut c_void,
-            );
+        if let Some(callback) = callbacks.get(&self.0) {
+            unsafe {
+                sys::panda_enable_callback_with_context(
+                    get_plugin_ref(),
+                    callback.cb_kind,
+                    callback.trampoline,
+                    callback.closure_ref as *mut c_void,
+                );
+            }
         }
     }
 
+    /// Disable the callback assigned to the given slot, if any.
     pub fn disable(&self) {
         let callbacks = CALLBACKS.read().unwrap();
-        let callback = callbacks.get(&self.0).unwrap();
 
-        unsafe {
-            sys::panda_disable_callback_with_context(
-                get_plugin_ref(),
-                callback.cb_kind,
-                callback.trampoline,
-                callback.closure_ref as *mut c_void,
-            );
+        if let Some(callback) = callbacks.get(&self.0) {
+            unsafe {
+                sys::panda_disable_callback_with_context(
+                    get_plugin_ref(),
+                    callback.cb_kind,
+                    callback.trampoline,
+                    callback.closure_ref as *mut c_void,
+                );
+            }
         }
     }
 }

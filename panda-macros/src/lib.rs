@@ -346,6 +346,10 @@ macro_rules! define_callback_attributes {
                         /// Installs the given callback, assigning it to this `Callback`'s
                         /// slot. Any callbacks previously stored in that slot will be
                         /// freed.
+                        ///
+                        $(
+                            #[doc = $doc]
+                        )*
                         pub fn $attr_name<F>(self, callback: F)
                             where F: FnMut($($arg),*) $(-> $ret)? + 'static
                         {
