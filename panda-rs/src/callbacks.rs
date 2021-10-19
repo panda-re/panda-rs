@@ -1,5 +1,8 @@
 use crate::sys::panda_cb_type;
 
+mod closure;
+pub use closure::{set_plugin_ref, Callback};
+
 /// An opaque type used to register/unregister callbacks with PANDA. Passed into init/unit
 /// callbacks
 pub struct PluginHandle;
