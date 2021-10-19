@@ -13,6 +13,68 @@ pub mod proc_start_linux;
 #[cfg(not(any(feature = "ppc", feature = "mips64")))]
 pub mod syscalls2;
 
+/// A macro for importing an external PANDA plugin to use
+///
+/// **Note:** it is recommended that, if the plugin you want to use already has
+/// panda-rs bindings, they should be used instead. Those are located in the
+/// [`plugins`](crate::plugins) module, and typically include a note about where
+/// the high-level bindings for the given plugin are located.
+///
+/// ## Example Usage
+///
+/// ### Declaring bindings for free function in an external plugin:
+///
+/// ```
+/// plugin_import!{
+///     static OSI: Osi = extern "osi" {
+///         fn get_process_handles(cpu: *mut CPUState) -> GBoxedSlice<OsiProcHandle>;
+///         fn get_current_thread(cpu: *mut CPUState) -> GBox<OsiThread>;
+///         fn get_modules(cpu: *mut CPUState) -> GBoxedSlice<OsiModule>;
+///         fn get_mappings(cpu: *mut CPUState, p: *mut OsiProc) -> GBoxedSlice<OsiModule>;
+///         fn get_processes(cpu: *mut CPUState) -> GBoxedSlice<OsiProc>;
+///         fn get_current_process(cpu: *mut CPUState) -> GBox<OsiProc>;
+///     };
+/// }
+/// ```
+///
+/// This will create a lazy initialized static variable named `OSI` in the current
+/// scope. This static will include all of the functions listed as methods, when
+/// any function is run the plugin (the name of which is specified by `extern "osi"`)
+/// will be loaded on the fly before executing the method.
+///
+/// To load a plugin without running any function, `plugin_import` also automatically
+/// creates an `ensure_init` method which initializes the plugin without any other
+/// side effects.
+///
+/// ### Plugin Callbacks
+///
+/// Plugin-to-Plugin callbacks in PANDA are typically quite verbose to make bindings for
+/// by hand, so the `plugin_import` macro provides a shorthand for defining a function
+/// prototype for the callback and it will generate all the code needed to add and remove
+/// callbacks for it.
+///
+/// ```
+/// plugin_import! {
+///     static PROC_START_LINUX: ProcStartLinux = extern "proc_start_linux" {
+///         callbacks {
+///             fn on_rec_auxv(cpu: &mut CPUState, tb: &mut TranslationBlock, auxv: &AuxvValues);
+///         }
+///     };
+/// }
+/// ```
+///
+/// the above creates another lazy static which has the following methods for working with
+/// the `on_rec_auxv` callback:
+///
+/// * `add_callback_on_rec_auxv` - add a callback by function pointer
+/// * `remove_callback_on_rec_auxv` - remove a callback by function pointer
+///
+/// One requirement of these function pointers is that they must use the C ABI. So the
+/// argument for both methods would be of the type:
+///
+/// ```
+/// extern "C" fn (&mut CPUState, &mut TranslationBlock, &AuxvValues)
+/// ```
 #[macro_export]
 macro_rules! plugin_import {
     {
