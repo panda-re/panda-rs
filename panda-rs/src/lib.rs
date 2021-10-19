@@ -6,18 +6,38 @@
 //! * Bindings to various core PANDA plugins (hooks2, osi, etc)
 //! * Safe bindings to the core PANDA API
 //! * An API for driving PANDA via libpanda
-//! * Access to raw PANDA API bindings via panda_sys
+//! * Access to raw PANDA and QEMU API bindings via panda_sys
 //!
 //! ### Feature flags:
+//!
 //! * `libpanda` - enable libpanda mode. This is used to allow for compiling as a binary that links
 //! against libpanda, for pypanda-style use.
 //!
+//! #### Architecture-specific features
+//!
+//! PANDA supports multiple architectures, but requires plugins to be compiled for each
+//! architecture. In order to target a specific guest arch, use exactly one of the following:
+//! `x86_64`, `i386`, `arm`, `aarch64`, `mips`, `mipsel`, `mips64`, `ppc`
+//!
+//! Typically PANDA plugins forward each of these features in their Cargo.toml:
+//!
+//! ```toml
+//! [features]
+//! x86_64 = ["panda/x86_64"]
+//! i386 = ["panda/i386"]
+//! # ...
+//! ```
+//!
 //! ### Callbacks
+//!
 //! `panda-rs` makes extensive use of callbacks for handling analyses on various events. To use
 //! callbacks, you simply apply the callback's attribute to any functions which should be called
 //! for the given callback. In order to use a callback in a PANDA plugin (not to be confused with
-//! an application that uses libpanda), one plugin must be marked `#[panda::init]`, otherwise the
-//! plugin will not work in PANDA.
+//! an application that uses libpanda), one function must be marked [`#[panda::init]`](init),
+//! otherwise the plugin will not work in PANDA.
+//!
+//! Callbacks come in two forms: free form functions (which use the attribute macros)
+//! mentioned above) and closure callbacks, which use the [`Callback`] API.
 //!
 //! ### libpanda Mode
 //!
