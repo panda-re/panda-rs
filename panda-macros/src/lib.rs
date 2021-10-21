@@ -457,7 +457,7 @@ macro_rules! define_callback_attributes {
     }
 }
 
-#[cfg(not(any(feature = "ppc", feature = "mips64")))]
+#[cfg(not(feature = "ppc"))]
 macro_rules! define_syscalls_callbacks {
     ($(
         $($doc:literal)*
@@ -756,6 +756,5 @@ include!("syscalls/mips.rs");
 #[cfg(feature = "mipsel")]
 include!("syscalls/mipsel.rs");
 
-// PANDA doesn't have MIPS64 syscalls support
-//#[cfg(feature = "mips64")]
-//include!("syscalls/mips64.rs");
+#[cfg(feature = "mips64")]
+include!("syscalls/mips64.rs");

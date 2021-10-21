@@ -120,7 +120,7 @@ pub mod prelude {
     pub use panda_macros::PandaArgs;
 }
 
-#[cfg(not(any(feature = "ppc", feature = "mips64")))]
+#[cfg(not(feature = "ppc"))]
 pub use panda_macros::{on_all_sys_enter, on_all_sys_return};
 
 // callbacks

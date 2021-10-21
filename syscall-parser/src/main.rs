@@ -95,7 +95,7 @@ peg::parser! {
             = ident:type_ident() _? "*" { Type::Ptr(Box::new(ident)) }
 
         rule type_ident() -> Type
-            = ident:ident() { Type::Ident(ident.into()) }
+            = ident:ident() { Type::Ident(ident) }
 
         rule ident() -> String
             = ident:$(
@@ -115,8 +115,7 @@ const ARCHES: &[(&str, &str)] = &[
     //("ppc", "ppc"),
     ("mips", "mips"),
     ("mipsel", "mips"),
-    // no mips64 support
-    //("mips64", "mips64"),
+    ("mips64", "mips"),
 ];
 
 fn main() {
@@ -165,8 +164,8 @@ fn main() {
                     f,
                     "    ({name}, add_callback_{name}, {sys_name}, {before_or_after:?}, ({args})),",
                     name = name,
-                    sys_name = syscall_name(&name),
-                    before_or_after = before_or_after(&name),
+                    sys_name = syscall_name(name),
+                    before_or_after = before_or_after(name),
                     args = args,
                 )
                 .unwrap();

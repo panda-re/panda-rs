@@ -10,7 +10,7 @@ pub mod hooks2;
 pub mod osi;
 pub mod proc_start_linux;
 
-#[cfg(not(any(feature = "ppc", feature = "mips64")))]
+#[cfg(not(feature = "ppc"))]
 pub mod syscalls2;
 
 /// A macro for importing an external PANDA plugin to use
