@@ -40,6 +40,20 @@ use crate::{sys, PluginHandle};
 ///    .generic("x86_64")
 ///    .run();
 /// ```
+///
+/// ## Note
+///
+/// Callback closures must have a static lifetime in order to live past the end of the
+/// function. This means that the only references a callback can include are references
+/// to static variables or leaked objects on the heap (See `Box::leak` for more info).
+///
+/// If you'd like to reference shared data without leaking, this can be accomplished via
+/// reference counting. See [`Arc`] for more info. If you want to capture data owned
+/// by the current function without sharing it, you can mark your closure as `move` in
+/// order to move all the variables you capture into your closure. (Such as in the above
+/// example, where `count` is moved into the closure for modification)
+///
+/// [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
 #[repr(transparent)]
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Callback(u64);

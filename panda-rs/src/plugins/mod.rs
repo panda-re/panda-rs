@@ -75,6 +75,13 @@ pub mod syscalls2;
 /// ```
 /// extern "C" fn (&mut CPUState, &mut TranslationBlock, &AuxvValues)
 /// ```
+///
+/// This macro will also generate a trait allowing any plugin-to-plugin callbacks to be
+/// used via the [`PppCallback`] API. So the above would generate
+/// a trait called `ProcStartLinuxCallbacks` which would have a method called `on_rec_auxv`,
+/// which is automatically implemented for [`PppCallback`].
+///
+/// [`PppCallback`]: crate::PppCallback
 #[macro_export]
 macro_rules! plugin_import {
     {
@@ -249,11 +256,53 @@ macro_rules! plugin_import {
             pub static ref $static: $ty = $ty::new();
         }
 
-
         $(
             $crate::paste::paste!{
+                /// A trait for expressing the plugin-to-plugin callbacks provided by
+                /// the given plugin. See `panda::PppCallback` for more information,
+                /// as this is intended to be used as an extension trait for it.
                 pub trait [<$ty Callbacks>] {
                     $(
+                        /// Installs the given closure over the callback slot provided
+                        /// by the `panda::PppCallback` this is called on, setting it to
+                        /// be run whenever the `
+                        #[doc = stringify!($cb_fn_name)]
+                        ///` callback is hit.
+                        ///
+                        /// ## Arguments
+                        ///
+                        $(
+                            #[doc = "* `"]
+                            #[doc = stringify!($cb_arg_name)]
+                            #[doc = "` - `"]
+                            #[doc = stringify!($cb_arg_ty)]
+                            #[doc = "`"]
+                            #[doc = ""]
+                        )*
+                        /// ## Example
+                        ///
+                        /// ```
+                        /// use panda::PppCallback;
+                        /// use panda::prelude::*;
+                        #[doc = concat!(
+                            "use /*...*/::",
+                            stringify!($ty),
+                            "Callbacks;"
+                        )]
+                        ///
+                        #[doc = concat!(
+                            "PppCallbacks::new()\n    .",
+                            stringify!($cb_fn_name),
+                            "(|",
+                            $(
+                                stringify!($cb_arg_name),
+                                ": ",
+                                stringify!($cb_arg_ty),
+                                ", ",
+                            )*
+                            "|{\n        // callback code\n    });"
+                        )]
+                        /// ```
                         fn $cb_fn_name<CallbackFn>(self, callback: CallbackFn)
                             where CallbackFn: FnMut($($cb_arg_ty),*) $(-> $cb_fn_ret)? + 'static;
                     )*
@@ -330,6 +379,8 @@ macro_rules! plugin_import {
     }
 }
 
+/// A wrapper for a dynamic library loaded as a PANDA plugin. Is used internally by
+/// the [`plugin_import`] macro to manage loading/unloading PANDA plugins lazily.
 pub struct Plugin {
     lib: libloading::Library,
 }
