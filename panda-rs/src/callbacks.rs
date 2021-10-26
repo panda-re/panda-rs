@@ -3,6 +3,11 @@ use crate::sys::panda_cb_type;
 mod closure;
 pub use closure::{set_plugin_ref, Callback};
 
+mod ppp_closures;
+pub use ppp_closures::{
+    InternalPppClosureCallback, PppCallback, __internal_install_ppp_closure_callback,
+};
+
 /// An opaque type used to register/unregister callbacks with PANDA. Passed into init/unit
 /// callbacks
 pub struct PluginHandle;

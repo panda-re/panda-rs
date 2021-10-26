@@ -172,9 +172,7 @@ macro_rules! plugin_import {
 
                         add_cb(callback);
                     }
-                }
 
-                $crate::paste::paste!{
                     pub fn [<remove_callback_ $cb_fn_name>](
                         &self,
                         callback: extern "C" fn(
@@ -194,6 +192,52 @@ macro_rules! plugin_import {
 
                         remove_cb(callback);
                     }
+
+                    #[doc(hidden)]
+                    pub fn [<add_callback_ $cb_fn_name _with_context>](
+                        &self,
+                        callback: unsafe extern "C" fn(
+                            *mut std::ffi::c_void, $($cb_arg_name: $cb_arg_ty),*
+                        ),
+                        context: *mut std::ffi::c_void,
+                    )
+                    {
+                        let add_cb = self.plugin.get::<
+                            extern "C" fn(
+                                unsafe extern "C" fn(
+                                    *mut std::ffi::c_void, $($cb_arg_ty),*
+                                ) $(-> $cb_fn_ret)?,
+                                *mut std::ffi::c_void,
+                            )
+                        >(
+                            concat!("ppp_add_cb_", stringify!($cb_fn_name), "_with_context")
+                        );
+
+                        add_cb(callback, context);
+                    }
+
+                    #[doc(hidden)]
+                    pub fn [<remove_callback_ $cb_fn_name _with_context>](
+                        &self,
+                        callback: unsafe extern "C" fn(
+                            *mut std::ffi::c_void, $($cb_arg_name: $cb_arg_ty),*
+                        ),
+                        context: *mut std::ffi::c_void,
+                    )
+                    {
+                        let remove_cb = self.plugin.get::<
+                            extern "C" fn(
+                                unsafe extern "C" fn(
+                                    *mut std::ffi::c_void, $($cb_arg_ty),*
+                                ) $(-> $cb_fn_ret)?,
+                                *mut std::ffi::c_void,
+                            )
+                        >(
+                            concat!("ppp_remove_cb_", stringify!($cb_fn_name), "_with_context")
+                        );
+
+                        remove_cb(callback, context);
+                    }
                 }
             )*)?
         }
@@ -204,6 +248,85 @@ macro_rules! plugin_import {
             )*
             pub static ref $static: $ty = $ty::new();
         }
+
+
+        $(
+            $crate::paste::paste!{
+                pub trait [<$ty Callbacks>] {
+                    $(
+                        fn $cb_fn_name<CallbackFn>(self, callback: CallbackFn)
+                            where CallbackFn: FnMut($($cb_arg_ty),*) $(-> $cb_fn_ret)? + 'static;
+                    )*
+                }
+
+                impl [<$ty Callbacks>] for $crate::PppCallback {
+                    $(
+                        fn $cb_fn_name<CallbackFn>(self, callback: CallbackFn)
+                            where CallbackFn: FnMut($($cb_arg_ty),*) $(-> $cb_fn_ret)? + 'static
+                        {
+                            use std::ffi::c_void;
+                            let closure_ref: *mut c_void = unsafe {
+                                let x: Box<Box<
+                                    dyn FnMut($($cb_arg_ty),*) $(-> $cb_fn_ret)?
+                                >> = Box::new(
+                                    Box::new(callback) as Box<_>
+                                );
+                                core::mem::transmute(x)
+                            };
+
+                            unsafe extern "C" fn trampoline(
+                                context: *mut c_void, $($cb_arg_name : $cb_arg_ty),*
+                            ) $(-> $cb_fn_ret)?
+                            {
+                                let closure: &mut &mut (
+                                    dyn FnMut($($cb_arg_ty),*) $(-> $cb_fn_ret)?
+                                ) = core::mem::transmute(
+                                    context
+                                );
+
+                                closure($($cb_arg_name),*)
+                            }
+
+                            unsafe fn drop_fn(this: *mut c_void) {
+                                let _: Box<Box<
+                                    dyn FnMut($($cb_arg_ty),*) $(-> $cb_fn_ret)?
+                                >> = core::mem::transmute(this);
+                            }
+
+                            unsafe fn enable(this: *mut c_void) {
+                                $static.[<add_callback_ $cb_fn_name _with_context>](
+                                    trampoline,
+                                    this
+                                );
+                            }
+
+                            unsafe fn disable(this: *mut c_void) {
+                                $static.[<remove_callback_ $cb_fn_name _with_context>](
+                                    trampoline,
+                                    this
+                                );
+                            }
+
+                            let callback = $crate::InternalPppClosureCallback {
+                                closure_ref,
+                                drop_fn,
+                                enable,
+                                disable,
+                                is_enabled: false,
+                            };
+                            $crate::Panda::run_after_init(move || {
+                                unsafe {
+                                    $crate::__internal_install_ppp_closure_callback(
+                                        self.0,
+                                        callback
+                                    );
+                                }
+                            });
+                        }
+                    )*
+                }
+            }
+        )?
     }
 }
 

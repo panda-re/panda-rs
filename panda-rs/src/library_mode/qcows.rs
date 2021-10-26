@@ -1,7 +1,8 @@
+use super::Arch;
 use std::path::PathBuf;
 use std::process::Command;
-use super::Arch;
 
+#[derive(Debug)]
 pub struct Image<'a> {
     pub arch: Arch,
     pub os: &'a str,
@@ -10,7 +11,7 @@ pub struct Image<'a> {
     pub snapshot: &'a str,
     pub default_mem: &'a str,
     pub url: &'a str,
-    pub extra_args: &'a[&'a str],
+    pub extra_args: &'a [&'a str],
 }
 
 pub fn get_supported_image(name: &str) -> Image<'static> {
@@ -136,7 +137,10 @@ pub fn get_generic_path(name: &str) -> PathBuf {
     let path = panda_image_dir().join(filename);
 
     if !path.exists() {
-        println!("QCOW {} doesn't exist. Downloading from https://panda-re.mit.edu. Thanks MIT!", name);
+        println!(
+            "QCOW {} doesn't exist. Downloading from https://panda-re.mit.edu. Thanks MIT!",
+            name
+        );
         Command::new("wget")
             .args(&["--quiet", &image.url, "-O"])
             .arg(&path)
