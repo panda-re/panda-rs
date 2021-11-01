@@ -1,7 +1,9 @@
 use crate::sys::panda_cb_type;
 
 mod closure;
+mod export;
 pub use closure::{set_plugin_ref, Callback};
+pub use export::CallbackReturn;
 
 mod ppp_closures;
 pub use ppp_closures::{
