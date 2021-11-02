@@ -1,3 +1,5 @@
+//! Bindings for various built-in PANDA plugins
+
 use crate::sys::panda_require;
 use libloading::Symbol;
 use std::ffi::CString;

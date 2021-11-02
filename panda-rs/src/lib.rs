@@ -52,7 +52,7 @@
 //! |:---------:|:-----------------------:|:---------------:|
 //! | [`init`]  | [`before_block_exec`]   | [`osi`](plugins::osi) |
 //! | [`Panda`] | [`virt_mem_after_read`] | [`proc_start_linux`](plugins::proc_start_linux) |
-//! | [`hook`]  | [`virt_mem_after_write`]| [`hooks2`](plugins::hooks2) |
+//! | [`mod@hook`]  | [`virt_mem_after_write`]| [`hooks2`](plugins::hooks2) |
 //! | [`on_sys`]| [`asid_changed`]        | [`guest_plugin_manager`](plugins::guest_plugin_manager) |
 //! | [`uninit`]| [`before_block_exec_invalidate_opt`] ||
 //! | [`regs`]  | [`insn_translate`]      ||
@@ -66,6 +66,9 @@ pub use panda_sys as sys;
 /// PANDA callback macros
 #[doc(inline)]
 pub use panda_macros as cbs;
+
+#[doc(inline)]
+pub use plugins::hooks::hook;
 
 #[doc(hidden)]
 pub use {lazy_static, paste};
