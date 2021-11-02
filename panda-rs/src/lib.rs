@@ -110,6 +110,14 @@ pub mod taint;
 
 pub use enums::arch::*;
 
+/// A set of types PANDA frequently requires but have a low likelihood of clashing with
+/// other types you import, for use as a wildcard import.
+///
+/// ## Example
+///
+/// ```
+/// use panda::prelude::*;
+/// ```
 pub mod prelude {
     pub use crate::panda_arg::PandaArgs;
     pub use crate::sys::target_long;
