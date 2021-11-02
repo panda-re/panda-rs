@@ -15,14 +15,20 @@ fn entry_hook(_cpu: &mut CPUState, _tb: &mut TranslationBlock, _exit_code: u8, h
 
 #[panda::on_rec_auxv]
 fn on_proc_start(_cpu: &mut CPUState, _tb: &mut TranslationBlock, auxv: &AuxvValues) {
-    entry_hook::hook()
-        .after_block_exec()
-        .at_addr(auxv.entry)
+    let address = auxv.entry;
+    panda::hook::before_block_exec(move |_, _, hook| {
+        println!(
+            "Before block exec of closure entry hook. (at address: {:#x?})",
+            address
+        );
+
+        hook.enabled = false;
+    })
+    .at_addr(auxv.entry);
+
+    entry_hook::hook().after_block_exec().at_addr(auxv.entry)
 }
 
 fn main() {
-    Panda::new()
-        .generic("x86_64")
-        .replay("test")
-        .run();
+    Panda::new().generic("x86_64").replay("test").run();
 }

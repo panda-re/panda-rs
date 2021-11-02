@@ -1,7 +1,8 @@
 //! Bindings for the PANDA 'hooks' plugin, enabling the ability
 //! to add callbacks for when a certain instruction is hit.
 //!
-//! Recommended usage is via the [`#[panda::hook]`](crate::hook) macro.
+//! Recommended usage is via either the [`#[panda::hook]`](macro@crate::hook) macro or
+//! the [`hook`](mod@crate::hook) module.
 //!
 //! ## Example
 //!
@@ -31,6 +32,8 @@
 //!     .replay("test")
 //!     .run();
 //! ```
+use std::ffi::c_void;
+
 use crate::plugin_import;
 use crate::prelude::*;
 use crate::sys::{self, panda_cb_type};
@@ -100,6 +103,85 @@ impl HooksPandaCallback {
     }
 }
 
+/// A set of functions for building hooks out of closures.
+///
+/// ## Example
+///
+/// ```
+/// use panda::{hook, prelude::*};
+///
+/// hook::before_block_exec(|_, _, hook| {
+///     println!("hook hit!");
+///     hook.enabled = false;
+/// })
+/// .at_addr(0x5555500ca);
+/// ```
+///
+/// For free functions, it may be easier to use [`#[panda::hook]`](macro@crate::hook)
+pub mod hook {
+    use super::*;
+
+    macro_rules! define_hook_builders {
+        ($(
+            fn $name:ident ( $($arg:ident : $arg_ty:ty ),* ) $(-> $ret_ty:ty)?;
+        )*) => {
+            $(
+                pub fn $name<CallbackFn>(
+                    callback: CallbackFn
+                ) -> HookBuilder<extern "C" fn(
+                    $( $arg : $arg_ty, )*
+                    hook: &mut Hook,
+                ) $( -> $ret_ty )?>
+                    where CallbackFn: FnMut($($arg_ty,)* &mut Hook) $( -> $ret_ty )? + 'static,
+                {
+                    extern "C" fn trampoline(
+                        $( $arg : $arg_ty, )*
+                        hook: &mut Hook,
+                    ) $( -> $ret_ty )? {
+                        let callback: &mut &mut dyn FnMut(
+                            $($arg_ty,)*
+                            &mut Hook,
+                        ) $( -> $ret_ty )? = unsafe {
+                            std::mem::transmute(hook.context)
+                        };
+
+                        callback($($arg, )* hook)
+                    }
+
+                    let cb: &mut &mut dyn FnMut(
+                        $($arg_ty,)* &mut Hook
+                    ) $( -> $ret_ty )? = Box::leak(Box::new(
+                        Box::leak(Box::new(callback) as _)
+                    ));
+
+                    $crate::paste::paste! {
+                        HookBuilder {
+                            hook: trampoline,
+                            callback: HooksPandaCallback::[< from_ $name  >](trampoline),
+                            only_kernel: None,
+                            enabled: true,
+                            asid: None,
+                            context: cb as *mut _ as *mut _,
+                        }
+                    }
+                }
+            )*
+        };
+    }
+
+    define_hook_builders! {
+        fn before_block_exec(env: &mut CPUState, tb: &mut TranslationBlock);
+        fn before_tcg_codegen(env: &mut CPUState, tb: &mut TranslationBlock);
+        fn after_block_translate(env: &mut CPUState, tb: &mut TranslationBlock);
+        fn start_block_exec(env: &mut CPUState, tb: &mut TranslationBlock);
+        fn end_block_exec(env: &mut CPUState, tb: &mut TranslationBlock);
+
+        fn after_block_exec(env: &mut CPUState, tb: &mut TranslationBlock, exit_code: u8);
+        fn before_block_translate(env: &mut CPUState, pc: target_ptr_t);
+        fn before_block_exec_invalidate_opt(env: &mut CPUState, tb: &mut TranslationBlock) -> bool;
+    }
+}
+
 #[repr(u32)]
 #[derive(Copy, Clone, Debug)]
 pub enum KernelMode {
@@ -132,6 +214,9 @@ pub struct Hook {
 
     /// The symbol of the function to hook
     pub sym: Symbol,
+
+    /// User-provided context variable
+    pub context: *mut c_void,
 }
 
 #[repr(C)]
@@ -160,6 +245,7 @@ impl IntoHookBuilder for NormalHookType {
             only_kernel: None,
             enabled: true,
             asid: None,
+            context: std::ptr::null_mut(),
         }
     }
 }
@@ -188,12 +274,14 @@ impl IntoHookBuilder for InvalidateOpHook {
     }
 }
 
+/// A builder type for helping construct and install a [`Hook`].
 pub struct HookBuilder<T> {
     hook: T,
     callback: HooksPandaCallback,
     only_kernel: Option<bool>,
     enabled: bool,
     asid: Option<target_ulong>,
+    context: *mut c_void,
 }
 
 impl<T> HookBuilder<T> {
@@ -229,6 +317,7 @@ impl<T> HookBuilder<T> {
             },
             cb: self.callback,
             sym: unsafe { std::mem::zeroed() },
+            context: self.context,
         });
     }
 }
@@ -270,6 +359,7 @@ impl HookBuilderCallbackTypeNeeded<BeforeTranslateHook> {
             only_kernel: None,
             enabled: true,
             asid: None,
+            context: std::ptr::null_mut(),
         }
     }
 }
@@ -282,6 +372,7 @@ impl HookBuilderCallbackTypeNeeded<AfterBlockHook> {
             only_kernel: None,
             enabled: true,
             asid: None,
+            context: std::ptr::null_mut(),
         }
     }
 }
@@ -294,6 +385,7 @@ impl HookBuilderCallbackTypeNeeded<InvalidateOpHook> {
             only_kernel: None,
             enabled: true,
             asid: None,
+            context: std::ptr::null_mut(),
         }
     }
 }
