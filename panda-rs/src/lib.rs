@@ -108,6 +108,9 @@ pub mod enums;
 pub mod plugins;
 pub mod taint;
 
+#[cfg(feature = "syscall-injection")]
+pub mod syscall_injection;
+
 pub use enums::arch::*;
 
 /// A set of types PANDA frequently requires but have a low likelihood of clashing with
