@@ -40,10 +40,17 @@ strum = "0.20"
 strum_macros = "0.20"
 thiserror = "1"
 once_cell = "1.8.0"
-#llvm-ir = { version = "0.7.4", features = ["llvm-10"] }
+
+# syscall-injection
+async-trait = { version = "0.1", optional = true }
+parking_lot = { version = "0.11", optional = true }
 
 [features]
+default = ["x86_64", "syscall-injection"]
 libpanda = ["panda-re-sys/libpanda"]
+syscall-injection = ["async-trait", "parking_lot"]
+
+# Architectures
 x86_64 = ["panda-re-sys/x86_64", "panda-re-macros/x86_64"]
 i386 = ["panda-re-sys/i386", "panda-re-macros/i386"]
 arm = ["panda-re-sys/arm", "panda-re-macros/arm"]
@@ -53,4 +60,3 @@ mips = ["panda-re-sys/mips", "panda-re-macros/mips"]
 mipsel = ["panda-re-sys/mipsel", "panda-re-macros/mipsel"]
 mips64 = ["panda-re-sys/mips64", "panda-re-macros/mips64"]
 
-default = ["x86_64"]
