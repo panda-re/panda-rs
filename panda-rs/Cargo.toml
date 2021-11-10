@@ -8,6 +8,10 @@ license = "GPL-2.0"
 documentation = "https://docs.rs/panda-re"
 homepage = "https://panda-re.mit.edu"
 
+[package.metadata.docs.rs]
+cargo-args = ["-Zunstable-options", "-Zrustdoc-scrape-examples=examples"]
+rustdoc-args = ["--cfg", "doc_cfg"]
+
 [lib]
 name = "panda"
 
