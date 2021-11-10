@@ -4,6 +4,16 @@ use crate::{cpu_arch_state, CPUArchPtr};
 use strum::IntoEnumIterator;
 use strum_macros::{EnumIter, EnumString, ToString};
 
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[repr(transparent)]
+pub struct SyscallPc(target_ulong);
+
+impl SyscallPc {
+    pub fn pc(self) -> target_ulong {
+        self.0
+    }
+}
+
 // Arch-specific mappings ----------------------------------------------------------------------------------------------
 
 // TODO: handle AX/AH/AL, etc via shifts? Tricky b/c enum val used to index QEMU array

@@ -11,12 +11,13 @@ use std::{
 
 use crate::{regs, sys};
 
-use super::{IntoSyscallArgs, SyscallArgs, SYSCALL_ARGS, SYSCALL_NUM_REG, SYSCALL_RET};
+use super::syscall_regs::{SYSCALL_ARGS, SYSCALL_NUM_REG, SYSCALL_RET};
+use super::{IntoSyscallArgs, SyscallArgs};
 use once_cell::sync::OnceCell;
 use panda_sys::{get_cpu, target_ulong, CPUState};
 use parking_lot::Mutex;
 
-pub struct SyscallFuture {
+pub(crate) struct SyscallFuture {
     ret_val: Arc<OnceCell<target_ulong>>,
 }
 
@@ -27,6 +28,8 @@ fn set_syscall_args(cpu: &mut CPUState, args: SyscallArgs) {
     }
 }
 
+/// Perform a system call in the guest. Should only be run within an injector being
+/// run by [`run_injector`](crate::syscall_injection::run_injector)
 pub async fn syscall(num: target_ulong, args: impl IntoSyscallArgs) -> target_ulong {
     let cpu = unsafe { &mut *get_cpu() };
 

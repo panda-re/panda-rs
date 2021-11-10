@@ -123,6 +123,7 @@ pub use enums::arch::*;
 /// ```
 pub mod prelude {
     pub use crate::panda_arg::PandaArgs;
+    pub use crate::regs::SyscallPc;
     pub use crate::sys::target_long;
     pub use crate::sys::target_pid_t;
     pub use crate::sys::target_ptr_t;

@@ -7,6 +7,6 @@
 
 #[allow(unused_imports)]
 use crate::sys::{target_ptr_t, target_ulong, CPUState};
-use crate::{plugin_import, cbs::generate_syscalls_callbacks};
+use crate::{cbs::generate_syscalls_callbacks, plugin_import, regs::SyscallPc};
 
 generate_syscalls_callbacks!();
