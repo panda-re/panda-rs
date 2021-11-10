@@ -524,8 +524,8 @@ macro_rules! define_syscalls_callbacks {
                                 );
                             )*
 
-                            fn on_all_sys_enter(cpu: &mut CPUState, pc: target_ulong, callno: target_ulong);
-                            fn on_all_sys_return(cpu: &mut CPUState, pc: target_ulong, callno: target_ulong);
+                            fn on_all_sys_enter(cpu: &mut CPUState, pc: SyscallPc, callno: target_ulong);
+                            fn on_all_sys_return(cpu: &mut CPUState, pc: SyscallPc, callno: target_ulong);
                         }
                     };
                 }

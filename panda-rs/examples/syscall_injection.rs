@@ -1,6 +1,6 @@
 use panda::plugins::osi::OSI;
 use panda::prelude::*;
-use panda::syscall_injection::{queue_injector, syscall};
+use panda::syscall_injection::{run_injector, syscall};
 
 const GET_PID: target_ulong = 39;
 const GET_UID: target_ulong = 102;
@@ -14,7 +14,7 @@ async fn getuid() -> target_ulong {
 }
 
 #[panda::on_all_sys_enter]
-fn any_syscall(cpu: &mut CPUState, pc: target_ptr_t, syscall_num: target_ulong) {
+fn any_syscall(cpu: &mut CPUState, pc: SyscallPc, syscall_num: target_ulong) {
     if FORBIDDEN_SYSCALLS.contains(&syscall_num) || in_same_asid(cpu) {
         return;
     }
@@ -22,7 +22,7 @@ fn any_syscall(cpu: &mut CPUState, pc: target_ptr_t, syscall_num: target_ulong) 
     let current_pid = OSI.get_current_process(cpu).pid;
     println!("OSI PID: {}", current_pid);
 
-    queue_injector(pc, async {
+    run_injector(pc, async {
         println!("PID: {}", getpid().await);
         println!("UID: {}", getuid().await);
         println!("PID (again): {}", getpid().await);

@@ -368,7 +368,7 @@ macro_rules! plugin_import {
                             $crate::Panda::run_after_init(move || {
                                 unsafe {
                                     $crate::__internal_install_ppp_closure_callback(
-                                        self.0,
+                                        self,
                                         callback
                                     );
                                 }

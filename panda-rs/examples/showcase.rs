@@ -15,7 +15,7 @@ struct Args {
 }
 
 #[panda::on_sys::write_enter]
-fn sys_write_test(cpu: &mut CPUState, _pc: target_ulong, _fd: u32, buf: target_ulong, count: u32) {
+fn sys_write_test(cpu: &mut CPUState, _pc: SyscallPc, _fd: u32, buf: target_ulong, count: u32) {
     println!(
         "sys_write buf = \"{}\"",
         String::from_utf8_lossy(&cpu.mem_read(buf, count as usize))
@@ -24,7 +24,7 @@ fn sys_write_test(cpu: &mut CPUState, _pc: target_ulong, _fd: u32, buf: target_u
 
 // print out the pc and syscall number of the first syscall to run
 #[panda::on_all_sys_enter]
-fn on_sys_enter(cpu: &mut CPUState, pc: target_ulong, callno: target_ulong) {
+fn on_sys_enter(cpu: &mut CPUState, pc: SyscallPc, callno: target_ulong) {
     println!("pc: {:#x?} | syscall: {}", pc, callno);
 
     // remove the hook once the first syscall has been printed out

@@ -6,13 +6,34 @@ struct CallbackType {
     arguments: Vec<Argument>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Argument {
     name: String,
     ty: Type,
 }
 
-#[derive(Debug)]
+impl Argument {
+    fn set_pc_type(&self) -> Self {
+        let Self { name, ty } = self.clone();
+
+        if name == "pc"
+            && matches!(
+                &ty,
+                Type::Ident(ident)
+                    if matches!(ident.as_str(), "target_ulong" | "target_ptr_t")
+            )
+        {
+            Self {
+                name: "pc".into(),
+                ty: Type::Ident("SyscallPc".into()),
+            }
+        } else {
+            Self { name, ty }
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 enum Type {
     Ptr(Box<Type>),
     Ident(String),
@@ -31,7 +52,7 @@ impl Type {
                 "int16_t" => "i16",
                 "int32_t" => "i32",
                 "int64_t" => "i64",
-                ident @ ("CPUState" | "target_ulong") => ident,
+                ident @ ("CPUState" | "target_ulong" | "SyscallPc") => ident,
                 ident => panic!("type {} unrecognized", ident),
             }
             .into(),
@@ -78,11 +99,19 @@ peg::parser! {
             = "//" [^ '\n']* "\n"
 
         rule callback_type() -> CallbackType
-            = "typedef" _ "void" _ "(" _? "*" _? name:ident() _? ")" _?
-              "(" _? arguments:argument() ** ("," _?) _? ")"
+            = "PPP_CB_TYPEDEF" _? "(" _? "void" _? "," _? name:ident() _? ","
+                _? arguments:argument() ** ("," _?) _? ")"
             {
                 CallbackType { name, arguments }
             }
+
+        // XXX: leftover from typedef version
+        //rule callback_type() -> CallbackType
+        //    = "typedef" _ "void" _ "(" _? "*" _? name:ident() _? ")" _?
+        //      "(" _? arguments:argument() ** ("," _?) _? ")"
+        //    {
+        //        CallbackType { name, arguments }
+        //    }
 
         rule argument() -> Argument
             = ty:c_type() _ name:ident() { Argument { name, ty } }
@@ -157,6 +186,7 @@ fn main() {
                 let args = callback_type
                     .arguments
                     .iter()
+                    .map(Argument::set_pc_type)
                     .map(|arg| format!("{}: {}", sanitize_name(&arg.name), arg.ty.as_rust_type()))
                     .collect::<Vec<String>>()
                     .join(", ");

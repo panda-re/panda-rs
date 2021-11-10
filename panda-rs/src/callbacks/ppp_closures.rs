@@ -171,7 +171,7 @@ unsafe impl Send for InternalPppClosureCallback {}
 
 #[doc(hidden)]
 pub unsafe fn __internal_install_ppp_closure_callback(
-    id: u64,
+    PppCallback(id): PppCallback,
     mut callback: InternalPppClosureCallback,
 ) {
     (callback.enable)(callback.closure_ref);
