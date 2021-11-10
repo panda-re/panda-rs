@@ -57,6 +57,7 @@
 //! | [`uninit`]| [`before_block_exec_invalidate_opt`] ||
 //! | [`regs`]  | [`insn_translate`]      ||
 //! | [`PandaArgs`] | [`insn_exec`] ||
+#![cfg_attr(doc_cfg, feature(doc_cfg))]
 
 /// Raw bindings to the PANDA API
 #[doc(inline)]
@@ -108,6 +109,7 @@ pub mod enums;
 pub mod plugins;
 pub mod taint;
 
+#[cfg_attr(doc_cfg, doc(cfg(feature = "syscall-injection")))]
 #[cfg(feature = "syscall-injection")]
 pub mod syscall_injection;
 
