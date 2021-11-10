@@ -4,6 +4,9 @@ use crate::{cpu_arch_state, CPUArchPtr};
 use strum::IntoEnumIterator;
 use strum_macros::{EnumIter, EnumString, ToString};
 
+/// Type-safe API to allow APIs to accept only program counters coming from
+/// syscall callbacks. To convert to integer of the width of your target, use the
+/// `.pc()` method.
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(transparent)]
 pub struct SyscallPc(target_ulong);
