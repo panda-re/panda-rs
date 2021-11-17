@@ -47,7 +47,7 @@
 
 use std::{
     future::Future,
-    sync::atomic::Ordering,
+    sync::atomic::{AtomicU64, Ordering},
     task::{Context, Poll, RawWaker, RawWakerVTable, Waker},
 };
 
@@ -118,10 +118,13 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
         // after the syscall set the return value for the future then jump back to
         // the syscall instruction
         sys_return.on_all_sys_return(move |cpu, _, _| {
-            set_ret_value(cpu);
-            regs::set_pc(cpu, pc);
-            unsafe {
-                panda::sys::cpu_loop_exit_noexc(cpu);
+            // only run for the asid we're currently injecting into
+            if CURRENT_INJECTOR_ASID.load(Ordering::SeqCst) == current_asid() {
+                set_ret_value(cpu);
+                regs::set_pc(cpu, pc);
+                unsafe {
+                    panda::sys::cpu_loop_exit_noexc(cpu);
+                }
             }
         });
 
@@ -174,6 +177,8 @@ fn waiting_for_syscall() -> bool {
     WAITING_FOR_SYSCALL.load(Ordering::SeqCst)
 }
 
+static CURRENT_INJECTOR_ASID: AtomicU64 = AtomicU64::new(0);
+
 /// Returns true if all injectors have been processed
 fn poll_injectors() -> bool {
     let raw = RawWaker::new(std::ptr::null(), &VTABLE);
@@ -185,6 +190,7 @@ fn poll_injectors() -> bool {
 
     while let Some(mut current_injector_mutex_guard) = INJECTORS.current() {
         let (asid, ref mut current_injector) = &mut *current_injector_mutex_guard;
+        CURRENT_INJECTOR_ASID.store(*asid, Ordering::SeqCst);
         // only poll from correct asid
         if *asid != current_asid() {
             return false;
