@@ -119,7 +119,7 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
         // the syscall instruction
         sys_return.on_all_sys_return(move |cpu, _, _| {
             // only run for the asid we're currently injecting into
-            if CURRENT_INJECTOR_ASID.load(Ordering::SeqCst) == current_asid() {
+            if CURRENT_INJECTOR_ASID.load(Ordering::SeqCst) == current_asid() as u64 {
                 set_ret_value(cpu);
                 regs::set_pc(cpu, pc);
                 unsafe {
@@ -190,7 +190,7 @@ fn poll_injectors() -> bool {
 
     while let Some(mut current_injector_mutex_guard) = INJECTORS.current() {
         let (asid, ref mut current_injector) = &mut *current_injector_mutex_guard;
-        CURRENT_INJECTOR_ASID.store(*asid, Ordering::SeqCst);
+        CURRENT_INJECTOR_ASID.store(*asid as u64, Ordering::SeqCst);
         // only poll from correct asid
         if *asid != current_asid() {
             return false;
