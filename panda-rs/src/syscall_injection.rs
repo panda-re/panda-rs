@@ -52,7 +52,7 @@ use std::{
 };
 
 use crate::prelude::*;
-use crate::{plugins::syscalls2::Syscalls2Callbacks, regs, PppCallback};
+use crate::{plugins::syscalls2::Syscalls2Callbacks, regs, sys, PppCallback};
 
 mod conversion;
 mod pinned_queue;
@@ -101,12 +101,13 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
     let pc = pc.pc();
 
     let is_first = INJECTORS.is_empty();
-    INJECTORS.push_future(async {
+    INJECTORS.push_future(current_asid(), async {
         let backed_up_regs = SyscallRegs::backup();
 
         injector.await;
 
         backed_up_regs.restore();
+        println!("Registers restored");
     });
 
     // Only install each callback once
@@ -141,6 +142,10 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
             sys_return.disable();
         }
     }
+}
+
+fn current_asid() -> target_ulong {
+    unsafe { sys::panda_current_asid(sys::get_cpu()) }
 }
 
 /// Queue an injector to be run during the next system call.
@@ -178,12 +183,17 @@ fn poll_injectors() -> bool {
     // reset the 'waiting for system call' flag
     WAITING_FOR_SYSCALL.store(false, Ordering::SeqCst);
 
-    while let Some(mut current_injector) = INJECTORS.current() {
+    while let Some(mut current_injector_mutex_guard) = INJECTORS.current() {
+        let (asid, ref mut current_injector) = &mut *current_injector_mutex_guard;
+        // only poll from correct asid
+        if *asid != current_asid() {
+            return false;
+        }
         match current_injector.as_mut().poll(&mut ctxt) {
             // If the current injector has finished running start polling the next
             // injector.
             Poll::Ready(_) => {
-                drop(current_injector);
+                drop(current_injector_mutex_guard);
                 INJECTORS.pop();
                 continue;
             }
