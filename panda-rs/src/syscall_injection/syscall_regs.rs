@@ -67,7 +67,7 @@ syscall_regs! {
     const {SYSCALL_ARGS, SYSCALL_RET, SYSCALL_NUM_REG};
 
     #[cfg(arch = "x86_64")] {
-        args = [RDI, RSI, RDX, RCX, R8, R9];
+        args = [RDI, RSI, RDX, R10, R8, R9];
         return = RAX;
         syscall_number = RAX;
     }
