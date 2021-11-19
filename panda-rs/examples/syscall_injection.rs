@@ -32,7 +32,7 @@ fn any_syscall(cpu: &mut CPUState, pc: SyscallPc, syscall_num: target_ulong) {
 fn main() {
     Panda::new()
         .generic("x86_64")
-        .args(&["-loadvm", "root"])
+        //.args(&["-loadvm", "root"])
         .run();
 }
 
