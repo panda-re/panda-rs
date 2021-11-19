@@ -3,7 +3,7 @@ use std::{
     future::Future,
     pin::Pin,
     sync::{
-        atomic::{AtomicBool, Ordering},
+        atomic::{AtomicBool, AtomicU64, Ordering},
         Arc,
     },
     task::{Context, Poll},
@@ -28,12 +28,19 @@ fn set_syscall_args(cpu: &mut CPUState, args: SyscallArgs) {
     }
 }
 
+static LAST_INJECTED_SYSCALL: AtomicU64 = AtomicU64::new(0);
+
+pub(crate) fn last_injected_syscall() -> target_ulong {
+    LAST_INJECTED_SYSCALL.load(Ordering::SeqCst) as target_ulong
+}
+
 /// Perform a system call in the guest. Should only be run within an injector being
 /// run by [`run_injector`](crate::syscall_injection::run_injector)
 pub async fn syscall(num: target_ulong, args: impl IntoSyscallArgs) -> target_ulong {
     let cpu = unsafe { &mut *get_cpu() };
 
     // Setup the system call (set syscall num and setup argument registers)
+    LAST_INJECTED_SYSCALL.store(num as u64, Ordering::SeqCst);
     regs::set_reg(cpu, SYSCALL_NUM_REG, num);
     set_syscall_args(cpu, args.into_syscall_args().await);
 

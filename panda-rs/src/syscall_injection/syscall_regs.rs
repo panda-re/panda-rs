@@ -5,14 +5,15 @@ use crate::regs::{
 };
 use crate::sys::get_cpu;
 
-pub(crate) struct SyscallRegs {
+#[derive(Copy, Clone, Debug)]
+pub struct SyscallRegs {
     sys_num_reg: target_ulong,
     arg_regs: [target_ulong; 6],
 }
 
 impl SyscallRegs {
     /// Backup all the registers needed for performing a system call
-    pub(crate) fn backup() -> Self {
+    pub fn backup() -> Self {
         let cpu = unsafe { &mut *get_cpu() };
 
         let sys_num_reg = get_reg(cpu, SYSCALL_NUM_REG);
@@ -25,7 +26,7 @@ impl SyscallRegs {
     }
 
     /// Restore the registers needed for performing a system call from a backup
-    pub(crate) fn restore(self) {
+    pub fn restore(self) {
         let Self {
             sys_num_reg,
             arg_regs,

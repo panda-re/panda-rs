@@ -47,12 +47,20 @@
 
 use std::{
     future::Future,
-    sync::atomic::{AtomicU64, Ordering},
+    pin::Pin,
+    sync::atomic::{AtomicBool, AtomicU64, Ordering},
     task::{Context, Poll, RawWaker, RawWakerVTable, Waker},
 };
 
+use dashmap::DashMap;
+use lazy_static::lazy_static;
+use parking_lot::{const_mutex, Mutex};
+
 use crate::prelude::*;
-use crate::{plugins::syscalls2::Syscalls2Callbacks, regs, sys, PppCallback};
+use crate::{
+    plugins::{osi::OSI, syscalls2::Syscalls2Callbacks},
+    regs, sys, PppCallback,
+};
 
 mod conversion;
 mod pinned_queue;
@@ -61,11 +69,64 @@ mod syscall_regs;
 mod syscalls;
 
 pub use {conversion::*, syscall_future::*};
-use {pinned_queue::PinnedQueue, syscall_future::WAITING_FOR_SYSCALL, syscall_regs::SyscallRegs};
+use {
+    pinned_queue::PinnedQueue,
+    syscall_future::WAITING_FOR_SYSCALL,
+    syscall_regs::{SyscallRegs, SYSCALL_RET},
+};
+
+#[cfg(feature = "x86_64")]
+const FORK: target_ulong = 57;
+
+#[cfg(not(feature = "x86_64"))]
+compile_error!("Only x86_64 has fork defined");
 
 type Injector = dyn Future<Output = ()>;
 
-static INJECTORS: PinnedQueue<Injector> = PinnedQueue::new();
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+struct ThreadId {
+    pid: target_ulong,
+    tid: target_ulong,
+}
+
+impl ThreadId {
+    fn current() -> Self {
+        let cpu = unsafe { &mut *sys::get_cpu() };
+        let thread = OSI.get_current_thread(cpu);
+
+        let tid = thread.tid as target_ulong;
+        let pid = thread.pid as target_ulong;
+        Self { tid, pid }
+    }
+}
+
+lazy_static! {
+    static ref INJECTORS: DashMap<ThreadId, PinnedQueue<Injector>> = DashMap::new();
+}
+
+struct ChildInjector((SyscallRegs, Pin<Box<dyn Future<Output = ()> + 'static>>));
+
+unsafe impl Send for ChildInjector {}
+unsafe impl Sync for ChildInjector {}
+
+static CHILD_INJECTOR: Mutex<Option<ChildInjector>> = const_mutex(None);
+
+pub async fn fork(child_injector: impl Future<Output = ()> + 'static) -> target_ulong {
+    let backed_up_regs = get_backed_up_regs().expect("Fork was run outside of an injector");
+
+    println!("set child injector");
+    CHILD_INJECTOR
+        .lock()
+        .replace(ChildInjector((backed_up_regs, Box::pin(child_injector))));
+    println!("child injector set");
+
+    syscall(FORK, ()).await
+}
+
+fn get_child_injector() -> (SyscallRegs, Pin<Box<dyn Future<Output = ()> + 'static>>) {
+    println!("get child injector");
+    CHILD_INJECTOR.lock().take().unwrap().0
+}
 
 /// Run a syscall injector in the form as an async block/value to be evaluated. If
 /// another injector is already running, it will be queued to start after all previous
@@ -101,14 +162,20 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
     let pc = pc.pc();
 
     let is_first = INJECTORS.is_empty();
-    INJECTORS.push_future(current_asid(), async {
-        let backed_up_regs = SyscallRegs::backup();
+    let thread_id = ThreadId::current();
+    INJECTORS
+        .entry(thread_id)
+        .or_default()
+        .push_future(current_asid(), async {
+            let backed_up_regs = SyscallRegs::backup();
+            set_backed_up_regs(backed_up_regs.clone());
 
-        injector.await;
+            injector.await;
 
-        backed_up_regs.restore();
-        println!("Registers restored");
-    });
+            backed_up_regs.restore();
+            unset_backed_up_regs();
+            println!("Registers restored");
+        });
 
     // Only install each callback once
     if is_first {
@@ -117,9 +184,39 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
 
         // after the syscall set the return value for the future then jump back to
         // the syscall instruction
-        sys_return.on_all_sys_return(move |cpu, _, _| {
-            // only run for the asid we're currently injecting into
-            if CURRENT_INJECTOR_ASID.load(Ordering::SeqCst) == current_asid() as u64 {
+        sys_return.on_all_sys_return(move |cpu: &mut CPUState, _, sys_num_bad| {
+            dbg!(sys_num_bad);
+            let sys_num = last_injected_syscall();
+            let is_fork_child = if dbg!(sys_num) == FORK {
+                regs::get_reg(cpu, SYSCALL_RET) == 0
+            } else {
+                false
+            };
+
+            if is_fork_child {
+                println!("in fork child");
+                let (backed_up_regs, child_injector) = get_child_injector();
+
+                // set up a child-injector, which doesn't back up its registers, only
+                // sets up to restore the registers of its parent
+                INJECTORS
+                    .entry(ThreadId::current())
+                    .or_default()
+                    .push_future(current_asid(), async move {
+                        println!("Start of child injector");
+                        child_injector.await;
+
+                        backed_up_regs.restore();
+                        println!("Child registers restored");
+                    });
+            }
+
+            println!("Should loop back?");
+            // only run for the asid we're currently injecting into, unless we just forked
+            if is_fork_child
+                || (CURRENT_INJECTOR_ASID.load(Ordering::SeqCst) == current_asid() as u64)
+            {
+                SHOULD_LOOP_AGAIN.store(true, Ordering::SeqCst);
                 set_ret_value(cpu);
                 regs::set_pc(cpu, pc);
                 unsafe {
@@ -130,10 +227,21 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
 
         // poll the injectors and if they've all finished running, disable these
         // callbacks
-        sys_enter.on_all_sys_enter(move |_, _, _| {
+        sys_enter.on_all_sys_enter(move |cpu, _, sys_num| {
             if poll_injectors() {
                 sys_enter.disable();
                 sys_return.disable();
+            }
+
+            if SHOULD_LOOP_AGAIN.swap(false, Ordering::SeqCst) {
+                println!("Looping again...");
+                regs::set_pc(cpu, pc);
+                unsafe {
+                    panda::sys::cpu_loop_exit_noexc(cpu);
+                }
+                return;
+            } else {
+                println!("Not looping again, sys_num: {}", sys_num);
             }
         });
 
@@ -145,6 +253,26 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
             sys_return.disable();
         }
     }
+}
+
+static SHOULD_LOOP_AGAIN: AtomicBool = AtomicBool::new(false);
+
+lazy_static! {
+    static ref CURRENT_REGS_BACKUP: DashMap<ThreadId, SyscallRegs> = DashMap::new();
+}
+
+pub fn get_backed_up_regs() -> Option<SyscallRegs> {
+    CURRENT_REGS_BACKUP
+        .get(&ThreadId::current())
+        .map(|x| x.clone())
+}
+
+fn set_backed_up_regs(regs: SyscallRegs) {
+    CURRENT_REGS_BACKUP.insert(ThreadId::current(), regs);
+}
+
+fn unset_backed_up_regs() {
+    CURRENT_REGS_BACKUP.remove(&ThreadId::current());
 }
 
 fn current_asid() -> target_ulong {
@@ -188,29 +316,32 @@ fn poll_injectors() -> bool {
     // reset the 'waiting for system call' flag
     WAITING_FOR_SYSCALL.store(false, Ordering::SeqCst);
 
-    while let Some(mut current_injector_mutex_guard) = INJECTORS.current() {
-        let (asid, ref mut current_injector) = &mut *current_injector_mutex_guard;
-        CURRENT_INJECTOR_ASID.store(*asid as u64, Ordering::SeqCst);
-        // only poll from correct asid
-        if *asid != current_asid() {
-            return false;
-        }
-        match current_injector.as_mut().poll(&mut ctxt) {
-            // If the current injector has finished running start polling the next
-            // injector.
-            Poll::Ready(_) => {
-                drop(current_injector_mutex_guard);
-                INJECTORS.pop();
-                continue;
+    if let Some(mut injectors) = INJECTORS.get_mut(&ThreadId::current()) {
+        while let Some(ref mut current_injector) = injectors.current_mut() {
+            let (asid, ref mut current_injector) = &mut *current_injector;
+            CURRENT_INJECTOR_ASID.store(*asid as u64, Ordering::SeqCst);
+            // only poll from correct asid
+            if *asid != current_asid() {
+                return false;
             }
+            match current_injector.as_mut().poll(&mut ctxt) {
+                // If the current injector has finished running start polling the next
+                // injector.
+                Poll::Ready(_) => {
+                    injectors.pop();
+                    continue;
+                }
 
-            // If the future is now waiting on a syscall to be evaluated, return
-            // so a system call can be run
-            Poll::Pending if waiting_for_syscall() => return false,
+                // If the future is now waiting on a syscall to be evaluated, return
+                // so a system call can be run
+                Poll::Pending if waiting_for_syscall() => return false,
 
-            // If the future is not waiting on a system call we should keep polling
-            Poll::Pending => continue,
+                // If the future is not waiting on a system call we should keep polling
+                Poll::Pending => continue,
+            }
         }
+    } else {
+        return false;
     }
 
     true
