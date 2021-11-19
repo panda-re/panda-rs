@@ -197,6 +197,9 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
                 println!("in fork child");
                 let (backed_up_regs, child_injector) = get_child_injector();
 
+                sys_enter.enable();
+                sys_return.enable();
+
                 // set up a child-injector, which doesn't back up its registers, only
                 // sets up to restore the registers of its parent
                 INJECTORS
@@ -329,6 +332,14 @@ fn poll_injectors() -> bool {
                 // injector.
                 Poll::Ready(_) => {
                     injectors.pop();
+
+                    // No more injectors in the current thread
+                    if injectors.is_empty() {
+                        drop(injectors);
+                        INJECTORS.remove(&ThreadId::current());
+                        break;
+                    }
+
                     continue;
                 }
 
@@ -344,5 +355,7 @@ fn poll_injectors() -> bool {
         return false;
     }
 
-    true
+    let all_injectors_finished = INJECTORS.is_empty();
+
+    all_injectors_finished
 }
