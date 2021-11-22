@@ -1,30 +1,31 @@
 use crate::enums::MemRWStatus;
-use crate::{sys, Error};
 use crate::prelude::*;
+use crate::{sys, Error};
 
-use std::os::raw::c_char;
 use std::ffi::CString;
+use std::os::raw::c_char;
 
 // Public API ----------------------------------------------------------------------------------------------------------
 
 /// Read from guest virtual memory
-pub fn virtual_memory_read(cpu: &mut CPUState, addr: target_ulong, len: usize) -> Result<Vec<u8>, MemRWStatus> {
+pub fn virtual_memory_read(
+    cpu: &mut CPUState,
+    addr: target_ulong,
+    len: usize,
+) -> Result<Vec<u8>, MemRWStatus> {
     let mut buf: Vec<c_char> = Vec::with_capacity(len);
 
     unsafe {
-        let res = panda_sys::panda_virtual_memory_read_external(
-            cpu,
-            addr,
-            buf.as_mut_ptr(),
-            len as i32,
-        ).into();
+        let res =
+            panda_sys::panda_virtual_memory_read_external(cpu, addr, buf.as_mut_ptr(), len as i32)
+                .into();
 
         match res {
             MemRWStatus::MemTxOk => {
                 buf.set_len(len);
                 Ok(vec_i8_into_u8(buf))
-            },
-            _ => Err(res)
+            }
+            _ => Err(res),
         }
     }
 }
@@ -38,14 +39,15 @@ pub fn physical_memory_read(addr: target_ulong, len: usize) -> Result<Vec<u8>, M
             addr as u64,
             buf.as_mut_ptr(),
             len as i32,
-        ).into();
+        )
+        .into();
 
         match res {
             MemRWStatus::MemTxOk => {
                 buf.set_len(len);
                 Ok(buf)
-            },
-            _ => Err(res)
+            }
+            _ => Err(res),
         }
     }
 }
@@ -59,7 +61,8 @@ pub fn virtual_memory_write(cpu: &mut CPUState, addr: target_ulong, data: &[u8])
             addr,
             c_data.as_mut_ptr() as *mut i8,
             c_data.len() as i32,
-        ).into()
+        )
+        .into()
     }
 }
 
@@ -71,17 +74,17 @@ pub fn physical_memory_write(addr: target_ulong, data: &[u8]) -> MemRWStatus {
             addr as _,
             c_data.as_mut_ptr(),
             c_data.len() as i32,
-        ).into()
+        )
+        .into()
     }
 }
 
-/// Translate guest virtual address to physical address
-pub fn virt_to_phys(cpu: &mut CPUState, addr: target_ulong) -> target_ulong {
-    unsafe {
-        panda_sys::panda_virt_to_phys_external(
-            cpu,
-            addr,
-        )
+/// Translate guest virtual address to physical address, returning `None` if no mapping
+/// can be found.
+pub fn virt_to_phys(cpu: &mut CPUState, addr: target_ulong) -> Option<target_ulong> {
+    match unsafe { panda_sys::panda_virt_to_phys_external(cpu, addr) } {
+        target_ulong::MAX => None,
+        phys_addr => Some(phys_addr),
     }
 }
 
@@ -102,7 +105,6 @@ pub fn map_memory(name: &str, size: target_ulong, addr: target_ptr_t) -> Result<
 
         Ok(())
     }
-
 }
 
 // Private API ---------------------------------------------------------------------------------------------------------
