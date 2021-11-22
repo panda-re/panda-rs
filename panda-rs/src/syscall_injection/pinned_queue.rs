@@ -1,4 +1,3 @@
-use parking_lot::{const_mutex, MappedMutexGuard, Mutex, MutexGuard};
 use std::future::Future;
 use std::pin::Pin;
 
