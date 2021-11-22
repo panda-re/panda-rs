@@ -83,7 +83,7 @@ compile_error!("Only x86_64 has fork defined");
 
 type Injector = dyn Future<Output = ()>;
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 struct ThreadId {
     pid: target_ulong,
     tid: target_ulong,
@@ -114,18 +114,22 @@ static CHILD_INJECTOR: Mutex<Option<ChildInjector>> = const_mutex(None);
 pub async fn fork(child_injector: impl Future<Output = ()> + 'static) -> target_ulong {
     let backed_up_regs = get_backed_up_regs().expect("Fork was run outside of an injector");
 
-    println!("set child injector");
     CHILD_INJECTOR
         .lock()
         .replace(ChildInjector((backed_up_regs, Box::pin(child_injector))));
-    println!("child injector set");
 
     syscall(FORK, ()).await
 }
 
 fn get_child_injector() -> (SyscallRegs, Pin<Box<dyn Future<Output = ()> + 'static>>) {
-    println!("get child injector");
     CHILD_INJECTOR.lock().take().unwrap().0
+}
+
+fn restart_syscall(cpu: &mut CPUState, pc: target_ulong) {
+    regs::set_pc(cpu, pc);
+    unsafe {
+        panda::sys::cpu_loop_exit_noexc(cpu);
+    }
 }
 
 /// Run a syscall injector in the form as an async block/value to be evaluated. If
@@ -174,7 +178,6 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
 
             backed_up_regs.restore();
             unset_backed_up_regs();
-            println!("Registers restored");
         });
 
     // Only install each callback once
@@ -184,67 +187,43 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
 
         // after the syscall set the return value for the future then jump back to
         // the syscall instruction
-        sys_return.on_all_sys_return(move |cpu: &mut CPUState, _, sys_num_bad| {
-            dbg!(sys_num_bad);
-            let sys_num = last_injected_syscall();
-            let is_fork_child = if dbg!(sys_num) == FORK {
-                regs::get_reg(cpu, SYSCALL_RET) == 0
-            } else {
-                false
-            };
+        sys_return.on_all_sys_return(move |cpu: &mut CPUState, _, sys_num| {
+            let is_fork = last_injected_syscall() == FORK || sys_num == FORK;
+            let is_fork_child = is_fork && regs::get_reg(cpu, SYSCALL_RET) == 0;
 
             if is_fork_child {
-                println!("in fork child");
-                let (backed_up_regs, child_injector) = get_child_injector();
-
-                sys_enter.enable();
-                sys_return.enable();
-
                 // set up a child-injector, which doesn't back up its registers, only
                 // sets up to restore the registers of its parent
+                let (backed_up_regs, child_injector) = get_child_injector();
                 INJECTORS
                     .entry(ThreadId::current())
                     .or_default()
                     .push_future(current_asid(), async move {
-                        println!("Start of child injector");
                         child_injector.await;
-
                         backed_up_regs.restore();
-                        println!("Child registers restored");
                     });
             }
 
-            println!("Should loop back?");
             // only run for the asid we're currently injecting into, unless we just forked
             if is_fork_child
                 || (CURRENT_INJECTOR_ASID.load(Ordering::SeqCst) == current_asid() as u64)
             {
                 SHOULD_LOOP_AGAIN.store(true, Ordering::SeqCst);
                 set_ret_value(cpu);
-                regs::set_pc(cpu, pc);
-                unsafe {
-                    panda::sys::cpu_loop_exit_noexc(cpu);
-                }
+                restart_syscall(cpu, pc);
             }
         });
 
         // poll the injectors and if they've all finished running, disable these
         // callbacks
-        sys_enter.on_all_sys_enter(move |cpu, _, sys_num| {
+        sys_enter.on_all_sys_enter(move |cpu, _, _| {
             if poll_injectors() {
                 sys_enter.disable();
                 sys_return.disable();
             }
 
             if SHOULD_LOOP_AGAIN.swap(false, Ordering::SeqCst) {
-                println!("Looping again...");
-                regs::set_pc(cpu, pc);
-                unsafe {
-                    panda::sys::cpu_loop_exit_noexc(cpu);
-                }
-                return;
-            } else {
-                println!("Not looping again, sys_num: {}", sys_num);
+                restart_syscall(cpu, pc);
             }
         });
 
@@ -319,6 +298,10 @@ fn poll_injectors() -> bool {
     // reset the 'waiting for system call' flag
     WAITING_FOR_SYSCALL.store(false, Ordering::SeqCst);
 
+    // Clear in case we're looping without any injectors, so a stale 'current injector'
+    // won't be injected into
+    CURRENT_INJECTOR_ASID.store(u64::MAX, Ordering::SeqCst);
+
     if let Some(mut injectors) = INJECTORS.get_mut(&ThreadId::current()) {
         while let Some(ref mut current_injector) = injectors.current_mut() {
             let (asid, ref mut current_injector) = &mut *current_injector;
@@ -355,7 +338,7 @@ fn poll_injectors() -> bool {
         return false;
     }
 
-    let all_injectors_finished = INJECTORS.is_empty();
+    let all_injectors_finished = INJECTORS.is_empty() && CHILD_INJECTOR.lock().is_none();
 
     all_injectors_finished
 }
