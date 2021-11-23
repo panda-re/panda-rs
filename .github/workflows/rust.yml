@@ -23,16 +23,16 @@ jobs:
     - name: Build x86_64
       run: cd panda-rs && cargo build --verbose
     - name: Build i386
-      run: cd panda-rs && cargo build --verbose --no-default-features --features=i386
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=i386,syscall-injection
     - name: Build ARM
-      run: cd panda-rs && cargo build --verbose --no-default-features --features=arm
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=arm,syscall-injection
     - name: Build 64-bit ARM
-      run: cd panda-rs && cargo build --verbose --no-default-features --features=aarch64
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=aarch64,syscall-injection
     - name: Build Mips
-      run: cd panda-rs && cargo build --verbose --no-default-features --features=mips
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=mips,syscall-injection
     - name: Build Mips (Little Endian)
-      run: cd panda-rs && cargo build --verbose --no-default-features --features=mipsel
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=mipsel,syscall-injection
     - name: Build 64-bit Mips
-      run: cd panda-rs && cargo build --verbose --no-default-features --features=mips64
+      run: cd panda-rs && cargo build --verbose --no-default-features --features=mips64,syscall-injection
     - name: Build PowerPC
       run: cd panda-rs && cargo build --verbose --no-default-features --features=ppc

@@ -11,7 +11,7 @@ use std::{
 
 use crate::{regs, sys};
 
-use super::syscall_regs::{SYSCALL_ARGS, SYSCALL_NUM_REG, SYSCALL_RET};
+use super::arch::{SYSCALL_ARGS, SYSCALL_NUM_REG, SYSCALL_RET};
 use super::{IntoSyscallArgs, SyscallArgs};
 use once_cell::sync::OnceCell;
 use panda_sys::{get_cpu, target_ulong, CPUState};

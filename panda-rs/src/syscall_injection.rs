@@ -62,24 +62,20 @@ use crate::{
     regs, sys, PppCallback,
 };
 
+mod arch;
 mod conversion;
 mod pinned_queue;
 mod syscall_future;
 mod syscall_regs;
 mod syscalls;
 
-pub use {conversion::*, syscall_future::*};
 use {
+    arch::{FORK, FORK_IS_CLONE, SYSCALL_RET},
     pinned_queue::PinnedQueue,
     syscall_future::WAITING_FOR_SYSCALL,
-    syscall_regs::{SyscallRegs, SYSCALL_RET},
+    syscall_regs::SyscallRegs,
 };
-
-#[cfg(feature = "x86_64")]
-const FORK: target_ulong = 57;
-
-#[cfg(not(feature = "x86_64"))]
-compile_error!("Only x86_64 has fork defined");
+pub use {conversion::*, syscall_future::*};
 
 type Injector = dyn Future<Output = ()>;
 
@@ -113,12 +109,15 @@ static CHILD_INJECTOR: Mutex<Option<ChildInjector>> = const_mutex(None);
 
 pub async fn fork(child_injector: impl Future<Output = ()> + 'static) -> target_ulong {
     let backed_up_regs = get_backed_up_regs().expect("Fork was run outside of an injector");
-
     CHILD_INJECTOR
         .lock()
         .replace(ChildInjector((backed_up_regs, Box::pin(child_injector))));
 
-    syscall(FORK, ()).await
+    if FORK_IS_CLONE {
+        todo!()
+    } else {
+        syscall(FORK, ()).await
+    }
 }
 
 fn get_child_injector() -> (SyscallRegs, Pin<Box<dyn Future<Output = ()> + 'static>>) {
