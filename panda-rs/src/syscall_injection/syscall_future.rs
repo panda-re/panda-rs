@@ -51,6 +51,27 @@ pub async fn syscall(num: target_ulong, args: impl IntoSyscallArgs) -> target_ul
     .await
 }
 
+/// Perform a system call in the guest. Should only be run within an injector being
+/// run by [`run_injector`](crate::syscall_injection::run_injector). Registers will
+/// not be restored after this syscall has been ran.
+pub async fn syscall_no_return(num: target_ulong, args: impl IntoSyscallArgs) -> ! {
+    let cpu = unsafe { &mut *get_cpu() };
+
+    // Setup the system call (set syscall num and setup argument registers)
+    LAST_INJECTED_SYSCALL.store(num as u64, Ordering::SeqCst);
+    regs::set_reg(cpu, SYSCALL_NUM_REG, num);
+    set_syscall_args(cpu, args.into_syscall_args().await);
+
+    bail_no_restore_regs().await
+}
+
+pub async fn bail_no_restore_regs() -> ! {
+    INJECTOR_BAIL.store(true, Ordering::SeqCst);
+
+    std::future::pending().await
+}
+
+pub(crate) static INJECTOR_BAIL: AtomicBool = AtomicBool::new(false);
 pub(crate) static WAITING_FOR_SYSCALL: AtomicBool = AtomicBool::new(false);
 
 // Maps ASID to RET_SLOT
