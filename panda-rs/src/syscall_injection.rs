@@ -72,7 +72,7 @@ mod syscalls;
 use {
     arch::{FORK, FORK_IS_CLONE, SYSCALL_RET},
     pinned_queue::PinnedQueue,
-    syscall_future::WAITING_FOR_SYSCALL,
+    syscall_future::{INJECTOR_BAIL, WAITING_FOR_SYSCALL},
     syscall_regs::SyscallRegs,
 };
 pub use {conversion::*, syscall_future::*};
@@ -305,14 +305,19 @@ fn poll_injectors() -> bool {
         while let Some(ref mut current_injector) = injectors.current_mut() {
             let (asid, ref mut current_injector) = &mut *current_injector;
             CURRENT_INJECTOR_ASID.store(*asid as u64, Ordering::SeqCst);
+
             // only poll from correct asid
             if *asid != current_asid() {
                 return false;
             }
+
             match current_injector.as_mut().poll(&mut ctxt) {
                 // If the current injector has finished running start polling the next
-                // injector.
-                Poll::Ready(_) => {
+                // injector. This includes if the current injector bails early.
+                status
+                    if matches!(status, Poll::Ready(_))
+                        || INJECTOR_BAIL.swap(false, Ordering::SeqCst) =>
+                {
                     injectors.pop();
 
                     // No more injectors in the current thread
@@ -331,6 +336,8 @@ fn poll_injectors() -> bool {
 
                 // If the future is not waiting on a system call we should keep polling
                 Poll::Pending => continue,
+
+                _ => unreachable!(),
             }
         }
     } else {
