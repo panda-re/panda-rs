@@ -107,6 +107,11 @@ unsafe impl Sync for ChildInjector {}
 
 static CHILD_INJECTOR: Mutex<Option<ChildInjector>> = const_mutex(None);
 
+/// Fork the guest process being injected into and begin injecting into it using the
+/// provided injector.
+///
+/// Registers will be restored once the child process completes as well, unless the
+/// child injector bails.
 pub async fn fork(child_injector: impl Future<Output = ()> + 'static) -> target_ulong {
     let backed_up_regs = get_backed_up_regs().expect("Fork was run outside of an injector");
     CHILD_INJECTOR
@@ -242,10 +247,11 @@ lazy_static! {
     static ref CURRENT_REGS_BACKUP: DashMap<ThreadId, SyscallRegs> = DashMap::new();
 }
 
+/// Get the registers set to be restored when the current injector finishes
 pub fn get_backed_up_regs() -> Option<SyscallRegs> {
     CURRENT_REGS_BACKUP
         .get(&ThreadId::current())
-        .map(|x| x.clone())
+        .map(|regs| regs.clone())
 }
 
 fn set_backed_up_regs(regs: SyscallRegs) {

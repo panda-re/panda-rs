@@ -65,6 +65,7 @@ pub async fn syscall_no_return(num: target_ulong, args: impl IntoSyscallArgs) ->
     bail_no_restore_regs().await
 }
 
+/// Bail from the current injector without restoring the original registers
 pub async fn bail_no_restore_regs() -> ! {
     INJECTOR_BAIL.store(true, Ordering::SeqCst);
 
