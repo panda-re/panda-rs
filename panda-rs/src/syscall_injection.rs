@@ -125,8 +125,8 @@ pub async fn fork(child_injector: impl Future<Output = ()> + 'static) -> target_
     }
 }
 
-fn get_child_injector() -> (SyscallRegs, Pin<Box<dyn Future<Output = ()> + 'static>>) {
-    CHILD_INJECTOR.lock().take().unwrap().0
+fn get_child_injector() -> Option<(SyscallRegs, Pin<Box<dyn Future<Output = ()> + 'static>>)> {
+    CHILD_INJECTOR.lock().take().map(|x| x.0)
 }
 
 fn restart_syscall(cpu: &mut CPUState, pc: target_ulong) {
@@ -198,14 +198,18 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
             if is_fork_child {
                 // set up a child-injector, which doesn't back up its registers, only
                 // sets up to restore the registers of its parent
-                let (backed_up_regs, child_injector) = get_child_injector();
-                INJECTORS
-                    .entry(ThreadId::current())
-                    .or_default()
-                    .push_future(current_asid(), async move {
-                        child_injector.await;
-                        backed_up_regs.restore();
-                    });
+                if let Some((backed_up_regs, child_injector)) = get_child_injector() {
+                    INJECTORS
+                        .entry(ThreadId::current())
+                        .or_default()
+                        .push_future(current_asid(), async move {
+                            child_injector.await;
+                            backed_up_regs.restore();
+                        });
+                } else {
+                    println!("WARNING: failed to get child injector");
+                    return;
+                }
             }
 
             // only run for the asid we're currently injecting into, unless we just forked
