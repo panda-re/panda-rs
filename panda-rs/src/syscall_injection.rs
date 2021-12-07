@@ -328,7 +328,6 @@ fn poll_injectors() -> bool {
                     if matches!(status, Poll::Ready(_))
                         || INJECTOR_BAIL.swap(false, Ordering::SeqCst) =>
                 {
-                    let bailed = matches!(status, Poll::Pending);
                     injectors.pop();
 
                     // No more injectors in the current thread
@@ -336,15 +335,9 @@ fn poll_injectors() -> bool {
                         drop(injectors);
                         INJECTORS.remove(&ThreadId::current());
 
-                        if bailed {
-                            return false;
-                        }
                         break;
                     }
 
-                    if bailed {
-                        return false;
-                    }
                     continue;
                 }
 
