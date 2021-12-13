@@ -7,6 +7,11 @@ pub mod regs;
 /// Functions for record and replay
 pub mod rr;
 
+/// Utilities for working with the PANDA OS API
+///
+/// For OS introspection, see [the `osi` plugin](crate::plugins::osi).
+pub mod os;
+
 /// Miscellaneous PANDA API utilities
 mod misc;
 pub use misc::*;
