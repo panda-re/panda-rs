@@ -13,3 +13,6 @@ pub use misc::*;
 
 mod utils;
 pub use utils::*;
+
+mod require_plugin;
+pub use require_plugin::*;

@@ -265,6 +265,8 @@ pub fn derive_panda_args(input: TokenStream) -> TokenStream {
                 .join(",");
             quote!(
                 impl ::panda::PandaArgs for #ident {
+                    const PLUGIN_NAME: &'static str = #name;
+
                     fn from_panda_args() -> Self {
                         let name = ::std::ffi::CString::new(#name).unwrap();
 
@@ -290,6 +292,14 @@ pub fn derive_panda_args(input: TokenStream) -> TokenStream {
                                 stringify!(#fields), self.#fields
                             ),*
                        )
+                    }
+
+                    fn to_panda_args(&self) -> ::std::vec::Vec<(&'static str, ::std::string::String)> {
+                        ::std::vec![
+                            #(
+                                (stringify!(#fields), self.#fields.to_string()),
+                            )*
+                        ]
                     }
                 }
             )
