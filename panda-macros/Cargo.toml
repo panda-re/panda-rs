@@ -1,6 +1,6 @@
 [package]
 name = "panda-re-macros"
-version = "0.15.0"
+version = "0.16.0"
 authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>"]
 edition = "2018"
 description = "Macros needed for the `panda-re` library"
@@ -17,6 +17,7 @@ syn = { version = "1.0.37", features = ["full"] }
 quote = "1.0.7"
 doc-comment = "0.3.3"
 darling = "0.10.2"
+proc-macro2 = "1"
 
 [features]
 x86_64 = []

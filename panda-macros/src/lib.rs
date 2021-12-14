@@ -163,6 +163,38 @@ pub fn hook(_: TokenStream, func: TokenStream) -> TokenStream {
     .into()
 }
 
+#[proc_macro_attribute]
+pub fn channel_recv(_: TokenStream, func: TokenStream) -> TokenStream {
+    let mut func = syn::parse_macro_input!(func as syn::ItemFn);
+
+    let name = std::mem::replace(&mut func.sig.ident, syn::parse_quote!(inner));
+
+    quote!(
+        extern "C" fn #name(channel_id: u32, data: *const u8, len: usize) {
+            #func
+
+            let msg = unsafe {
+                ::panda::plugins::guest_plugin_manager::FromChannelMessage::from_channel_message(
+                    data, len
+                )
+            };
+
+            match msg {
+                Ok(msg) => {
+                    inner(
+                        channel_id,
+                        msg
+                    );
+                },
+                Err(err) => {
+                    println!("Warning: could not parse channel message, {}", err);
+                }
+            }
+        }
+    )
+    .into()
+}
+
 #[derive(FromField)]
 #[darling(attributes(arg))]
 struct DeriveArgs {
