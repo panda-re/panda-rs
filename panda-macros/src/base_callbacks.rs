@@ -835,5 +835,5 @@ define_callback_attributes!(
         None
     "
 
-    (before_tcg_codegen, panda_cb_type_PANDA_CB_BEFORE_TCG_CODEGEN, (cpu: &mut CPUState, tb: &TranslationBlock))
+    (before_tcg_codegen, panda_cb_type_PANDA_CB_BEFORE_TCG_CODEGEN, (cpu: &mut CPUState, tb: &mut TranslationBlock))
 );
