@@ -65,10 +65,12 @@ use crate::{
 mod arch;
 mod conversion;
 mod pinned_queue;
+mod storage_location;
 mod syscall_future;
 mod syscall_regs;
 mod syscalls;
 
+pub(crate) use storage_location::*;
 use {
     arch::{FORK, FORK_IS_CLONE, SYSCALL_RET},
     pinned_queue::PinnedQueue,
@@ -136,6 +138,8 @@ fn restart_syscall(cpu: &mut CPUState, pc: target_ulong) {
     }
 }
 
+const SYSENTER_INSTR: &[u8] = &[0xf, 0x34];
+
 /// Run a syscall injector in the form as an async block/value to be evaluated. If
 /// another injector is already running, it will be queued to start after all previous
 /// injectors have finished running.
@@ -169,6 +173,20 @@ fn restart_syscall(cpu: &mut CPUState, pc: target_ulong) {
 pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static) {
     let pc = pc.pc();
 
+    #[cfg(any(feature = "x86_64", feature = "i386"))]
+    {
+        use crate::mem::virtual_memory_read;
+
+        let cpu = unsafe { &mut *sys::get_cpu() };
+        let is_sysenter = virtual_memory_read(cpu, pc, 2)
+            .ok()
+            .map(|bytes| bytes == SYSENTER_INSTR)
+            .unwrap_or(false);
+
+        log::trace!("is_sysenter = {}", is_sysenter);
+        set_is_sysenter(is_sysenter);
+    }
+
     let is_first = INJECTORS.is_empty();
     let thread_id = ThreadId::current();
     INJECTORS
@@ -186,12 +204,20 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
 
     // Only install each callback once
     if is_first {
+        log::trace!("Enabling callbacks...");
         let sys_enter = PppCallback::new();
         let sys_return = PppCallback::new();
+
+        let disable_callbacks = move || {
+            log::trace!("Disabling callbacks...");
+            sys_enter.disable();
+            sys_return.disable();
+        };
 
         // after the syscall set the return value for the future then jump back to
         // the syscall instruction
         sys_return.on_all_sys_return(move |cpu: &mut CPUState, _, sys_num| {
+            log::trace!("on_sys_return: {}", sys_num);
             let is_fork = last_injected_syscall() == FORK || sys_num == FORK;
             let is_fork_child = is_fork && regs::get_reg(cpu, SYSCALL_RET) == 0;
 
@@ -212,6 +238,8 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
                 }
             }
 
+            log::trace!("Current asid = {:x}", current_asid());
+
             // only run for the asid we're currently injecting into, unless we just forked
             if is_fork_child
                 || (CURRENT_INJECTOR_ASID.load(Ordering::SeqCst) == current_asid() as u64)
@@ -224,10 +252,10 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
 
         // poll the injectors and if they've all finished running, disable these
         // callbacks
-        sys_enter.on_all_sys_enter(move |cpu, _, _| {
+        sys_enter.on_all_sys_enter(move |cpu, _, sys_num| {
+            log::trace!("on_sys_enter: {}", sys_num);
             if poll_injectors() {
-                sys_enter.disable();
-                sys_return.disable();
+                disable_callbacks();
             }
 
             if SHOULD_LOOP_AGAIN.swap(false, Ordering::SeqCst) {
@@ -239,8 +267,7 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
         // disabling if it's already finished running
         if poll_injectors() {
             println!("WARN: Injector seemed to not call any system calls?");
-            sys_enter.disable();
-            sys_return.disable();
+            disable_callbacks();
         }
     }
 }

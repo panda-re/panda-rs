@@ -15,7 +15,7 @@ impl SyscallRegs {
         let cpu = unsafe { &mut *get_cpu() };
 
         let sys_num_reg = get_reg(cpu, SYSCALL_NUM_REG);
-        let arg_regs = SYSCALL_ARGS.map(|reg| get_reg(cpu, reg));
+        let arg_regs = SYSCALL_ARGS.map(|storage| storage.read(cpu));
 
         Self {
             sys_num_reg,
@@ -32,8 +32,8 @@ impl SyscallRegs {
         let cpu = unsafe { &mut *get_cpu() };
 
         set_reg(cpu, SYSCALL_NUM_REG, sys_num_reg);
-        for (&reg, &val) in SYSCALL_ARGS.iter().zip(arg_regs.iter()) {
-            set_reg(cpu, reg, val);
+        for (&storage, &val) in SYSCALL_ARGS.iter().zip(arg_regs.iter()) {
+            storage.write(cpu, val);
         }
     }
 }

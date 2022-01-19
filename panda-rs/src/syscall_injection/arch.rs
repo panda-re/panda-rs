@@ -1,5 +1,6 @@
 use crate::prelude::*;
 use crate::regs::Reg::{self, *};
+use crate::syscall_injection::StorageLocation;
 
 #[cfg(feature = "x86_64")]
 pub(crate) const FORK: target_ulong = 57;
@@ -26,7 +27,7 @@ macro_rules! syscall_regs {
         const { $syscall_args:ident, $syscall_ret:ident, $syscall_num_reg:ident };
         $(
             #[cfg($(arch = $arch:literal),+)] {
-                args = [$( $args:ident ),*];
+                args = [$( $args:ident $(@ $offset:literal)? ),*];
                 return = $ret:ident;
                 syscall_number = $sys_num:ident;
             }
@@ -34,7 +35,9 @@ macro_rules! syscall_regs {
     } => {
         $(
             #[cfg(any($(feature = $arch),*))]
-            pub(crate) const $syscall_args: [Reg; 6] = [$($args),*];
+            pub(crate) const $syscall_args: [StorageLocation; 6] = [$(
+                StorageLocation::Reg($args) $(.with_offset($offset))?
+            ),*];
 
             #[cfg(any($(feature = $arch),*))]
             pub(crate) const $syscall_ret: Reg = $ret;
@@ -55,7 +58,7 @@ syscall_regs! {
     }
 
     #[cfg(arch = "i386")] {
-        args = [EBX, ECX, EDX, ESI, EDI, EBP];
+        args = [EBX, ECX @ 0x8, EDX @ 0x4, ESI, EDI, EBP @ 0x0];
         return = EAX;
         syscall_number = EAX;
     }

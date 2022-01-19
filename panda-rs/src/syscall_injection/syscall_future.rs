@@ -23,8 +23,8 @@ pub(crate) struct SyscallFuture {
 
 // write all the syscall arguments to their corresponding registers
 fn set_syscall_args(cpu: &mut CPUState, args: SyscallArgs) {
-    for (reg, arg) in SYSCALL_ARGS.iter().copied().zip(args.iter_args()) {
-        regs::set_reg(cpu, reg, arg);
+    for (storage_location, arg) in SYSCALL_ARGS.iter().copied().zip(args.iter_args()) {
+        storage_location.write(cpu, arg);
     }
 }
 
@@ -37,7 +37,10 @@ pub(crate) fn last_injected_syscall() -> target_ulong {
 /// Perform a system call in the guest. Should only be run within an injector being
 /// run by [`run_injector`](crate::syscall_injection::run_injector)
 pub async fn syscall(num: target_ulong, args: impl IntoSyscallArgs) -> target_ulong {
+    log::trace!("Injecting syscall {}", num);
     let cpu = unsafe { &mut *get_cpu() };
+
+    let saved_sp = regs::get_reg(cpu, regs::reg_sp());
 
     // Setup the system call (set syscall num and setup argument registers)
     LAST_INJECTED_SYSCALL.store(num as u64, Ordering::SeqCst);
@@ -45,16 +48,23 @@ pub async fn syscall(num: target_ulong, args: impl IntoSyscallArgs) -> target_ul
     set_syscall_args(cpu, args.into_syscall_args().await);
 
     // Wait until the system call has returned to get the return value
-    Pin::new(&mut SyscallFuture {
+    let ret = Pin::new(&mut SyscallFuture {
         ret_val: Arc::new(OnceCell::new()),
     })
-    .await
+    .await;
+
+    log::trace!("Injected syscall {} returned {}", num, ret);
+
+    regs::set_reg(cpu, regs::reg_sp(), saved_sp);
+
+    ret
 }
 
 /// Perform a system call in the guest. Should only be run within an injector being
 /// run by [`run_injector`](crate::syscall_injection::run_injector). Registers will
 /// not be restored after this syscall has been ran.
 pub async fn syscall_no_return(num: target_ulong, args: impl IntoSyscallArgs) -> ! {
+    log::trace!("syscall_no_return num={}", num);
     let cpu = unsafe { &mut *get_cpu() };
 
     // Setup the system call (set syscall num and setup argument registers)
@@ -67,6 +77,7 @@ pub async fn syscall_no_return(num: target_ulong, args: impl IntoSyscallArgs) ->
 
 /// Bail from the current injector without restoring the original registers
 pub async fn bail_no_restore_regs() -> ! {
+    log::trace!("Bailing without restoring syscall args");
     INJECTOR_BAIL.store(true, Ordering::SeqCst);
 
     std::future::pending().await
@@ -88,6 +99,10 @@ pub(crate) fn set_ret_value(cpu: &mut CPUState) {
             println!("WARNING: Attempted to double-set syscall return value");
         }
         //.expect("Attempted to double-set syscall return value");
+        log::trace!(
+            "Return value set to {:#x?}",
+            regs::get_reg(cpu, SYSCALL_RET)
+        );
     }
 }
 
