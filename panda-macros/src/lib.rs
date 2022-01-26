@@ -32,7 +32,7 @@ pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
             use super::*;
 
             #[no_mangle]
-            unsafe extern "C" fn init_plugin(plugin: *mut ::panda::PluginHandle) {
+            pub unsafe extern "C" fn init_plugin(plugin: *mut ::panda::PluginHandle) -> bool {
                 ::panda::set_plugin_ref(plugin);
 
                 for cb in ::panda::inventory::iter::<::panda::InternalCallback> {
@@ -43,11 +43,11 @@ pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
                     cb.0();
                 }
 
-                #func_name(#args);
+                ::panda::InitReturn::into_init_bool(#func_name(#args))
             }
 
             #[no_mangle]
-            unsafe extern "C" fn uninit_plugin(plugin: *mut ::panda::PluginHandle) {
+             pub unsafe extern "C" fn uninit_plugin(plugin: *mut ::panda::PluginHandle) {
                 for cb in ::panda::inventory::iter::<::panda::UninitCallback> {
                     cb.0(unsafe { &mut *plugin });
                 }

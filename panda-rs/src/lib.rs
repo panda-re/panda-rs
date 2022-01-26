@@ -95,6 +95,9 @@ pub use error::*;
 mod callbacks;
 pub use callbacks::*;
 
+mod init_return;
+pub use init_return::InitReturn;
+
 /// For internal use. Access to inventory for managing callbacks.
 #[doc(hidden)]
 pub use inventory;
