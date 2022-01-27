@@ -419,7 +419,6 @@ macro_rules! define_callback_attributes {
                             }
 
                             pub fn disable() {
-                                println!("plugin: {}", env!("CARGO_PKG_NAME"));
                                 unsafe {
                                     ::panda::sys::panda_disable_callback(
                                         ::panda::sys::panda_get_plugin_by_name(
