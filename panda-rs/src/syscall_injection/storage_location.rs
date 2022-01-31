@@ -33,31 +33,38 @@ fn is_sysenter() -> bool {
     IS_SYSENTER.load(Ordering::SeqCst)
 }
 
+const REG_SIZE: usize = std::mem::size_of::<target_ulong>();
+
 impl StorageLocation {
     pub(crate) fn read(self, cpu: &mut CPUState) -> target_ulong {
         match self {
-            Self::StackReg(_, stack_offset) if is_sysenter() => target_ulong::from_le_bytes(
-                virtual_memory_read(
-                    cpu,
-                    regs::get_reg(cpu, regs::reg_sp()) + stack_offset,
-                    std::mem::size_of::<target_ulong>(),
+            Self::StackReg(_, stack_offset) if is_sysenter() => {
+                let sp = regs::get_reg(cpu, regs::reg_sp());
+
+                target_ulong::from_le_bytes(
+                    virtual_memory_read(cpu, sp + stack_offset, REG_SIZE)
+                        .expect("Failed to read syscall argument from stack")
+                        .try_into()
+                        .unwrap(),
                 )
-                .expect("Failed to read syscall argument from stack")
-                .try_into()
-                .unwrap(),
-            ),
+            }
             Self::Reg(reg) | Self::StackReg(reg, _) => regs::get_reg(cpu, reg),
         }
     }
 
     pub(crate) fn write(self, cpu: &mut CPUState, val: target_ulong) {
         match self {
-            Self::StackReg(_, stack_offset) if is_sysenter() => {
-                virtual_memory_write(
-                    cpu,
-                    regs::get_reg(cpu, regs::reg_sp()) + stack_offset,
-                    &val.to_le_bytes(),
-                );
+            Self::StackReg(reg, stack_offset) if is_sysenter() => {
+                let sp = regs::get_reg(cpu, regs::reg_sp());
+
+                virtual_memory_write(cpu, sp + stack_offset, &val.to_le_bytes());
+
+                #[cfg(feature = "i386")]
+                if reg == Reg::EBP {
+                    return;
+                }
+
+                regs::set_reg(cpu, reg, val);
             }
             Self::Reg(reg) | Self::StackReg(reg, _) => regs::set_reg(cpu, reg, val),
         }

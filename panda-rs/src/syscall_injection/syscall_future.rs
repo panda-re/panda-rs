@@ -42,6 +42,9 @@ pub async fn syscall(num: target_ulong, args: impl IntoSyscallArgs) -> target_ul
 
     let saved_sp = regs::get_reg(cpu, regs::reg_sp());
 
+    #[cfg(feature = "i386")]
+    let saved_bp = regs::get_reg(cpu, regs::Reg::EBP);
+
     // Setup the system call (set syscall num and setup argument registers)
     LAST_INJECTED_SYSCALL.store(num as u64, Ordering::SeqCst);
     regs::set_reg(cpu, SYSCALL_NUM_REG, num);
@@ -56,6 +59,9 @@ pub async fn syscall(num: target_ulong, args: impl IntoSyscallArgs) -> target_ul
     log::trace!("Injected syscall {} returned {}", num, ret);
 
     regs::set_reg(cpu, regs::reg_sp(), saved_sp);
+
+    #[cfg(feature = "i386")]
+    regs::set_reg(cpu, regs::Reg::EBP, saved_bp);
 
     ret
 }
