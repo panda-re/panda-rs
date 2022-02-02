@@ -1,9 +1,7 @@
 use std::future::Future;
 use std::pin::Pin;
 
-use crate::prelude::*;
-
-pub(crate) struct PinnedQueue<T: ?Sized>(Vec<(target_ulong, Pin<Box<T>>)>);
+pub(crate) struct PinnedQueue<T: ?Sized>(Vec<Pin<Box<T>>>);
 
 impl<T: ?Sized> Default for PinnedQueue<T> {
     fn default() -> Self {
@@ -19,11 +17,11 @@ impl<T: ?Sized> PinnedQueue<T> {
         Self(Vec::new())
     }
 
-    pub(crate) fn current_mut(&mut self) -> Option<&mut (target_ulong, Pin<Box<T>>)> {
+    pub(crate) fn current_mut(&mut self) -> Option<&mut Pin<Box<T>>> {
         self.0.get_mut(0)
     }
 
-    pub(crate) fn pop(&mut self) -> Option<(target_ulong, Pin<Box<T>>)> {
+    pub(crate) fn pop(&mut self) -> Option<Pin<Box<T>>> {
         if !self.0.is_empty() {
             Some(self.0.remove(0))
         } else {
@@ -41,11 +39,7 @@ impl<T: ?Sized> PinnedQueue<T> {
 }
 
 impl<Out> PinnedQueue<dyn Future<Output = Out>> {
-    pub(crate) fn push_future(
-        &mut self,
-        asid: target_ulong,
-        future: impl Future<Output = Out> + 'static,
-    ) {
-        self.0.push((asid, Box::pin(future) as _));
+    pub(crate) fn push_future(&mut self, future: impl Future<Output = Out> + 'static) {
+        self.0.push(Box::pin(future) as _);
     }
 }

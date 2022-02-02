@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::Future,
     pin::Pin,
     sync::{
@@ -9,13 +8,14 @@ use std::{
     task::{Context, Poll},
 };
 
+use super::arch::{SYSCALL_ARGS, SYSCALL_NUM_REG, SYSCALL_RET};
+use super::{IntoSyscallArgs, SyscallArgs, ThreadId};
 use crate::{regs, sys};
 
-use super::arch::{SYSCALL_ARGS, SYSCALL_NUM_REG, SYSCALL_RET};
-use super::{IntoSyscallArgs, SyscallArgs};
+use dashmap::DashMap;
+use lazy_static::lazy_static;
 use once_cell::sync::OnceCell;
 use panda_sys::{get_cpu, target_ulong, CPUState};
-use parking_lot::Mutex;
 
 pub(crate) struct SyscallFuture {
     ret_val: Arc<OnceCell<target_ulong>>,
@@ -28,10 +28,26 @@ fn set_syscall_args(cpu: &mut CPUState, args: SyscallArgs) {
     }
 }
 
-static LAST_INJECTED_SYSCALL: AtomicU64 = AtomicU64::new(0);
+lazy_static! {
+    static ref LAST_INJECTED_SYSCALL: DashMap<ThreadId, AtomicU64> = DashMap::new();
+}
 
 pub(crate) fn last_injected_syscall() -> target_ulong {
-    LAST_INJECTED_SYSCALL.load(Ordering::SeqCst) as target_ulong
+    LAST_INJECTED_SYSCALL
+        .get(&ThreadId::current())
+        .map(|num| num.load(Ordering::SeqCst) as target_ulong)
+        .unwrap_or_else(|| {
+            log::warn!("No syscall num found for thread {:?}", ThreadId::current());
+            0xBADCA11
+        })
+}
+
+fn set_syscall_num(cpu: &mut CPUState, num: target_ulong) {
+    LAST_INJECTED_SYSCALL
+        .entry(ThreadId::current())
+        .or_default()
+        .store(num as u64, Ordering::SeqCst);
+    regs::set_reg(cpu, SYSCALL_NUM_REG, num);
 }
 
 /// Perform a system call in the guest. Should only be run within an injector being
@@ -45,9 +61,8 @@ pub async fn syscall(num: target_ulong, args: impl IntoSyscallArgs) -> target_ul
     #[cfg(feature = "i386")]
     let saved_bp = regs::get_reg(cpu, regs::Reg::EBP);
 
-    // Setup the system call (set syscall num and setup argument registers)
-    LAST_INJECTED_SYSCALL.store(num as u64, Ordering::SeqCst);
-    regs::set_reg(cpu, SYSCALL_NUM_REG, num);
+    // Setup the system call
+    set_syscall_num(cpu, num);
     set_syscall_args(cpu, args.into_syscall_args().await);
 
     // Wait until the system call has returned to get the return value
@@ -73,9 +88,8 @@ pub async fn syscall_no_return(num: target_ulong, args: impl IntoSyscallArgs) ->
     log::trace!("syscall_no_return num={}", num);
     let cpu = unsafe { &mut *get_cpu() };
 
-    // Setup the system call (set syscall num and setup argument registers)
-    LAST_INJECTED_SYSCALL.store(num as u64, Ordering::SeqCst);
-    regs::set_reg(cpu, SYSCALL_NUM_REG, num);
+    // Setup the system call
+    set_syscall_num(cpu, num);
     set_syscall_args(cpu, args.into_syscall_args().await);
 
     bail_no_restore_regs().await
@@ -93,27 +107,21 @@ pub(crate) static INJECTOR_BAIL: AtomicBool = AtomicBool::new(false);
 pub(crate) static WAITING_FOR_SYSCALL: AtomicBool = AtomicBool::new(false);
 
 // Maps ASID to RET_SLOT
-lazy_static::lazy_static! {
-    static ref RET_SLOT: Mutex<HashMap<target_ulong, Arc<OnceCell<target_ulong>>>>
-        = Mutex::new(HashMap::new());
+lazy_static! {
+    static ref RET_SLOT: DashMap<ThreadId, Arc<OnceCell<target_ulong>>> = DashMap::new();
 }
 
 pub(crate) fn set_ret_value(cpu: &mut CPUState) {
-    let asid = unsafe { sys::panda_current_asid(cpu) };
-    if let Some(ret_slot) = RET_SLOT.lock().get_mut(&asid) {
+    if let Some(ret_slot) = RET_SLOT.get(&ThreadId::current()) {
         if ret_slot.set(regs::get_reg(cpu, SYSCALL_RET)).is_err() {
             println!("WARNING: Attempted to double-set syscall return value");
         }
-        //.expect("Attempted to double-set syscall return value");
+
         log::trace!(
             "Return value set to {:#x?}",
             regs::get_reg(cpu, SYSCALL_RET)
         );
     }
-}
-
-fn current_asid() -> target_ulong {
-    unsafe { sys::panda_current_asid(sys::get_cpu()) }
 }
 
 impl Future for SyscallFuture {
@@ -131,7 +139,7 @@ impl Future for SyscallFuture {
                 let ret_val = Arc::clone(&self.ret_val);
 
                 WAITING_FOR_SYSCALL.store(true, Ordering::SeqCst);
-                RET_SLOT.lock().insert(current_asid(), ret_val);
+                RET_SLOT.insert(ThreadId::current(), ret_val);
 
                 Poll::Pending
             }
