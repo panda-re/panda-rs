@@ -799,7 +799,7 @@ define_callback_attributes!(
         none
     "
 
-    (start_block_exec, panda_cb_type_PANDA_CB_START_BLOCK_EXEC,(cpu: &mut CPUState, tb: &TranslationBlock)),
+    (start_block_exec, panda_cb_type_PANDA_CB_START_BLOCK_EXEC,(cpu: &mut CPUState, tb: &mut TranslationBlock)),
 
     "Callback ID: PANDA_CB_END_BLOCK_EXEC
 
@@ -816,7 +816,7 @@ define_callback_attributes!(
         none
     "
 
-    (end_block_exec, panda_cb_type_PANDA_CB_END_BLOCK_EXEC,(cpu: &mut CPUState, tb: &TranslationBlock)),
+    (end_block_exec, panda_cb_type_PANDA_CB_END_BLOCK_EXEC,(cpu: &mut CPUState, tb: &mut TranslationBlock)),
 
     "Callback ID: PANDA_CB_BEFORE_TCG_CODEGEN
 
