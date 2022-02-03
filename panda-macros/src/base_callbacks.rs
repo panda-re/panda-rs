@@ -781,8 +781,8 @@ define_callback_attributes!(
        the new exception index, which will replace
        cpu->exception_index
      "
-    (before_handle_exception, panda_cb_type_PANDA_CB_BEFORE_HANDLE_EXCEPTION, (cpu: &mut CPUState, exception_index: i32)),
-    (before_handle_interrupt, panda_cb_type_PANDA_CB_BEFORE_HANDLE_INTERRUPT, (cpu: &mut CPUState, exception_index: i32)),
+    (before_handle_exception, panda_cb_type_PANDA_CB_BEFORE_HANDLE_EXCEPTION, (cpu: &mut CPUState, exception_index: i32) -> i32),
+    (before_handle_interrupt, panda_cb_type_PANDA_CB_BEFORE_HANDLE_INTERRUPT, (cpu: &mut CPUState, exception_index: i32) -> i32),
 
     " Callback ID: PANDA_CB_START_BLOCK_EXEC
 
