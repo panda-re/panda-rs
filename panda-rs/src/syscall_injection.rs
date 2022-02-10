@@ -284,7 +284,7 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
                 }
             }
 
-            let is_fork = /*last_injected_syscall() == FORK ||*/ sys_num == FORK;
+            let is_fork = last_injected_syscall() == FORK || sys_num == FORK;
             let is_fork_child = is_fork && regs::get_reg(cpu, SYSCALL_RET) == 0;
 
             if is_fork_child {
