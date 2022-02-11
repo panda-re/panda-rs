@@ -130,6 +130,8 @@ unsafe impl Sync for ChildInjector {}
 
 static CHILD_INJECTOR: Mutex<Option<ChildInjector>> = const_mutex(None);
 
+static PARENT_PID: AtomicU64 = AtomicU64::new(u64::MAX);
+
 /// Fork the guest process being injected into and begin injecting into it using the
 /// provided injector.
 ///
@@ -141,6 +143,8 @@ pub async fn fork(child_injector: impl Future<Output = ()> + 'static) -> target_
     // our system calls, we need to copy those registers as well in case the user wants
     // to resume the base program's execution within the child.
     let backed_up_regs = get_backed_up_regs().expect("Fork was run outside of an injector");
+
+    PARENT_PID.store(ThreadId::current().pid as u64, Ordering::SeqCst);
 
     // Used to keep track of the threads from which parent processes are forking
     FORKING_THREADS.insert(ThreadId::current());
@@ -270,6 +274,7 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
                 pc,
                 ThreadId::current(),
             );
+
             if sys_num == FORK {
                 log::trace!("ret = {:#x?}", regs::get_reg(cpu, SYSCALL_RET));
             }
@@ -284,8 +289,17 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
                 }
             }
 
+            let forker_pid = PARENT_PID.load(Ordering::SeqCst);
+            let is_child_of_forker =
+                forker_pid != u64::MAX && forker_pid == OSI.get_current_process(cpu).ppid as u64;
+
+            if is_child_of_forker {
+                PARENT_PID.store(u64::MAX, Ordering::SeqCst);
+            }
+
             let is_fork = last_injected_syscall() == FORK || sys_num == FORK;
-            let is_fork_child = is_fork && regs::get_reg(cpu, SYSCALL_RET) == 0;
+            let is_fork_child =
+                is_child_of_forker || (is_fork && regs::get_reg(cpu, SYSCALL_RET) == 0);
 
             if is_fork_child {
                 // If we're returning from a fork and are in the child process, retrieve
