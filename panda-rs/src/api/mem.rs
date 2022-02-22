@@ -118,9 +118,13 @@ pub fn physical_memory_write(addr: target_ulong, data: &[u8]) -> MemRWStatus {
     }
 }
 
-/// Translate guest virtual address to physical address
-pub fn virt_to_phys(cpu: &mut CPUState, addr: target_ulong) -> target_ulong {
-    unsafe { panda_sys::panda_virt_to_phys_external(cpu, addr) }
+/// Translate guest virtual address to physical address, returning `None` if no mapping
+/// can be found.
+pub fn virt_to_phys(cpu: &mut CPUState, addr: target_ulong) -> Option<target_ulong> {
+    match unsafe { panda_sys::panda_virt_to_phys_external(cpu, addr) } {
+        target_ulong::MAX => None,
+        phys_addr => Some(phys_addr),
+    }
 }
 
 pub const PAGE_SIZE: target_ulong = 1024;
@@ -140,6 +144,62 @@ pub fn map_memory(name: &str, size: target_ulong, addr: target_ptr_t) -> Result<
 
         Ok(())
     }
+}
+
+const IS_32_BIT: bool = std::mem::size_of::<target_ptr_t>() == 4;
+const TARGET_BITS: usize = std::mem::size_of::<target_ptr_t>() * 8;
+
+fn hex_addr(addr: target_ptr_t) -> impl std::fmt::Display {
+    if IS_32_BIT {
+        format!("{:08x}", addr)
+    } else {
+        format!("{:016x}", addr)
+    }
+}
+
+pub fn virt_memory_dump(cpu: &mut CPUState, addr: target_ptr_t, len: usize) {
+    let memory = virtual_memory_read(cpu, addr, len).unwrap();
+
+    let start_addr_aligned = addr & !0xf;
+    let end_addr_aligned = (addr + (len as target_ptr_t)) & !0xf;
+
+    let bytes_offset = addr - start_addr_aligned;
+
+    let hex_dump = (start_addr_aligned..=end_addr_aligned)
+        .step_by(0x10)
+        .enumerate()
+        .map(|(line_num, line_addr)| {
+            let hex_data = (0..0x10)
+                .map(|offset_in_line| {
+                    if line_num == 0 && offset_in_line < (bytes_offset as usize) {
+                        "  ".into()
+                    } else {
+                        let byte_index =
+                            ((line_num * 0x10) + offset_in_line) - (bytes_offset as usize);
+
+                        if let Some(byte) = memory.get(byte_index) {
+                            format!("{:02x}", byte).into()
+                        } else {
+                            "  ".into()
+                        }
+                    }
+                })
+                .collect::<Vec<std::borrow::Cow<'static, str>>>()
+                .join(" ");
+
+            format!("{}║{}\n", hex_addr(line_addr), hex_data)
+        })
+        .collect::<String>();
+
+    println!(
+        "{} 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f",
+        " ".repeat(TARGET_BITS / 4)
+    );
+    println!(
+        "{}╦═══════════════════════════════════════════════",
+        "═".repeat(TARGET_BITS / 4)
+    );
+    println!("{}", hex_dump);
 }
 
 // Private API ---------------------------------------------------------------------------------------------------------

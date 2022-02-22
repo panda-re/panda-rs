@@ -781,6 +781,59 @@ define_callback_attributes!(
        the new exception index, which will replace
        cpu->exception_index
      "
-    (before_handle_exception, panda_cb_type_PANDA_CB_BEFORE_HANDLE_EXCEPTION, (cpu: &mut CPUState, exception_index: i32)),
-    (before_handle_interrupt, panda_cb_type_PANDA_CB_BEFORE_HANDLE_INTERRUPT, (cpu: &mut CPUState, exception_index: i32))
+    (before_handle_exception, panda_cb_type_PANDA_CB_BEFORE_HANDLE_EXCEPTION, (cpu: &mut CPUState, exception_index: i32) -> i32),
+    (before_handle_interrupt, panda_cb_type_PANDA_CB_BEFORE_HANDLE_INTERRUPT, (cpu: &mut CPUState, exception_index: i32) -> i32),
+
+    " Callback ID: PANDA_CB_START_BLOCK_EXEC
+
+       start_block_exec:
+        This is like before_block_exec except its part of the TCG stream.
+
+       Arguments:
+        CPUState *env:        the current CPU state
+        TranslationBlock *tb: the TB we are executing
+
+       Helper call location: cpu-exec.c
+
+       Return value:
+        none
+    "
+
+    (start_block_exec, panda_cb_type_PANDA_CB_START_BLOCK_EXEC,(cpu: &mut CPUState, tb: &TranslationBlock)),
+
+    "Callback ID: PANDA_CB_END_BLOCK_EXEC
+
+       end_block_exec:
+        This is like after_block_exec except its part of the TCG stream.
+
+       Arguments:
+        CPUState *env:        the current CPU state
+        TranslationBlock *tb: the TB we are executing
+
+       Helper call location: cpu-exec.c
+
+       Return value:
+        none
+    "
+
+    (end_block_exec, panda_cb_type_PANDA_CB_END_BLOCK_EXEC,(cpu: &mut CPUState, tb: &TranslationBlock)),
+
+    "Callback ID: PANDA_CB_BEFORE_TCG_CODEGEN
+
+       before_tcg_codegen:
+        Called before host code generation for every basic block. Enables
+        inspection and modification of the TCG block after lifting from guest
+        code.
+
+       Arguments:
+        CPUState *env:        the current CPU state
+        TranslationBlock *tb: the TB about to be compiled
+
+       Helper call location: translate-all.c
+
+       Return value:
+        None
+    "
+
+    (before_tcg_codegen, panda_cb_type_PANDA_CB_BEFORE_TCG_CODEGEN, (cpu: &mut CPUState, tb: &mut TranslationBlock))
 );

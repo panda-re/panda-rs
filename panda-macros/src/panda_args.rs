@@ -1,61 +1,3 @@
-#[proc_macro_derive(PandaArgs, attributes(name, arg))]
-pub fn derive_panda_args(input: TokenStream) -> TokenStream {
-    let input = syn::parse_macro_input!(input as syn::ItemStruct);
-
-    let name = match get_name(&input.attrs) {
-        Some(name) => name,
-        None => {
-            return quote!(compile_error!(
-                "Missing plugin name, add `#[name = ...]` above struct"
-            ))
-            .into()
-        }
-    };
-
-    let ident = &input.ident;
-
-    match get_field_statements(&input.fields) {
-        Ok((statements, fields)) => {
-            let format_args = iter::repeat("{}={}")
-                .take(statements.len())
-                .collect::<Vec<_>>()
-                .join(",");
-            quote!(
-                impl ::panda::PandaArgs for #ident {
-                    fn from_panda_args() -> Self {
-                        let name = ::std::ffi::CString::new(#name).unwrap();
-
-                        unsafe {
-                            let __args_ptr = ::panda::sys::panda_get_args(name.as_ptr());
-
-                            #(
-                                #statements
-                            )*
-
-                            ::panda::sys::panda_free_args(__args_ptr);
-
-                            Self {
-                                #(#fields),*
-                            }
-                        }
-                    }
-
-                    fn to_panda_args_str(&self) -> ::std::string::String {
-                        format!(
-                            concat!(#name, ":", #format_args),
-                            #(
-                                stringify!(#fields), self.#fields
-                            ),*
-                       )
-                    }
-                }
-            )
-        }
-        Err(err) => err.write_errors(),
-    }
-    .into()
-}
-
 #[derive(FromField)]
 #[darling(attributes(arg))]
 struct DeriveArgs {
@@ -132,4 +74,71 @@ fn get_name(attrs: &[syn::Attribute]) -> Option<String> {
             }
         })
         .flatten()
+}
+
+#[proc_macro_derive(PandaArgs, attributes(name, arg))]
+pub fn derive_panda_args(input: TokenStream) -> TokenStream {
+    let input = syn::parse_macro_input!(input as syn::ItemStruct);
+
+    let name = match get_name(&input.attrs) {
+        Some(name) => name,
+        None => {
+            return quote!(compile_error!(
+                "Missing plugin name, add `#[name = ...]` above struct"
+            ))
+            .into()
+        }
+    };
+
+    let ident = &input.ident;
+
+    match get_field_statements(&input.fields) {
+        Ok((statements, fields)) => {
+            let format_args = iter::repeat("{}={}")
+                .take(statements.len())
+                .collect::<Vec<_>>()
+                .join(",");
+            quote!(
+                impl ::panda::PandaArgs for #ident {
+                    const PLUGIN_NAME: &'static str = #name;
+
+                    fn from_panda_args() -> Self {
+                        let name = ::std::ffi::CString::new(#name).unwrap();
+
+                        unsafe {
+                            let __args_ptr = ::panda::sys::panda_get_args(name.as_ptr());
+
+                            #(
+                                #statements
+                            )*
+
+                            ::panda::sys::panda_free_args(__args_ptr);
+
+                            Self {
+                                #(#fields),*
+                            }
+                        }
+                    }
+
+                    fn to_panda_args_str(&self) -> ::std::string::String {
+                        format!(
+                            concat!(#name, ":", #format_args),
+                            #(
+                                stringify!(#fields), self.#fields
+                            ),*
+                       )
+                    }
+
+                    fn to_panda_args(&self) -> ::std::vec::Vec<(&'static str, ::std::string::String)> {
+                        ::std::vec![
+                            #(
+                                (stringify!(#fields), self.#fields.to_string()),
+                            )*
+                        ]
+                    }
+                }
+            ).into()
+        }
+        Err(err) => err.write_errors().into(),
+    }
 }

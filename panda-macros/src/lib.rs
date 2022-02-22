@@ -32,7 +32,7 @@ pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
             use super::*;
 
             #[no_mangle]
-            unsafe extern "C" fn init_plugin(plugin: *mut ::panda::PluginHandle) {
+            pub unsafe extern "C" fn init_plugin(plugin: *mut ::panda::PluginHandle) -> bool {
                 ::panda::set_plugin_ref(plugin);
 
                 for cb in ::panda::inventory::iter::<::panda::InternalCallback> {
@@ -43,11 +43,11 @@ pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
                     cb.0();
                 }
 
-                #func_name(#args);
+                ::panda::InitReturn::into_init_bool(#func_name(#args))
             }
 
             #[no_mangle]
-            unsafe extern "C" fn uninit_plugin(plugin: *mut ::panda::PluginHandle) {
+             pub unsafe extern "C" fn uninit_plugin(plugin: *mut ::panda::PluginHandle) {
                 for cb in ::panda::inventory::iter::<::panda::UninitCallback> {
                     cb.0(unsafe { &mut *plugin });
                 }
@@ -175,6 +175,38 @@ pub fn derive_guest_type(input: TokenStream) -> TokenStream {
     }
 }
 
+#[proc_macro_attribute]
+pub fn channel_recv(_: TokenStream, func: TokenStream) -> TokenStream {
+    let mut func = syn::parse_macro_input!(func as syn::ItemFn);
+
+    let name = std::mem::replace(&mut func.sig.ident, syn::parse_quote!(inner));
+
+    quote!(
+        extern "C" fn #name(channel_id: u32, data: *const u8, len: usize) {
+            #func
+
+            let msg = unsafe {
+                ::panda::plugins::guest_plugin_manager::FromChannelMessage::from_channel_message(
+                    data, len
+                )
+            };
+
+            match msg {
+                Ok(msg) => {
+                    inner(
+                        channel_id,
+                        msg
+                    );
+                },
+                Err(err) => {
+                    println!("Warning: could not parse channel message, {}", err);
+                }
+            }
+        }
+    )
+    .into()
+}
+
 // derive PandaArgs
 include!("panda_args.rs");
 
@@ -256,7 +288,6 @@ macro_rules! define_callback_attributes {
                             }
 
                             pub fn disable() {
-                                println!("plugin: {}", env!("CARGO_PKG_NAME"));
                                 unsafe {
                                     ::panda::sys::panda_disable_callback(
                                         ::panda::sys::panda_get_plugin_by_name(
