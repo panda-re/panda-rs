@@ -78,7 +78,7 @@ pub fn physical_memory_read(addr: target_ulong, len: usize) -> Result<Vec<u8>, M
 pub fn physical_memory_read_into(addr: target_ulong, buf: &mut [u8]) -> Result<(), MemRWStatus> {
     let res = unsafe {
         panda_sys::panda_physical_memory_read_external(
-            addr,
+            addr as u64,
             buf.as_mut_ptr() as _,
             buf.len() as i32,
         )

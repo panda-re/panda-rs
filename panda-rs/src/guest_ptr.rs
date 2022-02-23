@@ -90,9 +90,10 @@ impl<T: GuestType> GuestPtr<T> {
     /// **Note:** Similar to normal pointer arithmatic the actual value of the offset
     /// will be multiplied by the size of the object.
     pub fn offset(&self, off: usize) -> Self {
-        let size = T::guest_size().expect("Attempted to offset an unsized GuestType") as u64;
+        let size =
+            T::guest_size().expect("Attempted to offset an unsized GuestType") as target_ptr_t;
         GuestPtr {
-            pointer: self.pointer + (size * (off as u64)),
+            pointer: self.pointer + (size * (off as target_ptr_t)),
             guest_type: OnceCell::new(),
         }
     }
@@ -100,7 +101,7 @@ impl<T: GuestType> GuestPtr<T> {
     /// Creates a copy of the pointer offset by N bytes.
     pub fn offset_bytes(&self, bytes: usize) -> Self {
         GuestPtr {
-            pointer: self.pointer + (bytes as u64),
+            pointer: self.pointer + (bytes as target_ptr_t),
             guest_type: OnceCell::new(),
         }
     }
@@ -138,9 +139,4 @@ impl<T: GuestType> Deref for GuestPtr<T> {
         self.get_cached()
             .expect("Failed to read cached value from GuestPtr")
     }
-}
-
-pub struct GuestPtrMut<T> {
-    pointer: target_ptr_t,
-    guest_type: Option<T>,
 }
