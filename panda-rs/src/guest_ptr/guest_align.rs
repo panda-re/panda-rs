@@ -13,6 +13,7 @@ macro_rules! align {
 #[cfg(any(
     feature = "x86_64",
     feature = "i386",
+    feature = "arm",
     feature = "aarch64",
     feature = "mips",
     feature = "mipsel",
