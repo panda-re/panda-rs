@@ -30,6 +30,28 @@ pub fn virtual_memory_read(
     }
 }
 
+/// Read from guest virtual memory into a buffer
+pub fn virtual_memory_read_into(
+    cpu: &mut CPUState,
+    addr: target_ulong,
+    buf: &mut [u8],
+) -> Result<(), MemRWStatus> {
+    let res = unsafe {
+        panda_sys::panda_virtual_memory_read_external(
+            cpu,
+            addr,
+            buf.as_mut_ptr() as _,
+            buf.len() as i32,
+        )
+        .into()
+    };
+
+    match res {
+        MemRWStatus::MemTxOk => Ok(()),
+        _ => Err(res),
+    }
+}
+
 /// Read from guest physical memory
 pub fn physical_memory_read(addr: target_ulong, len: usize) -> Result<Vec<u8>, MemRWStatus> {
     let mut buf: Vec<u8> = Vec::with_capacity(len);
@@ -49,6 +71,23 @@ pub fn physical_memory_read(addr: target_ulong, len: usize) -> Result<Vec<u8>, M
             }
             _ => Err(res),
         }
+    }
+}
+
+/// Read from guest physical memory into a pre-allocated buffer
+pub fn physical_memory_read_into(addr: target_ulong, buf: &mut [u8]) -> Result<(), MemRWStatus> {
+    let res = unsafe {
+        panda_sys::panda_physical_memory_read_external(
+            addr as u64,
+            buf.as_mut_ptr() as _,
+            buf.len() as i32,
+        )
+        .into()
+    };
+
+    match res {
+        MemRWStatus::MemTxOk => Ok(()),
+        _ => Err(res),
     }
 }
 
@@ -135,7 +174,8 @@ pub fn virt_memory_dump(cpu: &mut CPUState, addr: target_ptr_t, len: usize) {
                     if line_num == 0 && offset_in_line < (bytes_offset as usize) {
                         "  ".into()
                     } else {
-                        let byte_index = ((line_num * 0x10) + offset_in_line) - (bytes_offset as usize);
+                        let byte_index =
+                            ((line_num * 0x10) + offset_in_line) - (bytes_offset as usize);
 
                         if let Some(byte) = memory.get(byte_index) {
                             format!("{:02x}", byte).into()

@@ -84,9 +84,16 @@ pub mod on_sys;
 mod library_mode;
 pub use library_mode::*;
 
+mod guest_ptr;
+pub use guest_ptr::*;
+
 /// Safe wrappers for the PANDA API
 mod api;
 pub use api::*;
+
+/// Architecture-specific definitions
+mod arch;
+pub use arch::*;
 
 mod error;
 pub use error::*;
@@ -157,5 +164,5 @@ pub use panda_macros::{
     replay_hd_transfer, replay_net_transfer, replay_serial_read, replay_serial_receive,
     replay_serial_send, replay_serial_write, start_block_exec, top_loop, unassigned_io_read,
     unassigned_io_write, uninit, virt_mem_after_read, virt_mem_after_write, virt_mem_before_read,
-    virt_mem_before_write,
+    virt_mem_before_write, GuestType,
 };
