@@ -5,7 +5,7 @@ pub(crate) trait GuestAlign {
 macro_rules! align {
     ($ident:ident = $align:literal) => {
         impl GuestAlign for $ident {
-            const ALIGN: usize = $align;
+            const ALIGN: usize = $align / 8;
         }
     };
 }

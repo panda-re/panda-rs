@@ -25,9 +25,22 @@ fn setup(_: &mut CPUState) {
     assert_eq!(*ptr.offset(1), 0x20);
     println!("u32 ptr read success!");
 
-    let ptr = ptr.cast::<Test>();
+    let mut ptr = ptr.cast::<Test>();
     assert_eq!(*ptr, Test { x: 0x1234, y: 0x20 });
     println!("Struct read success!");
+
+    ptr.write(|test| {
+        test.x = 0x2345;
+        test.y = 0x21;
+    });
+
+    assert_eq!(*ptr, Test { x: 0x2345, y: 0x21 });
+    println!("Write to GuestPtr cache success");
+
+    ptr.clear_cache();
+
+    assert_eq!(*ptr, Test { x: 0x2345, y: 0x21 });
+    println!("Write to memory success");
 }
 
 fn main() {

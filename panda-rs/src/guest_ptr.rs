@@ -1,6 +1,7 @@
 use crate::prelude::*;
 use once_cell::sync::OnceCell;
 
+use std::alloc::Layout;
 use std::ops::Deref;
 
 mod guest_align;
@@ -11,11 +12,19 @@ pub(crate) use guest_align::GuestAlign;
 /// A type which can be converted to and from a guest memory representation, allowing
 /// it to be used with [`GuestPtr`].
 pub trait GuestType {
+    fn guest_layout() -> Option<Layout>;
+
     /// The size of the type in the guest, `None` if the type is dynamically sized
-    fn guest_size() -> Option<usize>;
+    fn guest_size() -> Option<usize> {
+        Self::guest_layout().map(|layout| layout.size())
+    }
 
     /// The required minimum alignment of the type in the guest
-    fn guest_align() -> usize;
+    fn guest_align() -> usize {
+        Self::guest_layout()
+            .map(|layout| layout.align())
+            .unwrap_or(1)
+    }
 
     fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Self;
     fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t);
@@ -35,6 +44,12 @@ impl<T: GuestType> From<target_ptr_t> for GuestPtr<T> {
             pointer,
             guest_type: OnceCell::new(),
         }
+    }
+}
+
+impl<T: GuestType> Clone for GuestPtr<T> {
+    fn clone(&self) -> Self {
+        Self::from(self.pointer)
     }
 }
 
@@ -96,6 +111,22 @@ impl<T: GuestType> GuestPtr<T> {
             pointer: self.pointer,
             guest_type: OnceCell::new(),
         }
+    }
+
+    /// Write to the GuestPtr, with all modifications flushed at the end of the scope of
+    /// the function provided to `write`.
+    pub fn write(&mut self, func: impl FnOnce(&mut T)) {
+        if self.guest_type.get().is_none() {
+            self.read();
+        }
+
+        let mut inner = self.guest_type.get_mut();
+        let inner = inner.as_mut().unwrap();
+
+        func(inner);
+
+        let cpu = unsafe { &mut *crate::sys::get_cpu() };
+        inner.write_to_guest(cpu, self.pointer)
     }
 }
 

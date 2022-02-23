@@ -65,8 +65,7 @@ impl Repr {
 }
 
 struct Impls {
-    guest_size: TokenStream,
-    guest_align: TokenStream,
+    guest_layout: TokenStream,
     read_from_guest: TokenStream,
     write_to_guest: TokenStream,
     read_from_guest_phys: TokenStream,
@@ -76,6 +75,8 @@ struct Impls {
 fn todo() -> TokenStream {
     quote! { todo!() }
 }
+
+mod struct_impl;
 
 impl GuestTypeInput {
     pub(crate) fn to_tokens(self) -> TokenStream {
@@ -93,27 +94,35 @@ impl GuestTypeInput {
         }
 
         let impls = match data {
-            Data::Enum(en) => Impls {
-                guest_size: todo(),
-                guest_align: todo(),
+            Data::Enum(_en) => Impls {
+                guest_layout: todo(),
                 read_from_guest: todo(),
                 write_to_guest: todo(),
                 read_from_guest_phys: todo(),
                 write_to_guest_phys: todo(),
             },
-            Data::Struct(st) => Impls {
-                guest_size: todo(),
-                guest_align: todo(),
-                read_from_guest: todo(),
-                write_to_guest: todo(),
-                read_from_guest_phys: todo(),
-                write_to_guest_phys: todo(),
-            },
+            Data::Struct(st) => {
+                let guest_layout =
+                    struct_impl::struct_layout(st.fields.iter().map(|field| &field.ty));
+
+                let read_from_guest = struct_impl::read_from_guest(&st.fields);
+                let read_from_guest_phys = struct_impl::read_from_guest_phys(&st.fields);
+
+                let write_to_guest = struct_impl::write_to_guest(&st.fields);
+                let write_to_guest_phys = struct_impl::write_to_guest_phys(&st.fields);
+
+                Impls {
+                    guest_layout,
+                    read_from_guest,
+                    write_to_guest,
+                    read_from_guest_phys,
+                    write_to_guest_phys,
+                }
+            }
         };
 
         let Impls {
-            guest_size,
-            guest_align,
+            guest_layout,
             read_from_guest,
             write_to_guest,
             read_from_guest_phys,
@@ -125,27 +134,23 @@ impl GuestTypeInput {
                 use panda::prelude::*;
 
                 impl ::panda::GuestType for #ty {
-                    fn guest_size() -> Option<usize> {
-                        #guest_size
+                    fn guest_layout() -> Option<::std::alloc::Layout> {
+                        #guest_layout
                     }
 
-                    fn guest_align() -> usize {
-                        #guest_align
-                    }
-
-                    fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Self {
+                    fn read_from_guest(__cpu: &mut CPUState, __ptr: target_ptr_t) -> Self {
                         #read_from_guest
                     }
 
-                    fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) {
+                    fn write_to_guest(&self, __cpu: &mut CPUState, __ptr: target_ptr_t) {
                         #write_to_guest
                     }
 
-                    fn read_from_guest_phys(ptr: target_ptr_t) -> Self {
+                    fn read_from_guest_phys(__ptr: target_ptr_t) -> Self {
                         #read_from_guest_phys
                     }
 
-                    fn write_to_guest_phys(&self, ptr: target_ptr_t) {
+                    fn write_to_guest_phys(&self, __ptr: target_ptr_t) {
                         #write_to_guest_phys
                     }
                 }

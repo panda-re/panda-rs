@@ -2,16 +2,17 @@ use super::GuestAlign;
 use crate::prelude::*;
 use crate::{enums::Endian, mem::*, GuestType, ARCH_ENDIAN};
 
+use std::alloc::Layout;
+
 macro_rules! impl_for_num {
     ($($ty:ty),*) => {
         $(
             impl GuestType for $ty {
-                fn guest_size() -> Option<usize> {
-                    Some(core::mem::size_of::<$ty>())
-                }
-
-                fn guest_align() -> usize {
-                    <$ty as GuestAlign>::ALIGN
+                fn guest_layout() -> Option<Layout> {
+                    Layout::from_size_align(
+                        core::mem::size_of::<$ty>(),
+                        <$ty as GuestAlign>::ALIGN
+                    ).ok()
                 }
 
                 fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Self {
@@ -36,12 +37,22 @@ macro_rules! impl_for_num {
                     }
                 }
 
-                fn write_to_guest(&self, _cpu: &mut CPUState, _ptr: target_ptr_t) {
-                    todo!()
+                fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) {
+                    let bytes = match ARCH_ENDIAN {
+                        Endian::Big => <$ty>::to_be_bytes(*self),
+                        Endian::Little => <$ty>::to_le_bytes(*self),
+                    };
+
+                    virtual_memory_write(cpu, ptr, &bytes);
                 }
 
-                fn write_to_guest_phys(&self, _ptr: target_ptr_t) {
-                    todo!()
+                fn write_to_guest_phys(&self, ptr: target_ptr_t) {
+                    let bytes = match ARCH_ENDIAN {
+                        Endian::Big => <$ty>::to_be_bytes(*self),
+                        Endian::Little => <$ty>::to_le_bytes(*self),
+                    };
+
+                    physical_memory_write(ptr, &bytes);
                 }
             }
         )*
