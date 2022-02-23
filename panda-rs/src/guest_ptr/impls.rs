@@ -1,4 +1,4 @@
-use super::GuestAlign;
+use super::{GuestAlign, GuestPtr};
 use crate::prelude::*;
 use crate::{enums::Endian, mem::*, GuestType, ARCH_ENDIAN};
 
@@ -60,3 +60,25 @@ macro_rules! impl_for_num {
 }
 
 impl_for_num!(u8, u16, u32, u64, u128, i8, i16, i32, i64, i128, f32, f64);
+
+impl<T: GuestType> GuestType for GuestPtr<T> {
+    fn guest_layout() -> Option<Layout> {
+        target_ptr_t::guest_layout()
+    }
+
+    fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Self {
+        Self::from(target_ptr_t::read_from_guest(cpu, ptr))
+    }
+
+    fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) {
+        self.pointer.write_to_guest(cpu, ptr)
+    }
+
+    fn read_from_guest_phys(ptr: target_ptr_t) -> Self {
+        Self::from(target_ptr_t::read_from_guest_phys(ptr))
+    }
+
+    fn write_to_guest_phys(&self, ptr: target_ptr_t) {
+        self.pointer.write_to_guest_phys(ptr)
+    }
+}
