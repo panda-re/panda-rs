@@ -9,9 +9,15 @@ mod impls;
 
 pub(crate) use guest_align::GuestAlign;
 
+#[derive(Copy, Clone, Debug)]
+pub struct GuestReadFail;
+
+#[derive(Copy, Clone, Debug)]
+pub struct GuestWriteFail;
+
 /// A type which can be converted to and from a guest memory representation, allowing
 /// it to be used with [`GuestPtr`].
-pub trait GuestType {
+pub trait GuestType: Sized {
     fn guest_layout() -> Option<Layout>;
 
     /// The size of the type in the guest, `None` if the type is dynamically sized
@@ -26,11 +32,11 @@ pub trait GuestType {
             .unwrap_or(1)
     }
 
-    fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Self;
-    fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t);
+    fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Result<Self, GuestReadFail>;
+    fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) -> Result<(), GuestWriteFail>;
 
-    fn read_from_guest_phys(ptr: target_ptr_t) -> Self;
-    fn write_to_guest_phys(&self, ptr: target_ptr_t);
+    fn read_from_guest_phys(ptr: target_ptr_t) -> Result<Self, GuestReadFail>;
+    fn write_to_guest_phys(&self, ptr: target_ptr_t) -> Result<(), GuestWriteFail>;
 }
 
 pub struct GuestPtr<T: GuestType> {
@@ -62,11 +68,12 @@ impl<T: GuestType> GuestPtr<T> {
     /// [`GuestPtr::update`] instead. If you wish to read at time of first access,
     /// the `GuestPtr` only needs to be dereferenced without calling `read` ahead of
     /// time.
-    pub fn read(&self) {
+    pub fn read(&self) -> Result<&T, GuestReadFail> {
         let cpu = unsafe { &mut *crate::sys::get_cpu() };
 
         self.guest_type
-            .get_or_init(|| Box::new(T::read_from_guest(cpu, self.pointer)));
+            .get_or_try_init(|| T::read_from_guest(cpu, self.pointer).map(Box::new))
+            .map(|x| &**x) // &Box<T> -> &T
     }
 
     /// Reads the value from the guest, replacing it if any exists.
@@ -116,7 +123,7 @@ impl<T: GuestType> GuestPtr<T> {
 
     /// Write to the GuestPtr, with all modifications flushed at the end of the scope of
     /// the function provided to `write`.
-    pub fn write(&mut self, func: impl FnOnce(&mut T)) {
+    pub fn write(&mut self, func: impl FnOnce(&mut T)) -> Result<(), GuestWriteFail> {
         if self.guest_type.get().is_none() {
             self.read();
         }

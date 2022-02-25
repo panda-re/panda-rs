@@ -1,4 +1,4 @@
-use super::{GuestAlign, GuestPtr};
+use super::{GuestAlign, GuestPtr, GuestReadFail, GuestWriteFail};
 use crate::prelude::*;
 use crate::{enums::Endian, mem::*, GuestType, ARCH_ENDIAN};
 
@@ -15,44 +15,46 @@ macro_rules! impl_for_num {
                     ).ok()
                 }
 
-                fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Self {
+                fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Result<Self, GuestReadFail> {
                     let mut bytes = [0u8; core::mem::size_of::<$ty>()];
-                    virtual_memory_read_into(cpu, ptr, &mut bytes)
-                        .expect("Virtual memory read for GuestType failed.");
+                    virtual_memory_read_into(cpu, ptr, &mut bytes).or(Err(GuestReadFail))?;
 
-                    match ARCH_ENDIAN {
+                    Ok(match ARCH_ENDIAN {
                         Endian::Big => <$ty>::from_be_bytes(bytes),
                         Endian::Little => <$ty>::from_le_bytes(bytes),
-                    }
+                    })
                 }
 
-                fn read_from_guest_phys(ptr: target_ptr_t) -> Self {
+                fn read_from_guest_phys(ptr: target_ptr_t) -> Result<Self, GuestReadFail> {
                     let mut bytes = [0u8; core::mem::size_of::<$ty>()];
-                    physical_memory_read_into(ptr, &mut bytes)
-                        .expect("Physical memory read for GuestType failed.");
+                    physical_memory_read_into(ptr, &mut bytes).or(Err(GuestReadFail))?;
 
-                    match ARCH_ENDIAN {
+                    Ok(match ARCH_ENDIAN {
                         Endian::Big => <$ty>::from_be_bytes(bytes),
                         Endian::Little => <$ty>::from_le_bytes(bytes),
-                    }
+                    })
                 }
 
-                fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) {
+                fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) -> Result<(), GuestWriteFail> {
                     let bytes = match ARCH_ENDIAN {
                         Endian::Big => <$ty>::to_be_bytes(*self),
                         Endian::Little => <$ty>::to_le_bytes(*self),
                     };
 
                     virtual_memory_write(cpu, ptr, &bytes);
+
+                    Ok(())
                 }
 
-                fn write_to_guest_phys(&self, ptr: target_ptr_t) {
+                fn write_to_guest_phys(&self, ptr: target_ptr_t) -> Result<(), GuestWriteFail> {
                     let bytes = match ARCH_ENDIAN {
                         Endian::Big => <$ty>::to_be_bytes(*self),
                         Endian::Little => <$ty>::to_le_bytes(*self),
                     };
 
                     physical_memory_write(ptr, &bytes);
+
+                    Ok(())
                 }
             }
         )*
@@ -66,19 +68,19 @@ impl<T: GuestType> GuestType for GuestPtr<T> {
         target_ptr_t::guest_layout()
     }
 
-    fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Self {
-        Self::from(target_ptr_t::read_from_guest(cpu, ptr))
+    fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Result<Self, GuestReadFail> {
+        target_ptr_t::read_from_guest(cpu, ptr).map(Self::from)
     }
 
-    fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) {
+    fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) -> Result<(), GuestWriteFail> {
         self.pointer.write_to_guest(cpu, ptr)
     }
 
-    fn read_from_guest_phys(ptr: target_ptr_t) -> Self {
-        Self::from(target_ptr_t::read_from_guest_phys(ptr))
+    fn read_from_guest_phys(ptr: target_ptr_t) -> Result<Self, GuestReadFail> {
+        target_ptr_t::read_from_guest_phys(ptr).map(Self::from)
     }
 
-    fn write_to_guest_phys(&self, ptr: target_ptr_t) {
+    fn write_to_guest_phys(&self, ptr: target_ptr_t) -> Result<(), GuestWriteFail> {
         self.pointer.write_to_guest_phys(ptr)
     }
 }
@@ -107,7 +109,7 @@ impl<T: GuestType, const N: usize> GuestType for [T; N] {
         T::guest_layout().map(|layout| repeat(&layout, N))
     }
 
-    fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Self {
+    fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Result<Self, GuestReadFail> {
         let padded_size = padded_size(
             &T::guest_layout().expect("Cannot read array of unsized types from guest."),
         );
@@ -116,12 +118,12 @@ impl<T: GuestType, const N: usize> GuestType for [T; N] {
             (ptr..)
                 .step_by(padded_size)
                 .take(N)
-                .map(|ptr| T::read_from_guest(cpu, ptr)),
+                .filter_map(|ptr| T::read_from_guest(cpu, ptr).ok()),
         )
-        .unwrap()
+        .ok_or(GuestReadFail)
     }
 
-    fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) {
+    fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) -> Result<(), GuestWriteFail> {
         let padded_size = padded_size(
             &T::guest_layout().expect("Cannot write array of unsized types to the guest."),
         );
@@ -129,9 +131,11 @@ impl<T: GuestType, const N: usize> GuestType for [T; N] {
         for (ptr, item) in (ptr..).step_by(padded_size).zip(self.iter()) {
             item.write_to_guest(cpu, ptr);
         }
+
+        Ok(())
     }
 
-    fn read_from_guest_phys(ptr: target_ptr_t) -> Self {
+    fn read_from_guest_phys(ptr: target_ptr_t) -> Result<Self, GuestReadFail> {
         let padded_size = padded_size(
             &T::guest_layout().expect("Cannot read array of unsized types from guest."),
         );
@@ -140,12 +144,12 @@ impl<T: GuestType, const N: usize> GuestType for [T; N] {
             (ptr..)
                 .step_by(padded_size)
                 .take(N)
-                .map(T::read_from_guest_phys),
+                .filter_map(|ptr| T::read_from_guest_phys(ptr).ok()),
         )
-        .unwrap()
+        .ok_or(GuestReadFail)
     }
 
-    fn write_to_guest_phys(&self, ptr: target_ptr_t) {
+    fn write_to_guest_phys(&self, ptr: target_ptr_t) -> Result<(), GuestWriteFail> {
         let padded_size = padded_size(
             &T::guest_layout().expect("Cannot write array of unsized types to the guest."),
         );
@@ -153,5 +157,7 @@ impl<T: GuestType, const N: usize> GuestType for [T; N] {
         for (ptr, item) in (ptr..).step_by(padded_size).zip(self.iter()) {
             item.write_to_guest_phys(ptr);
         }
+
+        Ok(())
     }
 }

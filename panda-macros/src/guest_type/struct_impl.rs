@@ -40,10 +40,10 @@ fn read(is_virt: bool, fields: &[GuestTypeField]) -> TokenStream {
 
                 let #field_name = <#field_ty as ::panda::GuestType>::#read_method(
                     #cpu __ptr + (offset as ::panda::prelude::target_ptr_t)
-                );
+                )?;
             )*
 
-            Self { #( #field_name ),* }
+            Ok(Self { #( #field_name ),* })
     }
 }
 
@@ -81,8 +81,10 @@ fn write(is_virt: bool, fields: &[GuestTypeField]) -> TokenStream {
                 <#field_ty as ::panda::GuestType>::#write_method(
                     &self.#field_name,
                     #cpu __ptr + (offset as ::panda::prelude::target_ptr_t)
-                );
+                )?;
             )*
+
+            Ok(())
     }
 }
 

@@ -1,11 +1,95 @@
 use crate::enums::MemRWStatus;
 use crate::prelude::*;
+use crate::GuestType;
 use crate::{sys, Error};
+use crate::{GuestReadFail, GuestWriteFail};
 
 use std::ffi::CString;
 use std::os::raw::c_char;
 
 // Public API ----------------------------------------------------------------------------------------------------------
+
+/// Read a structure or value from guest memory using the guest endianess and
+/// layout for the given type.
+///
+/// ## Example
+///
+/// ```
+/// use panda::mem::read_guest_type;
+/// use panda::prelude::*;
+///
+/// # let cpu: &mut CPUState = todo!();
+/// let pid: u32 = read_guest_type(cpu, 0x55550000).unwrap();
+/// ```
+///
+/// To use custom structures and types, derive the [`GuestType`] trait for your
+/// given structure.
+pub fn read_guest_type<T: GuestType>(
+    cpu: &mut CPUState,
+    addr: target_ptr_t,
+) -> Result<T, GuestReadFail> {
+    T::read_from_guest(cpu, addr)
+}
+
+/// Write a given type to guest memory using the guest endianess and layout for the
+/// given type.
+///
+/// ## Example
+///
+/// ```
+/// use panda::mem::write_guest_type;
+/// use panda::prelude::*;
+///
+/// # let cpu: &mut CPUState = todo!();
+/// let pid = 1234_u32;
+///
+/// write_guest_type(cpu, 0x55550000, pid);
+/// ```
+pub fn write_guest_type<T: GuestType>(
+    cpu: &mut CPUState,
+    addr: target_ptr_t,
+    val: &T,
+) -> Result<(), GuestWriteFail> {
+    val.write_to_guest(cpu, addr)
+}
+
+/// Read a structure or value from physical guest memory using the guest endianess and layout
+/// for the given type.
+///
+/// ## Example
+///
+/// ```
+/// use panda::mem::read_guest_type_phys;
+/// use panda::prelude::*;
+///
+/// # let cpu: &mut CPUState = todo!();
+/// let ptr = 0xF8000010;
+/// let pid: u32 = read_guest_type_phys(ptr).unwrap();
+/// ```
+pub fn read_guest_type_phys<T: GuestType>(addr: target_ptr_t) -> Result<T, GuestReadFail> {
+    T::read_from_guest_phys(addr)
+}
+
+/// Write a given type to guest physical memory using the guest endianess and layout for the
+/// given type.
+///
+/// ## Example
+///
+/// ```
+/// use panda::mem::write_guest_type_phys;
+/// use panda::prelude::*;
+///
+/// # let cpu: &mut CPUState = todo!();
+/// let pid = 1234_u32;
+///
+/// write_guest_type_phys(0xF8000010, pid);
+/// ```
+pub fn write_guest_type_phys<T: GuestType>(
+    addr: target_ptr_t,
+    val: &T,
+) -> Result<(), GuestWriteFail> {
+    val.write_to_guest_phys(addr)
+}
 
 /// Read from guest virtual memory
 pub fn virtual_memory_read(

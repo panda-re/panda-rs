@@ -129,6 +129,9 @@ impl GuestTypeInput {
             write_to_guest_phys,
         } = impls;
 
+        let ret_type = quote!( Result<Self, ::panda::GuestReadFail> );
+        let write_ret = quote!( Result<(), ::panda::GuestWriteFail> );
+
         quote! {
             const _: fn() = || {
                 use panda::prelude::*;
@@ -138,19 +141,19 @@ impl GuestTypeInput {
                         #guest_layout
                     }
 
-                    fn read_from_guest(__cpu: &mut CPUState, __ptr: target_ptr_t) -> Self {
+                    fn read_from_guest(__cpu: &mut CPUState, __ptr: target_ptr_t) -> #ret_type {
                         #read_from_guest
                     }
 
-                    fn write_to_guest(&self, __cpu: &mut CPUState, __ptr: target_ptr_t) {
+                    fn write_to_guest(&self, __cpu: &mut CPUState, __ptr: target_ptr_t) -> #write_ret {
                         #write_to_guest
                     }
 
-                    fn read_from_guest_phys(__ptr: target_ptr_t) -> Self {
+                    fn read_from_guest_phys(__ptr: target_ptr_t) -> #ret_type {
                         #read_from_guest_phys
                     }
 
-                    fn write_to_guest_phys(&self, __ptr: target_ptr_t) {
+                    fn write_to_guest_phys(&self, __ptr: target_ptr_t) -> #write_ret {
                         #write_to_guest_phys
                     }
                 }
