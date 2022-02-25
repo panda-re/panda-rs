@@ -82,3 +82,76 @@ impl<T: GuestType> GuestType for GuestPtr<T> {
         self.pointer.write_to_guest_phys(ptr)
     }
 }
+
+fn padding_needed_for(layout: &Layout, align: usize) -> usize {
+    let len = layout.size();
+
+    let len_rounded_up = len.wrapping_add(align).wrapping_sub(1) & !align.wrapping_sub(1);
+    len_rounded_up.wrapping_sub(len)
+}
+
+fn padded_size(layout: &Layout) -> usize {
+    layout.size() + padding_needed_for(&layout, layout.align())
+}
+
+fn repeat(layout: &Layout, n: usize) -> Layout {
+    let alloc_size = padded_size(layout)
+        .checked_mul(n)
+        .expect("Layout of guest array overflow");
+
+    Layout::from_size_align(alloc_size, layout.align()).expect("Layout of guest array invalid")
+}
+
+impl<T: GuestType, const N: usize> GuestType for [T; N] {
+    fn guest_layout() -> Option<Layout> {
+        T::guest_layout().map(|layout| repeat(&layout, N))
+    }
+
+    fn read_from_guest(cpu: &mut CPUState, ptr: target_ptr_t) -> Self {
+        let padded_size = padded_size(
+            &T::guest_layout().expect("Cannot read array of unsized types from guest."),
+        );
+
+        array_init::from_iter(
+            (ptr..)
+                .step_by(padded_size)
+                .take(N)
+                .map(|ptr| T::read_from_guest(cpu, ptr)),
+        )
+        .unwrap()
+    }
+
+    fn write_to_guest(&self, cpu: &mut CPUState, ptr: target_ptr_t) {
+        let padded_size = padded_size(
+            &T::guest_layout().expect("Cannot write array of unsized types to the guest."),
+        );
+
+        for (ptr, item) in (ptr..).step_by(padded_size).zip(self.iter()) {
+            item.write_to_guest(cpu, ptr);
+        }
+    }
+
+    fn read_from_guest_phys(ptr: target_ptr_t) -> Self {
+        let padded_size = padded_size(
+            &T::guest_layout().expect("Cannot read array of unsized types from guest."),
+        );
+
+        array_init::from_iter(
+            (ptr..)
+                .step_by(padded_size)
+                .take(N)
+                .map(T::read_from_guest_phys),
+        )
+        .unwrap()
+    }
+
+    fn write_to_guest_phys(&self, ptr: target_ptr_t) {
+        let padded_size = padded_size(
+            &T::guest_layout().expect("Cannot write array of unsized types to the guest."),
+        );
+
+        for (ptr, item) in (ptr..).step_by(padded_size).zip(self.iter()) {
+            item.write_to_guest_phys(ptr);
+        }
+    }
+}
