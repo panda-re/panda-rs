@@ -65,7 +65,7 @@ pub use panda_sys as sys;
 //pub use panda_macros::*;
 
 /// PANDA callback macros
-#[doc(inline)]
+#[doc(hidden)]
 pub use panda_macros as cbs;
 
 #[doc(inline)]

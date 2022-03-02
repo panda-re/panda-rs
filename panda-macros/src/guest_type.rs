@@ -13,6 +13,7 @@ pub(crate) struct GuestTypeInput {
     guest_repr: String,
 }
 
+#[allow(dead_code)]
 #[derive(FromVariant)]
 struct GuestTypeVariant {
     ident: syn::Ident,

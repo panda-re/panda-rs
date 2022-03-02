@@ -1,6 +1,6 @@
 use darling::{FromDeriveInput, FromField};
 use proc_macro::TokenStream;
-use quote::quote;
+use quote::{quote, ToTokens};
 use std::iter;
 
 /// (**Required** Callback) Called when the plugin is being uninitialized
@@ -166,13 +166,35 @@ pub fn hook(_: TokenStream, func: TokenStream) -> TokenStream {
 mod guest_type;
 use guest_type::GuestTypeInput;
 
-#[proc_macro_derive(GuestType, attributes(name, arg))]
+#[proc_macro_derive(GuestType)]
 pub fn derive_guest_type(input: TokenStream) -> TokenStream {
     let input = syn::parse_macro_input!(input as syn::DeriveInput);
     match GuestTypeInput::from_derive_input(&input) {
         Ok(input) => input.to_tokens().into(),
         Err(err) => err.write_errors().into(),
     }
+}
+
+mod osi_type;
+use osi_type::OsiTypeInput;
+
+#[proc_macro_derive(OsiType, attributes(osi))]
+pub fn derive_osi_type(input: TokenStream) -> TokenStream {
+    let input = syn::parse_macro_input!(input as syn::DeriveInput);
+    match OsiTypeInput::from_derive_input(&input) {
+        Ok(input) => input.to_tokens().into(),
+        Err(err) => err.write_errors().into(),
+    }
+}
+
+mod osi_static;
+use osi_static::OsiStatics;
+
+#[proc_macro]
+pub fn osi_static(input: TokenStream) -> TokenStream {
+    let input = syn::parse_macro_input!(input as OsiStatics);
+
+    input.into_token_stream().into()
 }
 
 #[proc_macro_attribute]
