@@ -129,7 +129,7 @@ impl<T: GuestType, const N: usize> GuestType for [T; N] {
         );
 
         for (ptr, item) in (ptr..).step_by(padded_size).zip(self.iter()) {
-            item.write_to_guest(cpu, ptr);
+            item.write_to_guest(cpu, ptr)?;
         }
 
         Ok(())
@@ -155,7 +155,7 @@ impl<T: GuestType, const N: usize> GuestType for [T; N] {
         );
 
         for (ptr, item) in (ptr..).step_by(padded_size).zip(self.iter()) {
-            item.write_to_guest_phys(ptr);
+            item.write_to_guest_phys(ptr)?;
         }
 
         Ok(())

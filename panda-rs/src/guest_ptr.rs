@@ -79,7 +79,7 @@ impl<T: GuestType> GuestPtr<T> {
     /// Reads the value from the guest, replacing it if any exists.
     pub fn update(&mut self) {
         self.clear_cache();
-        self.read();
+        self.read().unwrap();
     }
 
     /// Clear the cached value, if any exists.
@@ -125,7 +125,7 @@ impl<T: GuestType> GuestPtr<T> {
     /// the function provided to `write`.
     pub fn write(&mut self, func: impl FnOnce(&mut T)) -> Result<(), GuestWriteFail> {
         if self.guest_type.get().is_none() {
-            self.read();
+            self.read().unwrap();
         }
 
         let mut inner = self.guest_type.get_mut();
@@ -142,7 +142,7 @@ impl<T: GuestType> Deref for GuestPtr<T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
-        self.read();
+        self.read().unwrap();
         self.get_cached()
             .expect("Failed to read cached value from GuestPtr")
     }
