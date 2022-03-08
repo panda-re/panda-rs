@@ -14,7 +14,7 @@ use crate::plugin_import;
 use crate::prelude::*;
 use crate::GuestReadFail;
 
-use std::ffi::CString;
+use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 
 mod osi_statics;
@@ -147,11 +147,13 @@ plugin_import! {
         fn symbol_value_from_name(name: *const c_char) -> target_ptr_t;
         fn addr_of_symbol(symbol: &VolatilitySymbol) -> target_ptr_t;
         fn value_of_symbol(symbol: &VolatilitySymbol) -> target_ptr_t;
+        fn name_of_symbol(symbol: &VolatilitySymbol) -> *mut c_char;
         fn offset_of_field(
             vol_struct: &VolatilityStruct,
             name: *const c_char
         ) -> target_long;
         fn size_of_struct(vol_struct: &VolatilityStruct) -> target_ulong;
+        fn free_osi2_str(string: *mut c_char);
     };
 }
 
@@ -205,6 +207,24 @@ impl VolatilitySymbol {
     /// required afterwards to handle per-CPU structs.
     pub fn raw_value(&self) -> target_ptr_t {
         OSI2.value_of_symbol(self)
+    }
+
+    /// Get the symbol name from the volatility structure if it can be found
+    pub fn name(&self) -> Option<String> {
+        let name_ptr = OSI2.name_of_symbol(self);
+
+        if name_ptr.is_null() {
+            return None;
+        }
+
+        let name = unsafe { CStr::from_ptr(name_ptr) }
+            .to_str()
+            .expect("Invalid volatility symbol name, invalid UTF-8")
+            .to_owned();
+
+        OSI2.free_osi2_str(name_ptr);
+
+        Some(name)
     }
 }
 
