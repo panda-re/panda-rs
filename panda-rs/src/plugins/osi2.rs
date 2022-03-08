@@ -1,6 +1,10 @@
 //! Bindings and helpers for working with the OSI2 plugin, allowing kernel
 //! introspection via Volatility 3 Profiles.
 //!
+//! This allows for easily building off of and taking advantage of the amazing work done by
+//! the Volatility and greater memory forensics communities but in a dynamic analysis
+//! setting.
+//!
 //! See [`OsiType`] and [`osi_static`] for high-level usage.
 //!
 //! [`OsiType`]: macro@panda::plugins::osi2::OsiType
@@ -140,7 +144,9 @@ plugin_import! {
         fn symbol_from_name(name: *const c_char) -> Option<&'static VolatilitySymbol>;
         fn type_from_name(name: *const c_char) -> Option<&'static VolatilityStruct>;
         fn symbol_addr_from_name(name: *const c_char) -> target_ptr_t;
+        fn symbol_value_from_name(name: *const c_char) -> target_ptr_t;
         fn addr_of_symbol(symbol: &VolatilitySymbol) -> target_ptr_t;
+        fn value_of_symbol(symbol: &VolatilitySymbol) -> target_ptr_t;
         fn offset_of_field(
             vol_struct: &VolatilityStruct,
             name: *const c_char
@@ -194,6 +200,12 @@ impl VolatilitySymbol {
     pub fn addr(&self) -> target_ptr_t {
         OSI2.addr_of_symbol(self)
     }
+
+    /// Get the raw value of the given symbol. Note that additional calculations may be
+    /// required afterwards to handle per-CPU structs.
+    pub fn raw_value(&self) -> target_ptr_t {
+        OSI2.value_of_symbol(self)
+    }
 }
 
 impl VolatilityStruct {
@@ -242,13 +254,21 @@ pub fn type_from_name(name: &str) -> Option<&'static VolatilityStruct> {
     OSI2.type_from_name(name.as_ptr())
 }
 
-/// Get the symbol of a type relative to the KASLR base offset from the volatility profile
+/// Get the symbol address of a type including the KASLR base offset from the volatility profile
 /// currently loaded by OSI2. This offset may need additional modification if it points
 /// to a per-CPU structure.
 pub fn symbol_addr_from_name(name: &str) -> target_ptr_t {
     let name = CString::new(name).unwrap();
 
     OSI2.symbol_addr_from_name(name.as_ptr())
+}
+
+/// Get the symbol address of a type, not including the KASLR base offset, from the volatility profile
+/// currently loaded by OSI2.
+pub fn symbol_value_from_name(name: &str) -> target_ptr_t {
+    let name = CString::new(name).unwrap();
+
+    OSI2.symbol_value_from_name(name.as_ptr())
 }
 
 /// Get the KASLR offset of the system, calculating and caching it if it has not already
@@ -286,7 +306,7 @@ pub fn find_per_cpu_address(
     symbol: &str,
 ) -> Result<target_ptr_t, GuestReadFail> {
     let symbol_offset = symbol_addr_from_name(symbol);
-    let ptr_to_ptr = kaslr_offset(cpu) + current_cpu_offset(cpu) + symbol_offset;
+    let ptr_to_ptr = current_cpu_offset(cpu) + symbol_offset;
 
     read_guest_type(cpu, ptr_to_ptr)
 }

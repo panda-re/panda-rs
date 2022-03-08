@@ -76,11 +76,9 @@ impl OsiTypeInput {
                     let __base_ptr = if is_per_cpu {
                         ::panda::plugins::osi2::find_per_cpu_address(__cpu, self.0)?
                     } else {
-                        let symbol_offset = ::panda::plugins::osi2::symbol_addr_from_name(
+                        ::panda::plugins::osi2::symbol_addr_from_name(
                             self.0
-                        );
-
-                        ::panda::plugins::osi2::kaslr_offset(__cpu) + symbol_offset
+                        )
                     };
 
                     ::panda::mem::read_guest_type::<#ty>(
