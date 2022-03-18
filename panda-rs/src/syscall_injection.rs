@@ -72,7 +72,7 @@ mod syscalls;
 
 pub(crate) use storage_location::*;
 use {
-    arch::{FORK, FORK_IS_CLONE, SYSCALL_RET},
+    arch::{FORK_IS_CLONE, SYSCALL_RET, VFORK},
     pinned_queue::PinnedQueue,
     syscall_future::{INJECTOR_BAIL, WAITING_FOR_SYSCALL},
     syscall_regs::SyscallRegs,
@@ -164,7 +164,7 @@ pub async fn fork(child_injector: impl Future<Output = ()> + 'static) -> target_
     if FORK_IS_CLONE {
         todo!()
     } else {
-        syscall(FORK, ()).await
+        syscall(VFORK, ()).await
     }
 }
 
@@ -275,13 +275,13 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
                 ThreadId::current(),
             );
 
-            if sys_num == FORK {
+            if sys_num == VFORK {
                 log::trace!("ret = {:#x?}", regs::get_reg(cpu, SYSCALL_RET));
             }
 
             let thread_id = ThreadId::current();
             if FORKING_THREADS.contains(&thread_id) {
-                if sys_num != FORK {
+                if sys_num != VFORK {
                     println!("Non-fork ({}) return from {:?}", sys_num, thread_id);
                     return;
                 } else {
@@ -297,9 +297,10 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
                 PARENT_PID.store(u64::MAX, Ordering::SeqCst);
             }
 
-            let is_fork = last_injected_syscall() == FORK || sys_num == FORK;
-            let is_fork_child =
-                is_child_of_forker || (is_fork && regs::get_reg(cpu, SYSCALL_RET) == 0);
+            let is_fork_child = is_child_of_forker;
+            //let is_fork = last_injected_syscall() == VFORK || sys_num == VFORK;
+            //let is_fork_child =
+            //    is_child_of_forker || (is_fork && regs::get_reg(cpu, SYSCALL_RET) == 0);
 
             if is_fork_child {
                 // If we're returning from a fork and are in the child process, retrieve
