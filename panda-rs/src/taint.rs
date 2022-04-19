@@ -106,7 +106,7 @@ plugin_import! {
 
 pub type LabelSetVisitorRawFn = extern "C" fn(u32, *mut c_void) -> c_int;
 
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub union ValueUnion {
     pub ha: u64,
@@ -122,7 +122,7 @@ pub union ValueUnion {
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-#[repr(c_int)]
+#[repr(C)]
 #[allow(non_camel_case_types)]
 pub enum AddrType {
     HADDR,
@@ -139,7 +139,7 @@ pub enum AddrType {
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-#[repr(c_int)]
+#[repr(C)]
 #[allow(non_camel_case_types)]
 pub enum AddrFlag {
     IRRELEVANT = 5,
@@ -148,7 +148,7 @@ pub enum AddrFlag {
     FUNCARG,
 }
 
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy)]
 #[repr(C)]
 pub struct Addr {
     pub typ: AddrType,
@@ -212,6 +212,92 @@ pub fn label_reg(register: impl Into<Reg>, label: u32) {
     }
 }
 
+/// Add a 32-bit taint label to a given register. Any previous taint labels on the same register are not removed.
+///
+/// ## Example
+///
+/// ```no_run
+/// use panda::taint;
+/// use panda::regs::Reg;
+///
+/// // Select register by enum for compile-time guarantees
+/// taint::label_reg_additive(Reg::RAX, 1);
+///
+/// // Select register by string when needed
+/// taint::label_reg_additive("rax", 1);
+/// ```
+///
+/// If a register is not supported by the [`Reg`] API, either make an issue or use
+/// [`taint2_label_reg_additive`] directly. (example: `TAINT.taint2_label_reg_additive(reg_num, 0, label)`)
+///
+/// [`taint2_label_reg_additive`]: Taint::taint2_label_reg_additive
+///
+/// **Note**: This will enable taint if not already enabled.
+pub fn label_reg_additive(register: impl Into<Reg>, label: u32) {
+    let reg = register.into() as c_int;
+    enable();
+    for i in 0..std::mem::size_of::<target_ptr_t>() {
+        TAINT.taint2_label_reg_additive(reg, i as c_int, label);
+    }
+}
+
+/// Apply a 32-bit taint label to a specific byte of a given register.
+///
+/// ## Panics
+///
+/// This function panics if `byte_offset` is greater than or equal to the size of the register.
+///
+/// ## Example
+///
+/// ```no_run
+/// use panda::taint;
+/// use panda::regs::Reg;
+///
+/// // Select register by enum for compile-time guarantees
+/// taint::label_reg_byte(Reg::RAX, 0, 1);
+///
+/// // Select register by string when needed
+/// taint::label_reg_byte("rax", 0, 1);
+/// ```
+///
+/// **Note**: This will enable taint if not already enabled.
+pub fn label_reg_byte(register: impl Into<Reg>, byte_offset: usize, label: u32) {
+    assert!(byte_offset < std::mem::size_of::<target_ptr_t>());
+
+    let reg = register.into() as c_int;
+    enable();
+    TAINT.taint2_label_reg(reg, byte_offset as c_int, label);
+}
+
+/// Apply a 32-bit taint label to a specific byte of a given register. Any previous taint labels on the same register
+/// byte are not removed.
+///
+/// ## Panics
+///
+/// This function panics if `byte_offset` is greater than or equal to the size of the register.
+///
+/// ## Example
+///
+/// ```no_run
+/// use panda::taint;
+/// use panda::regs::Reg;
+///
+/// // Select register by enum for compile-time guarantees
+/// taint::label_reg_byte_additive(Reg::RAX, 0, 1);
+///
+/// // Select register by string when needed
+/// taint::label_reg_byte_additive("rax", 0, 1);
+/// ```
+///
+/// **Note**: This will enable taint if not already enabled.
+pub fn label_reg_byte_additive(register: impl Into<Reg>, byte_offset: usize, label: u32) {
+    assert!(byte_offset < std::mem::size_of::<target_ptr_t>());
+
+    let reg = register.into() as c_int;
+    enable();
+    TAINT.taint2_label_reg_additive(reg, byte_offset as c_int, label);
+}
+
 /// Apply a 32-bit taint label to a given byte in RAM.
 ///
 /// ## Example
@@ -229,6 +315,23 @@ pub fn label_ram(addr: target_ptr_t, label: u32) {
     TAINT.taint2_label_ram(addr as u64, label)
 }
 
+/// Add a 32-bit taint label to a given byte in RAM. Any previous taint labels on the same byte are not removed.
+///
+/// ## Example
+///
+/// ```no_run
+/// use panda::taint;
+///
+/// // Add a new taint label `4` to the byte at address 0xfffffff01c5
+/// taint::label_ram_additive(0xfffffff01c5, 4);
+/// ```
+///
+/// **Note**: This will enable taint if not already enabled.
+pub fn label_ram_additive(addr: target_ptr_t, label: u32) {
+    enable();
+    TAINT.taint2_label_ram_additive(addr as u64, label);
+}
+
 /// Apply a 32-bit taint label to a range of bytes in RAM.
 ///
 /// ## Example
@@ -240,14 +343,93 @@ pub fn label_ram(addr: target_ptr_t, label: u32) {
 /// // Select register by enum for compile-time guarantees
 /// let start = 0xfffffff01c4;
 /// let end = start + std::mem::size_of::<target_ptr_t>();
-/// taint::label_ram(, 4);
+/// taint::label_ram(start..end, 4);
 /// ```
 ///
 /// **Note**: This will enable taint if not already enabled.
 pub fn label_ram_range(addr_range: Range<target_ptr_t>, label: u32) {
     enable();
     for addr in addr_range {
-        TAINT.taint2_label_ram(addr as u64, label)
+        TAINT.taint2_label_ram(addr as u64, label);
+    }
+}
+
+/// Add a 32-bit taint label to a range of bytes in RAM. Any previous taint labels on the same range of bytes are not
+/// removed.
+///
+/// ## Example
+///
+/// ```no_run
+/// use panda::taint;
+/// use panda::prelude::*;
+///
+/// // Select register by enum for compile-time guarantees
+/// let start = 0xfffffff01c4;
+/// let end = start + std::mem::size_of::<target_ptr_t>();
+/// taint::label_ram_range_additive(start..end, 4);
+/// ```
+///
+/// **Note**: This will enable taint if not already enabled.
+pub fn label_ram_range_additive(addr_range: Range<target_ptr_t>, label: u32) {
+    enable();
+    for addr in addr_range {
+        TAINT.taint2_label_ram_additive(addr as u64, label);
+    }
+}
+
+/// Removes all taint labels on all bytes of a given register.
+///
+/// This function effectively does nothing if taint is not enabled.
+pub fn unlabel_reg(register: impl Into<Reg>) {
+    if !TAINT_ENABLE.is_completed() {
+        return;
+    }
+
+    let reg = register.into() as c_int;
+    for i in 0..std::mem::size_of::<target_ptr_t>() {
+        TAINT.taint2_delete_reg(reg, i as c_int);
+    }
+}
+
+/// Removes all taint labels on a specific byte of a given register.
+///
+/// This function effectively does nothing if taint is not enabled.
+///
+/// ## Panics
+///
+/// This function panics if `byte_offset` is greater than or equal to the size of the register.
+pub fn unlabel_reg_byte(register: impl Into<Reg>, byte_offset: usize) {
+    assert!(byte_offset < std::mem::size_of::<target_ptr_t>());
+
+    if !TAINT_ENABLE.is_completed() {
+        return;
+    }
+
+    let reg = register.into() as c_int;
+    TAINT.taint2_delete_reg(reg, byte_offset as c_int);
+}
+
+/// Removes all taint labels on a given byte in RAM.
+///
+/// This function effectively does nothing if taint is not enabled.
+pub fn unlabel_ram(addr: target_ptr_t) {
+    if !TAINT_ENABLE.is_completed() {
+        return;
+    }
+
+    TAINT.taint2_delete_ram(addr as u64);
+}
+
+/// Removes all taint labels on a range of bytes in RAM.
+///
+/// This function effectively does nothing if taint is not enabled.
+pub fn unlabel_ram_range(addr_range: Range<target_ptr_t>) {
+    if !TAINT_ENABLE.is_completed() {
+        return;
+    }
+
+    for addr in addr_range {
+        TAINT.taint2_delete_ram(addr as u64);
     }
 }
 
@@ -270,6 +452,31 @@ pub fn check_reg(reg: impl Into<Reg>) -> bool {
     check_reg_num(reg_num)
 }
 
+/// Check if a specific byte of a register is tainted by any label
+///
+/// ## Panics
+///
+/// This function panics if `byte_offset` is greater than or equal to the size of the register.
+///
+/// ## Example
+///
+/// ```no_run
+/// use panda::taint;
+/// use panda::regs::Reg;
+///
+/// taint::label_reg_byte(Reg::RAX, 1, 1);
+///
+/// if taint::check_reg_byte(Reg::RAX, 1) {
+///     println!("RAX[1] is tainted by some label");
+/// }
+/// ```
+pub fn check_reg_byte(reg: impl Into<Reg>, byte_offset: usize) -> bool {
+    assert!(byte_offset < std::mem::size_of::<target_ptr_t>());
+
+    let reg_num = reg.into() as c_int;
+    check_reg_num_byte(reg_num, byte_offset)
+}
+
 /// Check if a register is tainted by any label, by the register number
 ///
 /// ### Notes
@@ -282,6 +489,21 @@ pub fn check_reg_num(reg_num: c_int) -> bool {
 
         (0..reg_size).any(|offset| TAINT.taint2_query_reg(reg_num, offset as c_int) > 0)
     }
+}
+
+/// Check if a specific byte of a register is tainted by any label, by the register number
+///
+/// ## Panics
+///
+/// This function panics if `byte_offset` is greater than or equal to the size of the register.
+///
+/// ### Notes
+///
+/// * When your given register is supported in the [`Reg`] API, use [`check_reg_byte`]
+/// * If taint has not been enabled by **your** plugin, this will return false
+pub fn check_reg_num_byte(reg_num: c_int, byte_offset: usize) -> bool {
+    assert!(byte_offset < std::mem::size_of::<target_ptr_t>());
+    TAINT_ENABLE.is_completed() && TAINT.taint2_query_reg(reg_num, byte_offset as c_int) > 0
 }
 
 /// Check if a byte in RAM is tainted by any label
@@ -329,6 +551,16 @@ pub fn get_reg(reg: impl Into<Reg>) -> Vec<u32> {
     labels.into_iter().collect()
 }
 
+/// Get a list of all taint labels applied to a specific byte of a register
+///
+/// ## Panics
+///
+/// This function panics if `byte_offset` is greater than or equal to the size of the register.
+pub fn get_reg_byte(reg: impl Into<Reg>, byte_offset: usize) -> Vec<u32> {
+    assert!(byte_offset < std::mem::size_of::<target_ptr_t>());
+    iter_reg_byte_labels(reg, byte_offset).collect()
+}
+
 /// Get a list of all taint labels applied to a byte of memory
 pub fn get_ram(addr: target_ptr_t) -> Vec<u32> {
     let mut query_result = QueryResult::empty();
@@ -361,23 +593,34 @@ pub fn iter_reg_labels(reg: impl Into<Reg>) -> impl Iterator<Item = u32> {
 
     let reg = reg.into();
     (0..reg_size)
-        .map(move |i| {
-            let mut query_result = QueryResult::empty();
-            TAINT.taint2_query_reg_full(reg as u32, i as u32, &mut query_result);
-
-            if TAINT.taint2_query_reg(reg as i32, i as c_int) > 0 {
-                LabelIter {
-                    done: query_result.is_empty_or_invalid(),
-                    query_result,
-                }
-            } else {
-                LabelIter {
-                    done: true,
-                    query_result,
-                }
-            }
-        })
+        .map(move |i| iter_reg_byte_labels(reg, i))
         .flatten()
+}
+
+/// Iterate over all the taint labels applied to a specific byte of a given register
+///
+/// ## Panics
+///
+/// This function panics if `byte_offset` is greater than or equal to the size of the register.
+pub fn iter_reg_byte_labels(reg: impl Into<Reg>, byte_offset: usize) -> impl Iterator<Item = u32> {
+    assert!(byte_offset < std::mem::size_of::<target_ptr_t>());
+
+    let reg = reg.into();
+
+    let mut query_result = QueryResult::empty();
+    TAINT.taint2_query_reg_full(reg as u32, byte_offset as u32, &mut query_result);
+
+    if TAINT.taint2_query_reg(reg as c_int, byte_offset as c_int) > 0 {
+        LabelIter {
+            done: query_result.is_empty_or_invalid(),
+            query_result,
+        }
+    } else {
+        LabelIter {
+            done: true,
+            query_result,
+        }
+    }
 }
 
 /// Iterate over all the taint labels applied to a segment of memory
