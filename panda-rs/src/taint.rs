@@ -7,7 +7,7 @@
 //! [dynamic taint analysis]: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.681.4094&rep=rep1&type=pdf
 //!
 //! ## Example
-//! 
+//!
 //! ```no_run
 //! use panda::taint;
 //! use panda::regs::Reg;
@@ -30,32 +30,131 @@
 //!
 //! ([Full Example](https://github.com/panda-re/panda-rs/blob/master/panda-rs/examples/unicorn_taint.rs))
 
-use crate::sys::target_ptr_t;
 use crate::api::regs::Reg;
 use crate::plugin_import;
+use crate::sys::{target_ptr_t, CPUState};
 
-use std::os::raw::{c_void, c_int};
 use std::collections::HashSet;
-use std::sync::Once;
 use std::ops::Range;
+use std::os::raw::{c_int, c_long, c_void};
 use std::ptr;
+use std::sync::Once;
 
-plugin_import!{
+plugin_import! {
     /// Direct access to the taint2 C API when direct use is needed
     static TAINT: Taint = extern "taint2" {
         fn taint2_enable_taint();
         fn taint2_enable_tainted_pointer();
         fn taint2_enabled() -> bool;
+
+        fn taint2_label_addr(a: Addr, offset: c_int, label: u32);
         fn taint2_label_ram(ram_offset: u64, label: u32);
         fn taint2_label_reg(reg_num: c_int, offset: c_int, label: u32);
+        fn taint2_label_io(ia: u64, label: u32);
+        fn taint2_label_ram_additive(ram_offset: u64, label: u32);
+        fn taint2_label_reg_additive(reg_num: c_int, offset: c_int, label: u32);
+        fn taint2_label_io_additive(ia: u64, label: u32);
+        fn taint2_add_taint_ram_pos(cpu: &mut CPUState, addr: u64, length: u32, start_label: u32);
+        fn taint2_add_taint_ram_single_label(cpu: &mut CPUState, addr: u64, length: u32, label: c_long);
+
+        fn taint2_delete_ram(ram_offset: u64);
+        fn taint2_delete_reg(reg_num: c_int, offset: c_int);
+        fn taint2_delete_io(ia: u64);
+
+        fn taint2_query_pandalog(addr: Addr, offset: u32) -> *mut c_void;
+        fn pandalog_taint_query_free(tq: *mut c_void);
+
+        fn taint2_query(addr: Addr) -> u32;
         fn taint2_query_reg(reg_num: c_int, offset: c_int) -> u32;
         fn taint2_query_ram(ram_offset: u64) -> u32;
         fn taint2_query_laddr(la: u64, off: u64) -> u32;
+        fn taint2_query_io(ia: u64) -> u32;
+        fn taint2_query_llvm(reg_num: c_int, offset: c_int) -> u32;
 
+        fn taint2_query_set_a(a: Addr, out: &mut *mut u32, outsz: &mut u32) -> u32;
+
+        fn taint2_query_set(a: Addr, out: *mut u32);
+        fn taint2_query_set_ram(ram_offset: u64, out: *mut u32);
+        fn taint2_query_set_reg(reg_num: c_int, offset: c_int, out: *mut u32);
+        fn taint2_query_set_io(ia: u64, out: *mut u32);
+
+        fn taint2_query_tcn(a: Addr) -> u32;
+        fn taint2_query_tcn_ram(ram_offset: u64) -> u32;
+        fn taint2_query_tcn_reg(reg_num: c_int, offset: c_int) -> u32;
+        fn taint2_query_tcn_io(ia: u64) -> u32;
+        fn taint2_query_tcn_llvm(reg_num: c_int, offset: c_int) -> u32;
+
+        fn taint2_query_cb_mask(a: Addr, size: u8) -> u64;
+
+        fn taint2_labelset_addr_iter(addr: Addr, app: LabelSetVisitorRawFn, stuff: *mut c_void);
+        fn taint2_labelset_ram_iter(ram_offset: u64, app: LabelSetVisitorRawFn, stuff: *mut c_void);
+        fn taint2_labelset_reg_iter(reg_num: c_int, offset: c_int, app: LabelSetVisitorRawFn, stuff: *mut c_void);
+        fn taint2_labelset_io_iter(ia: u64, app: LabelSetVisitorRawFn, stuff: *mut c_void);
+        fn taint2_labelset_llvm_iter(reg_num: c_int, offset: c_int, app: LabelSetVisitorRawFn, stuff: *mut c_void);
+
+        fn taint2_num_labels_applied() -> u32;
+
+        fn taint2_track_taint_state();
+
+        fn taint2_query_results_iter(qr: &mut QueryResult);
         fn taint2_query_result_next(qr: &mut QueryResult, done: &mut bool) -> u32;
+        fn taint2_query_laddr_full(reg_num: u64, offset: u64, qr: &mut QueryResult);
         fn taint2_query_reg_full(reg_num: u32, offset: u32, qr: &mut QueryResult);
         fn taint2_query_ram_full(addr: u64, qr: &mut QueryResult);
     };
+}
+
+pub type LabelSetVisitorRawFn = extern "C" fn(u32, *mut c_void) -> c_int;
+
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[repr(C)]
+pub union ValueUnion {
+    pub ha: u64,
+    pub ma: u64,
+    pub ia: u64,
+    pub pa: u64,
+    pub la: u64,
+    pub gr: u64,
+    pub gs: u64,
+    pub ua: u64,
+    pub con: u64,
+    pub ret: u64,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[repr(c_int)]
+#[allow(non_camel_case_types)]
+pub enum AddrType {
+    HADDR,
+    MADDR,
+    IADDR,
+    PADDR,
+    LADDR,
+    GREG,
+    GSPEC,
+    UNK,
+    CONST,
+    RET,
+    ADDR_LAST,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[repr(c_int)]
+#[allow(non_camel_case_types)]
+pub enum AddrFlag {
+    IRRELEVANT = 5,
+    EXCEPTION = 1,
+    READLOG,
+    FUNCARG,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[repr(C)]
+pub struct Addr {
+    pub typ: AddrType,
+    pub val: ValueUnion,
+    pub off: u16,
+    pub flag: AddrFlag,
 }
 
 static TAINT_ENABLE: Once = Once::new();
@@ -236,7 +335,11 @@ pub fn get_ram(addr: target_ptr_t) -> Vec<u32> {
     TAINT.taint2_query_ram_full(addr as u64, &mut query_result);
 
     if check_ram(addr) {
-        LabelIter { done: query_result.num_labels == 0, query_result }.collect()
+        LabelIter {
+            done: query_result.num_labels == 0,
+            query_result,
+        }
+        .collect()
     } else {
         Vec::with_capacity(0)
     }
@@ -261,11 +364,17 @@ pub fn iter_reg_labels(reg: impl Into<Reg>) -> impl Iterator<Item = u32> {
         .map(move |i| {
             let mut query_result = QueryResult::empty();
             TAINT.taint2_query_reg_full(reg as u32, i as u32, &mut query_result);
-            
+
             if TAINT.taint2_query_reg(reg as i32, i as c_int) > 0 {
-                LabelIter { done: query_result.is_empty_or_invalid(), query_result }
+                LabelIter {
+                    done: query_result.is_empty_or_invalid(),
+                    query_result,
+                }
             } else {
-                LabelIter { done: true, query_result }
+                LabelIter {
+                    done: true,
+                    query_result,
+                }
             }
         })
         .flatten()
@@ -280,11 +389,17 @@ pub fn iter_ram_labels(addr_range: Range<target_ptr_t>) -> impl Iterator<Item = 
         .map(move |addr| {
             let mut query_result = QueryResult::empty();
             TAINT.taint2_query_ram_full(addr as u64, &mut query_result);
-            
+
             if check_ram(addr) {
-                LabelIter { done: query_result.is_empty_or_invalid(), query_result }
+                LabelIter {
+                    done: query_result.is_empty_or_invalid(),
+                    query_result,
+                }
             } else {
-                LabelIter { done: true, query_result }
+                LabelIter {
+                    done: true,
+                    query_result,
+                }
             }
         })
         .flatten()
@@ -335,4 +450,3 @@ impl Iterator for LabelIter {
 }
 
 // TODO: sym_enable, sym_label_ram, sym_label_reg
-
