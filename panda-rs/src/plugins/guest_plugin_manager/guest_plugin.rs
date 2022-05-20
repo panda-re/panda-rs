@@ -21,8 +21,19 @@ pub struct GuestPlugin {
 pub struct Channel(ChannelId);
 
 impl Channel {
-    fn write_packet(&mut self, buf: &[u8]) {
+    /// Write data to a single packet without going through the io::Write trait
+    pub fn write_packet(&mut self, buf: &[u8]) {
         GUEST_PLUGIN_MANAGER.channel_write(self.0, buf.as_ptr(), buf.len());
+    }
+
+    /// Creates a new anonymous channel provided a callback for handling writes
+    pub fn new(callback: ChannelCB) -> Self {
+        Channel(GUEST_PLUGIN_MANAGER.allocate_channel(callback))
+    }
+
+    /// Get the raw channel ID of this channel
+    pub fn id(&self) -> ChannelId {
+        self.0
     }
 }
 

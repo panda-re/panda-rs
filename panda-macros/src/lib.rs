@@ -410,8 +410,9 @@ macro_rules! define_syscalls_callbacks {
                     stringify!($syscall_name),
                     " syscall runs.\n\nCallback arguments: (",
                     $("`", stringify!($arg), "`,",)*
-                    ")\n### Example\n```rust\nuse panda::prelude::*;\n\n#[panda::",
-                    stringify!($attr_name),
+                    ")\n### Example\n```rust\nuse panda::prelude::*;\n\n#[panda::on_sys::",
+                    stringify!($syscall_name),
+                    "_enter",
                     "]\nfn callback(",
                     $("_: ", stringify!($arg), ", ",)*
                     ") {\n    // do stuff\n}\n```"

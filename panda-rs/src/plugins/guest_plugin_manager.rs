@@ -76,6 +76,10 @@ plugin_import! {
         /// associated with, as each guest plugin is allocated a "main" channel of the
         /// same name.
         fn get_channel_from_name(channel_name: *const c_char) -> ChannelId;
+
+        /// Create a new channel given a callback for handling writes, returns the ID
+        /// of the newly allocated channel.
+        fn allocate_channel(callback: ChannelCB) -> ChannelId;
     };
 }
 

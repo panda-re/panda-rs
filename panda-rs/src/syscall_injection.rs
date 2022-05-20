@@ -281,23 +281,31 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
 
             let thread_id = ThreadId::current();
             if FORKING_THREADS.contains(&thread_id) {
-                if sys_num != VFORK {
-                    println!("Non-fork ({}) return from {:?}", sys_num, thread_id);
-                    return;
-                } else {
-                    FORKING_THREADS.remove(&thread_id);
-                }
+                //if sys_num != VFORK {
+                //    println!("Non-fork ({}) return from {:?}", sys_num, thread_id);
+                //    println!("Non-fork ret = {:#x?}", regs::get_reg(cpu, SYSCALL_RET));
+                //    return;
+                //} else {
+                //}
+                println!("Returning from fork {:?}", &thread_id);
+                FORKING_THREADS.remove(&thread_id);
             }
 
             let forker_pid = PARENT_PID.load(Ordering::SeqCst);
-            let is_child_of_forker =
-                forker_pid != u64::MAX && forker_pid == OSI.get_current_process(cpu).ppid as u64;
 
-            if is_child_of_forker {
+            let parent_pid = OSI.get_current_process(cpu).ppid as u64;
+            let is_fork_child = FORKING_THREADS
+                .iter()
+                .any(|thread| thread.pid as u64 == parent_pid);
+
+            //let is_child_of_forker =
+            //    forker_pid != u64::MAX && forker_pid == ;
+
+            if is_fork_child {
                 PARENT_PID.store(u64::MAX, Ordering::SeqCst);
             }
 
-            let is_fork_child = is_child_of_forker;
+            //let is_fork_child = is_child_of_forker;
             //let is_fork = last_injected_syscall() == VFORK || sys_num == VFORK;
             //let is_fork_child =
             //    is_child_of_forker || (is_fork && regs::get_reg(cpu, SYSCALL_RET) == 0);
