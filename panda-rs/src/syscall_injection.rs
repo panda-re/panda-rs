@@ -65,12 +65,11 @@ use crate::{
 mod arch;
 mod conversion;
 mod pinned_queue;
-mod storage_location;
 mod syscall_future;
 mod syscall_regs;
 mod syscalls;
 
-pub(crate) use storage_location::*;
+pub(crate) use crate::abi::set_is_sysenter;
 use {
     arch::{FORK_IS_CLONE, SYSCALL_RET, VFORK},
     pinned_queue::PinnedQueue,

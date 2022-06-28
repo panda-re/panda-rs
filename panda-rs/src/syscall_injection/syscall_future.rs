@@ -10,7 +10,7 @@ use std::{
 
 use super::arch::{SYSCALL_ARGS, SYSCALL_NUM_REG, SYSCALL_RET};
 use super::{IntoSyscallArgs, SyscallArgs, ThreadId};
-use crate::{regs, sys};
+use crate::regs;
 
 use dashmap::DashMap;
 use lazy_static::lazy_static;

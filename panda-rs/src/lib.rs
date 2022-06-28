@@ -77,6 +77,9 @@ pub use {lazy_static, paste};
 #[doc(hidden)]
 extern crate self as panda;
 
+/// Helpers and constants for interacting with various ABIs
+pub mod abi;
+
 /// Callbacks for linux syscalls (from syscalls2)
 pub mod on_sys;
 

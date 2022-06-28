@@ -138,22 +138,35 @@ plugin_import! {
     static OSI2: Osi2 = extern "osi2" {
         fn kaslr_offset(cpu: &mut CPUState) -> target_ptr_t;
         fn current_cpu_offset(cpu: &mut CPUState) -> target_ulong;
+        fn free_osi2_str(string: *mut c_char);
 
-        fn enum_from_name(name: *const c_char) -> Option<&'static VolatilityEnum>;
-        fn base_type_from_name(name: *const c_char) -> Option<&'static VolatilityBaseType>;
         fn symbol_from_name(name: *const c_char) -> Option<&'static VolatilitySymbol>;
-        fn type_from_name(name: *const c_char) -> Option<&'static VolatilityStruct>;
         fn symbol_addr_from_name(name: *const c_char) -> target_ptr_t;
         fn symbol_value_from_name(name: *const c_char) -> target_ptr_t;
         fn addr_of_symbol(symbol: &VolatilitySymbol) -> target_ptr_t;
         fn value_of_symbol(symbol: &VolatilitySymbol) -> target_ptr_t;
         fn name_of_symbol(symbol: &VolatilitySymbol) -> *mut c_char;
+
+        fn type_from_name(name: *const c_char) -> Option<&'static VolatilityStruct>;
+        fn name_of_struct(ty: &VolatilityStruct) -> *mut c_char;
+        fn size_of_struct(vol_struct: &VolatilityStruct) -> target_ulong;
         fn offset_of_field(
             vol_struct: &VolatilityStruct,
             name: *const c_char
         ) -> target_long;
-        fn size_of_struct(vol_struct: &VolatilityStruct) -> target_ulong;
-        fn free_osi2_str(string: *mut c_char);
+        fn type_of_field(
+            vol_struct: &VolatilityStruct,
+            name: *const c_char
+        ) -> *mut c_char;
+        fn get_field_by_index(ty: &VolatilityStruct, index: usize) -> *mut c_char;
+
+        fn enum_from_name(name: *const c_char) -> Option<&'static VolatilityEnum>;
+        fn name_of_enum(ty: &VolatilityEnum) -> *mut c_char;
+
+        fn base_type_from_name(name: *const c_char) -> Option<&'static VolatilityBaseType>;
+        fn name_of_base_type(ty: &VolatilityBaseType) -> *mut c_char;
+        fn size_of_base_type(ty: &VolatilityBaseType) -> target_ptr_t;
+        fn is_base_type_signed(ty: &VolatilityBaseType) -> bool;
     };
 }
 
@@ -239,6 +252,136 @@ impl VolatilityStruct {
         let field_name = CString::new(field).unwrap();
 
         OSI2.offset_of_field(self, field_name.as_ptr())
+    }
+
+    /// Get the type of a given field within the structure given the name of the field
+    pub fn type_of(&self, field: &str) -> String {
+        let field_name = CString::new(field).unwrap();
+
+        let type_ptr = OSI2.type_of_field(self, field_name.as_ptr());
+
+        if type_ptr.is_null() {
+            panic!("Failed to get type of VolatilityStruct field");
+        }
+
+        let type_name = unsafe { CStr::from_ptr(type_ptr) }
+            .to_str()
+            .expect("Invalid volatility struct field type name, invalid UTF-8")
+            .to_owned();
+
+        OSI2.free_osi2_str(type_ptr);
+
+        type_name
+    }
+
+    /// Get the name of a the struct
+    ///
+    /// **Note:** this requires an O(n) reverse lookup and is not efficient. Limit
+    /// usage when possible.
+    pub fn name(&self) -> String {
+        let name_ptr = OSI2.name_of_struct(self);
+
+        if name_ptr.is_null() {
+            panic!("Failed to get name of VolatilityStruct");
+        }
+
+        let name = unsafe { CStr::from_ptr(name_ptr) }
+            .to_str()
+            .expect("Invalid volatility struct name, invalid UTF-8")
+            .to_owned();
+
+        OSI2.free_osi2_str(name_ptr);
+
+        name
+    }
+
+    /// Iterate over the fields of the given struct
+    pub fn fields(&self) -> VolatilityFieldIter<'_> {
+        VolatilityFieldIter(self, 0)
+    }
+}
+
+/// An iterator over the fields of a VolatilityStruct
+pub struct VolatilityFieldIter<'a>(&'a VolatilityStruct, usize);
+
+impl Iterator for VolatilityFieldIter<'_> {
+    type Item = (String, target_ptr_t);
+
+    fn next(&mut self) -> Option<(String, target_ptr_t)> {
+        let name_ptr = OSI2.get_field_by_index(self.0, self.1);
+
+        self.1 += 1;
+
+        if name_ptr.is_null() {
+            return None;
+        }
+
+        let offset = OSI2.offset_of_field(self.0, name_ptr);
+
+        let name = unsafe { CStr::from_ptr(name_ptr) }
+            .to_str()
+            .expect("Invalid volatility field name, invalid UTF-8")
+            .to_owned();
+
+        OSI2.free_osi2_str(name_ptr);
+
+        Some((name, offset as target_ptr_t))
+    }
+}
+
+impl VolatilityEnum {
+    /// Get the name of a the enum
+    ///
+    /// **Note:** this requires an O(n) reverse lookup and is not efficient. Limit
+    /// usage when possible.
+    pub fn name(&self) -> String {
+        let name_ptr = OSI2.name_of_enum(self);
+
+        if name_ptr.is_null() {
+            panic!("Failed to get name of VolatilityEnum");
+        }
+
+        let name = unsafe { CStr::from_ptr(name_ptr) }
+            .to_str()
+            .expect("Invalid volatility struct name, invalid UTF-8")
+            .to_owned();
+
+        OSI2.free_osi2_str(name_ptr);
+
+        name
+    }
+}
+
+impl VolatilityBaseType {
+    /// Get the name of a the base type
+    ///
+    /// **Note:** this requires an O(n) reverse lookup and is not efficient. Limit
+    /// usage when possible.
+    pub fn name(&self) -> String {
+        let name_ptr = OSI2.name_of_base_type(self);
+
+        if name_ptr.is_null() {
+            panic!("Failed to get name of VolatilityBaseType");
+        }
+
+        let name = unsafe { CStr::from_ptr(name_ptr) }
+            .to_str()
+            .expect("Invalid volatility struct name, invalid UTF-8")
+            .to_owned();
+
+        OSI2.free_osi2_str(name_ptr);
+
+        name
+    }
+
+    /// Get the size, in bytes, of the base type
+    pub fn size(&self) -> target_ptr_t {
+        OSI2.size_of_base_type(self)
+    }
+
+    /// Get whether the type is signed or unsigned
+    pub fn signed(&self) -> bool {
+        OSI2.is_base_type_signed(self)
     }
 }
 
