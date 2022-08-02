@@ -123,7 +123,7 @@ pub mod plugins;
 pub mod taint;
 
 #[cfg_attr(doc_cfg, doc(cfg(feature = "syscall-injection")))]
-#[cfg(feature = "syscall-injection")]
+#[cfg(all(feature = "syscall-injection", not(feature = "ppc")))]
 pub mod syscall_injection;
 
 pub use enums::arch::*;
