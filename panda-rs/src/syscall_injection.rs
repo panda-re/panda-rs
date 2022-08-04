@@ -242,6 +242,7 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
 
         injector.await;
 
+        log::debug!("Restoring backed up registers");
         backed_up_regs.restore();
         unset_backed_up_regs();
     });
@@ -283,7 +284,17 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
                 if sys_num != VFORK {
                     log::warn!("Non-fork ({}) return from {:?}", sys_num, thread_id);
                     log::warn!("Non-fork ret = {:#x?}", regs::get_reg(cpu, SYSCALL_RET));
-                    return;
+
+                    if cfg!(not(feature = "arm")) {
+                        return;
+                    }
+
+                    log::warn!("Returning from fork anyways.");
+                    FORKING_THREADS.remove(&thread_id);
+
+                    SHOULD_LOOP_AGAIN.store(true, Ordering::SeqCst);
+                    set_ret_value(cpu);
+                    restart_syscall(cpu, pc);
                 } else {
                     log::debug!("Returning from fork {:?}", &thread_id);
                     FORKING_THREADS.remove(&thread_id);
