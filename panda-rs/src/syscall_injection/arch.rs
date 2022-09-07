@@ -15,9 +15,13 @@ pub(crate) const VFORK: target_ulong = 220;
 
 // TODO: mips needs to be changed to VFORK
 #[cfg(feature = "mips64")]
-pub(crate) const VFORK: target_ulong = 5056;
+pub(crate) const VFORK: target_ulong = 4002;
 
 #[cfg(any(feature = "mips", feature = "mipsel"))]
-pub(crate) const VFORK: target_ulong = 6056; // n32
+pub(crate) const VFORK: target_ulong = 4120; // n32
 
-pub(crate) const FORK_IS_CLONE: bool = cfg!(feature = "aarch64");
+pub(crate) const FORK_IS_CLONE: bool = cfg!(any(
+    feature = "aarch64",
+    feature = "mips",
+    feature = "mipsel"
+));

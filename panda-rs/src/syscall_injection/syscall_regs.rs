@@ -6,7 +6,7 @@ use crate::sys::get_cpu;
 #[derive(Copy, Clone, Debug)]
 pub struct SyscallRegs {
     sys_num_reg: target_ulong,
-    arg_regs: [target_ulong; 6],
+    arg_regs: [target_ulong; SYSCALL_ARGS_LEN],
 }
 
 impl SyscallRegs {

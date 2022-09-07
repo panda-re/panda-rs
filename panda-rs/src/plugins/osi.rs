@@ -1,21 +1,21 @@
 //! Bingings for the OSI (Operating System Introspection) plugin
-use crate::sys::{target_ptr_t, target_pid_t, target_ulong, CPUState};
-use crate::plugins::glib::{GBox, GBoxedSlice};
 use crate::plugin_import;
+use crate::plugins::glib::{GBox, GBoxedSlice};
+use crate::sys::{target_pid_t, target_ptr_t, target_ulong, CPUState};
 
-use std::ffi::CStr;
 use std::borrow::Cow;
+use std::ffi::CStr;
 
 use glib_sys::GArray;
 
-plugin_import!{
+plugin_import! {
     static OSI: Osi = extern "osi" {
         fn get_process_handles(cpu: *mut CPUState) -> GBoxedSlice<OsiProcHandle>;
         fn get_current_thread(cpu: *mut CPUState) -> GBox<OsiThread>;
         fn get_modules(cpu: *mut CPUState) -> GBoxedSlice<OsiModule>;
         fn get_mappings(cpu: *mut CPUState, p: *mut OsiProc) -> GBoxedSlice<OsiModule>;
         fn get_processes(cpu: *mut CPUState) -> GBoxedSlice<OsiProc>;
-        fn get_current_process(cpu: *mut CPUState) -> GBox<OsiProc>;
+        fn get_current_process(cpu: *mut CPUState) -> Option<GBox<OsiProc>>;
         fn get_one_module(osimodules: *mut GArray, idx: ::std::os::raw::c_uint) -> *mut OsiModule;
         fn get_one_proc(osiprocs: *mut GArray, idx: ::std::os::raw::c_uint) -> *mut OsiProc;
         fn cleanup_garray(g: *mut GArray);
@@ -97,6 +97,10 @@ pub type OsiProc = osi_proc_struct;
 
 impl osi_proc_struct {
     pub fn get_name(&self) -> Cow<str> {
-        unsafe { CStr::from_ptr(self.name) }.to_string_lossy()
+        if self.name.is_null() {
+            "".into()
+        } else {
+            unsafe { CStr::from_ptr(self.name) }.to_string_lossy()
+        }
     }
 }

@@ -9,6 +9,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 
 static IS_SYSENTER: AtomicBool = AtomicBool::new(false);
 
+#[allow(dead_code)]
 pub(crate) fn set_is_sysenter(is_sysenter: bool) {
     IS_SYSENTER.store(is_sysenter, Ordering::SeqCst);
 }
@@ -17,25 +18,40 @@ fn is_sysenter() -> bool {
     IS_SYSENTER.load(Ordering::SeqCst)
 }
 
+struct Stack;
+
 pub mod syscall {
     use super::*;
 
+    macro_rules! reg_or_stack {
+        (Stack) => {
+            StorageLocation::StackOffset(0)
+        };
+        ($reg:ident) => {
+            StorageLocation::Reg($reg)
+        };
+    }
+
     macro_rules! syscall_regs {
         {
-            const { $syscall_args:ident, $syscall_ret:ident, $syscall_num_reg:ident };
+            const { $syscall_args:ident, $syscall_ret:ident, $syscall_num_reg:ident, $syscall_args_len:ident };
             $(
                 #[cfg($(arch = $arch:literal),+)] {
-                    args = [$( $args:ident $(@ $offset:literal)? ),*];
+                    args$(: $size:literal)? = [$( $args:ident $(@ $offset:literal)? ),*];
                     return = $ret:ident;
                     syscall_number = $sys_num:ident;
                 }
             )*
         } => {
             $(
+                /// Number of syscall arguments
+                #[cfg(any($(feature = $arch),*))]
+                pub const $syscall_args_len: usize = 6 $(+ ($size - 6))?;
+
                 /// Argument registers for performing syscalls
                 #[cfg(any($(feature = $arch),*))]
-                pub const $syscall_args: [StorageLocation; 6] = [$(
-                    StorageLocation::Reg($args) $(.with_offset($offset))?
+                pub const $syscall_args: [StorageLocation; $syscall_args_len] = [$(
+                    reg_or_stack!($args) $(.with_offset($offset))?
                 ),*];
 
                 /// Register where syscall return value is stored on syscall exit
@@ -50,7 +66,7 @@ pub mod syscall {
     }
 
     syscall_regs! {
-        const {SYSCALL_ARGS, SYSCALL_RET, SYSCALL_NUM_REG};
+        const {SYSCALL_ARGS, SYSCALL_RET, SYSCALL_NUM_REG, SYSCALL_ARGS_LEN};
 
         #[cfg(arch = "x86_64")] {
             args = [RDI, RSI, RDX, R10, R8, R9];
@@ -79,7 +95,18 @@ pub mod syscall {
 
         // we "only" "support" the n32 ABI (syscalls2 supports configuring o32 ABI at
         // compile-time, other things probably(?) don't)
-        #[cfg(arch = "mips", arch = "mipsel", arch = "mips64")] {
+        #[cfg(arch = "mips", arch = "mipsel")] {
+            // n32 ABI
+            // args = [A0, A1, A2, A3, T0, T1];
+
+            // o32 ABI
+            args: 8 = [A0, A1, A2, A3, Stack@0x10, Stack@0x14, Stack@0x18, Stack@0x1c];
+            return = V0;
+            syscall_number = V0;
+        }
+
+        #[cfg(arch = "mips64")] {
+            // n32 ABI
             args = [A0, A1, A2, A3, T0, T1];
             return = V0;
             syscall_number = V0;
@@ -90,6 +117,7 @@ pub mod syscall {
 #[derive(Clone, Copy, PartialEq, Debug)]
 pub enum StorageLocation {
     Reg(Reg),
+    StackOffset(target_ulong),
     StackReg(Reg, target_ulong),
 }
 
@@ -105,38 +133,59 @@ impl From<(Reg, target_ulong)> for StorageLocation {
     }
 }
 
+impl From<Stack> for StorageLocation {
+    fn from(_: Stack) -> Self {
+        Self::StackOffset(0)
+    }
+}
+
 const REG_SIZE: usize = std::mem::size_of::<target_ulong>();
+
+fn is_little_endian() -> bool {
+    crate::ARCH_ENDIAN == crate::enums::Endian::Little
+}
 
 impl StorageLocation {
     #[allow(dead_code)]
     pub(crate) const fn with_offset(self, offset: target_ulong) -> Self {
-        let (Self::Reg(reg) | Self::StackReg(reg, _)) = self;
+        if let Self::Reg(reg) | Self::StackReg(reg, _) = self {
+            Self::StackReg(reg, offset)
+        } else {
+            Self::StackOffset(offset)
+        }
+    }
 
-        Self::StackReg(reg, offset)
+    fn is_stack(&self) -> bool {
+        matches!(self, Self::StackOffset(_)) || is_sysenter()
     }
 
     pub fn read(self, cpu: &mut CPUState) -> target_ulong {
         match self {
-            Self::StackReg(_, stack_offset) if is_sysenter() => {
+            Self::StackReg(_, offset) | Self::StackOffset(offset) if self.is_stack() => {
                 let sp = regs::get_reg(cpu, regs::reg_sp());
 
-                target_ulong::from_le_bytes(
-                    virtual_memory_read(cpu, sp + stack_offset, REG_SIZE)
-                        .expect("Failed to read syscall argument from stack")
-                        .try_into()
-                        .unwrap(),
-                )
+                let bytes = virtual_memory_read(cpu, sp + offset, REG_SIZE)
+                    .expect("Failed to read syscall argument from stack")
+                    .try_into()
+                    .unwrap();
+
+                if is_little_endian() {
+                    target_ulong::from_le_bytes(bytes)
+                } else {
+                    target_ulong::from_be_bytes(bytes)
+                }
             }
+            Self::StackOffset(_offset) => unreachable!(),
             Self::Reg(reg) | Self::StackReg(reg, _) => regs::get_reg(cpu, reg),
         }
     }
 
     pub fn write(self, cpu: &mut CPUState, val: target_ulong) {
         match self {
-            Self::StackReg(reg, stack_offset) if is_sysenter() => {
+            Self::StackReg(reg, offset) if is_sysenter() => {
                 let sp = regs::get_reg(cpu, regs::reg_sp());
 
-                virtual_memory_write(cpu, sp + stack_offset, &val.to_le_bytes());
+                virtual_memory_write(cpu, sp + offset, &val.to_le_bytes());
 
                 #[cfg(feature = "i386")]
                 if reg == Reg::EBP {
@@ -144,6 +193,17 @@ impl StorageLocation {
                 }
 
                 regs::set_reg(cpu, reg, val);
+            }
+            Self::StackOffset(offset) => {
+                let sp = regs::get_reg(cpu, regs::reg_sp());
+
+                let bytes = if is_little_endian() {
+                    val.to_le_bytes()
+                } else {
+                    val.to_be_bytes()
+                };
+
+                virtual_memory_write(cpu, sp + offset, &bytes);
             }
             Self::Reg(reg) | Self::StackReg(reg, _) => regs::set_reg(cpu, reg, val),
         }

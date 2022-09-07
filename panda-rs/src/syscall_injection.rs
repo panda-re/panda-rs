@@ -101,6 +101,9 @@ impl ThreadId {
 
         let tid = thread.tid as target_ulong;
         let pid = thread.pid as target_ulong;
+
+        log::trace!("current tid, pid: {:#x?}, {:#x?}", tid, pid);
+
         Self { tid, pid }
     }
 }
@@ -130,6 +133,8 @@ unsafe impl Sync for ChildInjector {}
 static CHILD_INJECTOR: Mutex<Option<ChildInjector>> = const_mutex(None);
 
 static PARENT_PID: AtomicU64 = AtomicU64::new(u64::MAX);
+
+static JUST_CLONED: AtomicBool = AtomicBool::new(false);
 
 /// Fork the guest process being injected into and begin injecting into it using the
 /// provided injector.
@@ -161,7 +166,27 @@ pub async fn fork(child_injector: impl Future<Output = ()> + 'static) -> target_
     // our syscall number for it (`FORK`) actually be the syscall number for clone, which
     // has a different set of arguments. Currently unsupported.
     if FORK_IS_CLONE {
-        todo!()
+        const CLONE_FILES: target_ulong = 0x00000400;
+        const CLONE_VFORK: target_ulong = 0x00004000;
+        const CLONE_NEWPID: target_ulong = 0x20000000;
+
+        const NULL: target_ptr_t = 0;
+        const CLONE: target_ulong = VFORK;
+
+        JUST_CLONED.swap(true, Ordering::SeqCst);
+
+        log::debug!("Running clone syscall");
+        syscall(
+            CLONE,
+            (
+                CLONE_VFORK | CLONE_NEWPID | CLONE_FILES,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+            ),
+        )
+        .await
     } else {
         syscall(VFORK, ()).await
     }
@@ -267,13 +292,23 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
         // after the syscall set the return value for the future then jump back to
         // the syscall instruction
         sys_return.on_all_sys_return(move |cpu: &mut CPUState, sys_pc, sys_num| {
-            log::trace!(
-                "on_sys_return: {} @ {:#x?} ({:#x?}?) ({:?})",
-                sys_num,
-                sys_pc.pc(),
-                pc,
-                ThreadId::current(),
-            );
+            if JUST_CLONED.load(Ordering::SeqCst) {
+                log::debug!(
+                    "on_sys_return: {} @ {:#x?} ({:#x?}?) ({:?})",
+                    sys_num,
+                    sys_pc.pc(),
+                    pc,
+                    ThreadId::current(),
+                );
+            } else {
+                log::trace!(
+                    "on_sys_return: {} @ {:#x?} ({:#x?}?) ({:?})",
+                    sys_num,
+                    sys_pc.pc(),
+                    pc,
+                    ThreadId::current(),
+                );
+            }
 
             if sys_num == VFORK {
                 log::trace!("ret = {:#x?}", regs::get_reg(cpu, SYSCALL_RET));
@@ -308,8 +343,14 @@ pub fn run_injector(pc: SyscallPc, injector: impl Future<Output = ()> + 'static)
             //    .iter()
             //    .any(|thread| thread.pid as u64 == parent_pid);
 
-            let is_child_of_forker =
-                forker_pid != u64::MAX && forker_pid == OSI.get_current_process(cpu).ppid as u64;
+            let is_child_of_forker = forker_pid != u64::MAX
+                && OSI
+                    .get_current_process(cpu)
+                    .map(|proc| proc.ppid as u64 == forker_pid)
+                    .unwrap_or_else(|| {
+                        log::debug!("Failed to get process");
+                        false
+                    });
 
             if is_child_of_forker {
                 PARENT_PID.store(u64::MAX, Ordering::SeqCst);

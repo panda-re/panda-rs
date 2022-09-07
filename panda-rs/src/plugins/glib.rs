@@ -1,25 +1,29 @@
 //! glib wrappers for supporting glib-based plugins
 
-use std::mem::size_of;
+use glib_sys::{g_array_free, g_free, g_malloc, gpointer, GArray};
 use std::marker::PhantomData;
+use std::mem::size_of;
 use std::ops::{Deref, DerefMut};
-use glib_sys::{g_malloc, g_free, gpointer, g_array_free, GArray};
+
+use std::ptr::NonNull;
 
 /// An owned glib-allocated value that will be freed using glib's allocator on drop.
 #[repr(transparent)]
-pub struct GBox<T>(*mut T);
+pub struct GBox<T>(NonNull<T>);
 
 impl<T: Sized> GBox<T> {
     pub fn new(val: T) -> Self {
         unsafe {
             let ptr = g_malloc(size_of::<T>());
-            *(ptr as *mut T) = val;
-            Self(ptr as *mut T)
+            if !ptr.is_null() {
+                *(ptr as *mut T) = val;
+            }
+            Self(NonNull::new(ptr as *mut T).unwrap())
         }
     }
 
     pub fn as_ptr(&self) -> *const T {
-        self.0
+        self.0.as_ptr()
     }
 }
 
@@ -27,20 +31,20 @@ impl<T> Deref for GBox<T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
-        unsafe { &*self.0 }
+        unsafe { self.0.as_ref() }
     }
 }
 
 impl<T> DerefMut for GBox<T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        unsafe { &mut *self.0 }
+        unsafe { self.0.as_mut() }
     }
 }
 
 impl<T> Drop for GBox<T> {
     fn drop(&mut self) {
         unsafe {
-            g_free(self.0 as gpointer);
+            g_free(self.0.as_ptr() as gpointer);
         }
     }
 }
@@ -56,7 +60,7 @@ impl<T> GBoxedSlice<T> {
 
 impl<T> Deref for GBoxedSlice<T> {
     type Target = [T];
-    
+
     fn deref(&self) -> &Self::Target {
         if self.0.is_null() {
             panic!("Invalid GBoxedSlice: null");
@@ -66,9 +70,7 @@ impl<T> Deref for GBoxedSlice<T> {
             if g_array.data.is_null() {
                 &[]
             } else {
-                unsafe {
-                    std::slice::from_raw_parts(g_array.data as _, g_array.len as usize)
-                }
+                unsafe { std::slice::from_raw_parts(g_array.data as _, g_array.len as usize) }
             }
         }
     }
@@ -84,9 +86,7 @@ impl<T> DerefMut for GBoxedSlice<T> {
         if g_array.data.is_null() {
             &mut []
         } else {
-            unsafe {
-                std::slice::from_raw_parts_mut(g_array.data as *mut T, g_array.len as usize)
-            }
+            unsafe { std::slice::from_raw_parts_mut(g_array.data as *mut T, g_array.len as usize) }
         }
     }
 }
