@@ -4,7 +4,7 @@ use crate::guest_ptr::GuestReadFail;
 use crate::prelude::*;
 use crate::GuestType;
 
-use super::{find_per_cpu_address, kaslr_offset, symbol_addr_from_name};
+use super::{find_per_cpu_address, symbol_addr_from_name};
 
 /// A trait representing that a type is readable using OSI 2.
 ///
@@ -63,8 +63,7 @@ pub struct OsiGlobal<T: OsiType>(pub &'static str, pub T::MethodDispatcher);
 
 impl<T: OsiType> OsiGlobal<T> {
     pub fn read(&self, cpu: &mut CPUState) -> Result<T, GuestReadFail> {
-        let symbol_offset = symbol_addr_from_name(self.0);
-        let ptr = kaslr_offset(cpu) + symbol_offset;
+        let ptr = symbol_addr_from_name(self.0);
 
         T::osi_read(cpu, ptr)
     }
