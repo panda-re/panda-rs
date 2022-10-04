@@ -468,7 +468,7 @@ pub fn find_per_cpu_address(
     cpu: &mut CPUState,
     symbol: &str,
 ) -> Result<target_ptr_t, GuestReadFail> {
-    let symbol_offset = symbol_addr_from_name(symbol);
+    let symbol_offset = symbol_value_from_name(symbol);
     let ptr_to_ptr = current_cpu_offset(cpu) + symbol_offset;
 
     read_guest_type(cpu, ptr_to_ptr)
