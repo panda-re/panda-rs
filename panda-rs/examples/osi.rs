@@ -19,7 +19,7 @@ fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock, exit_code: u
     }
 
     let curr_proc = OSI.get_current_process(cpu);
-    let curr_proc_name_c_str = unsafe { CStr::from_ptr((*curr_proc).name) };
+    let curr_proc_name_c_str = unsafe { CStr::from_ptr(curr_proc.as_ref().unwrap().name) };
 
     let curr_bb = NUM_BB.fetch_add(1, Ordering::SeqCst);
     if (curr_bb % 1000 == 0) && (curr_bb != 0) {
@@ -28,7 +28,7 @@ fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock, exit_code: u
             curr_proc_name_c_str,
             tb.pc,
             NUM_BB.load(Ordering::SeqCst) - 1,
-            OSI.in_shared_object(cpu, curr_proc.as_ptr()),
+            OSI.in_shared_object(cpu, &**curr_proc.as_ref().unwrap()),
         );
     }
 }

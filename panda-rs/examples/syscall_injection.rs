@@ -19,7 +19,7 @@ fn any_syscall(cpu: &mut CPUState, pc: SyscallPc, syscall_num: target_ulong) {
         return;
     }
 
-    let current_pid = OSI.get_current_process(cpu).pid;
+    let current_pid = OSI.get_current_process(cpu).unwrap().pid;
     println!("OSI PID: {}", current_pid);
 
     run_injector(pc, async {
