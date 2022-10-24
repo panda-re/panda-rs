@@ -52,8 +52,17 @@ impl OsiTypeInput {
                 .unwrap();
 
             quote! {
+                let __field_offset = {
+                    static FIELD_OFFSET: ::panda::once_cell::sync::OnceCell<::panda::prelude::target_long>
+                        = ::panda::once_cell::sync::OnceCell::new();
+
+                    *FIELD_OFFSET.get_or_init(|| {
+                        __osi_type.offset_of(#field_name)
+                    })
+                };
+
                 let #ident = ::panda::mem::read_guest_type::<#ty>(
-                    __cpu, __base_ptr + (__osi_type.offset_of(#field_name) as ::panda::prelude::target_ptr_t)
+                    __cpu, __base_ptr + (__field_offset as ::panda::prelude::target_ptr_t)
                 )?;
             }
         });
@@ -74,11 +83,26 @@ impl OsiTypeInput {
 
                     let is_per_cpu = self.1;
                     let __base_ptr = if is_per_cpu {
-                        ::panda::plugins::osi2::find_per_cpu_address(__cpu, self.0)?
+                        static PER_CPU_ADDR: ::panda::once_cell::sync::OnceCell<
+                            Result<
+                                ::panda::prelude::target_ptr_t,
+                                ::panda::GuestReadFail
+                            >
+                        >
+                            = ::panda::once_cell::sync::OnceCell::new();
+
+                        (*PER_CPU_ADDR.get_or_init(|| {
+                            ::panda::plugins::osi2::find_per_cpu_address(__cpu, self.0)
+                        }))?
                     } else {
-                        ::panda::plugins::osi2::symbol_addr_from_name(
-                            self.0
-                        )
+                        static SYMBOL_ADDR: ::panda::once_cell::sync::OnceCell<::panda::prelude::target_ptr_t>
+                            = ::panda::once_cell::sync::OnceCell::new();
+
+                        *SYMBOL_ADDR.get_or_init(|| {
+                            ::panda::plugins::osi2::symbol_addr_from_name(
+                                self.0
+                            )
+                        })
                     };
 
                     ::panda::mem::read_guest_type::<#ty>(

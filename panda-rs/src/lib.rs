@@ -72,7 +72,7 @@ pub use panda_macros as cbs;
 pub use plugins::hooks::hook;
 
 #[doc(hidden)]
-pub use {lazy_static, paste};
+pub use {inventory, lazy_static, once_cell, paste};
 
 #[doc(hidden)]
 extern crate self as panda;
@@ -107,10 +107,6 @@ pub use callbacks::*;
 
 mod init_return;
 pub use init_return::InitReturn;
-
-/// For internal use. Access to inventory for managing callbacks.
-#[doc(hidden)]
-pub use inventory;
 
 /// Helpers for getting plugin arguments from panda
 pub mod panda_arg;
