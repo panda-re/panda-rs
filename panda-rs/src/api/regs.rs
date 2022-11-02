@@ -18,7 +18,8 @@ impl SyscallPc {
 }
 
 impl Reg {
-    fn iter() -> RegIter {
+    /// Iterate over the available registers
+    pub fn iter() -> RegIter {
         <Self as IntoEnumIterator>::iter()
     }
 }
