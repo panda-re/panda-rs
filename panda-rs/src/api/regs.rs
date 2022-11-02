@@ -17,6 +17,12 @@ impl SyscallPc {
     }
 }
 
+impl Reg {
+    fn iter() -> RegIter {
+        <Self as IntoEnumIterator>::iter()
+    }
+}
+
 // Arch-specific mappings ----------------------------------------------------------------------------------------------
 
 // TODO: handle AX/AH/AL, etc via shifts? Tricky b/c enum val used to index QEMU array
