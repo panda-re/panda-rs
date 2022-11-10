@@ -32,6 +32,9 @@ struct OsiTypeField {
 
     #[darling(default)]
     rename: Option<String>,
+
+    #[darling(default)]
+    osi_type: bool,
 }
 
 impl OsiTypeInput {
@@ -51,6 +54,16 @@ impl OsiTypeInput {
                 .or_else(|| ident.as_ref().map(ToString::to_string))
                 .unwrap();
 
+            let read_func = if field.osi_type {
+                quote! {
+                    <#ty as ::panda::plugins::osi2::OsiType>::osi_read
+                }
+            } else {
+                quote! {
+                    ::panda::mem::read_guest_type::<#ty>
+                }
+            };
+
             quote! {
                 let __field_offset = {
                     static FIELD_OFFSET: ::panda::once_cell::sync::OnceCell<::panda::prelude::target_long>
@@ -61,7 +74,7 @@ impl OsiTypeInput {
                     })
                 };
 
-                let #ident = ::panda::mem::read_guest_type::<#ty>(
+                let #ident = #read_func (
                     __cpu, __base_ptr + (__field_offset as ::panda::prelude::target_ptr_t)
                 )?;
             }
@@ -76,8 +89,18 @@ impl OsiTypeInput {
                 .or_else(|| ident.as_ref().map(ToString::to_string))
                 .unwrap();
 
+            let read_func = if field.osi_type {
+                quote! {
+                    <#ty as ::panda::plugins::osi2::OsiType>::osi_read
+                }
+            } else {
+                quote! {
+                    ::panda::mem::read_guest_type::<#ty>
+                }
+            };
+
             quote! {
-                pub fn #ident(&self, __cpu: &mut CPUState) -> Result<#ty, ::panda::GuestReadFail> {
+                pub(crate) fn #ident(&self, __cpu: &mut CPUState) -> Result<#ty, ::panda::GuestReadFail> {
                     let __osi_type = ::panda::plugins::osi2::type_from_name(#type_name)
                         .ok_or(::panda::GuestReadFail)?;
 
@@ -105,7 +128,7 @@ impl OsiTypeInput {
                         })
                     };
 
-                    ::panda::mem::read_guest_type::<#ty>(
+                    #read_func (
                         __cpu, __base_ptr + (__osi_type.offset_of(#field_name) as ::panda::prelude::target_ptr_t)
                     )
                 }

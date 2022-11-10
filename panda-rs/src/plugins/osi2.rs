@@ -80,6 +80,7 @@ pub use panda_macros::osi_static;
 /// |:-----------:|:------------------:|:--------:|:------------|
 /// | `type_name` |    Struct-Level    |    ✔️     | Sets the name of the type to pull info from within the volatility profile |
 /// |   `rename`  |    Field-Level     |          | By default the name of the field within the volatility profile will be assumed to be identical to the field within the Rust type, the `rename` attribute allows overriding this to have the volatility name and Rust field name be separate.
+/// |  `osi_type` |    Field-Level     |          | Treat as a nested [`OsiType`], not a [`GuestType`]
 ///
 /// ## Example
 ///
