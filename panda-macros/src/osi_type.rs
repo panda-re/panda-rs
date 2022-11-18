@@ -106,17 +106,7 @@ impl OsiTypeInput {
 
                     let is_per_cpu = self.1;
                     let __base_ptr = if is_per_cpu {
-                        static PER_CPU_ADDR: ::panda::once_cell::sync::OnceCell<
-                            Result<
-                                ::panda::prelude::target_ptr_t,
-                                ::panda::GuestReadFail
-                            >
-                        >
-                            = ::panda::once_cell::sync::OnceCell::new();
-
-                        (*PER_CPU_ADDR.get_or_init(|| {
-                            ::panda::plugins::osi2::find_per_cpu_address(__cpu, self.0)
-                        }))?
+                        ::panda::plugins::osi2::find_per_cpu_address(__cpu, self.0)?
                     } else {
                         static SYMBOL_ADDR: ::panda::once_cell::sync::OnceCell<::panda::prelude::target_ptr_t>
                             = ::panda::once_cell::sync::OnceCell::new();
