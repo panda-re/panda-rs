@@ -8,7 +8,7 @@ use super::{find_per_cpu_address, symbol_addr_from_name};
 
 /// A trait representing that a type is readable using OSI 2.
 ///
-/// See the [`OsiType`](macro@panda::plugins::osi2::OsiType) derive macro for more details.
+/// See the [`OsiType`](macro@panda::plugins::cosi::OsiType) derive macro for more details.
 pub trait OsiType: Sized {
     type MethodDispatcher;
 
@@ -35,7 +35,7 @@ impl<T: GuestType> OsiType for T {
     }
 }
 
-/// A type used internally by [`osi_static`](panda::plugins::osi2::osi_static) in order
+/// A type used internally by [`osi_static`](panda::plugins::cosi::osi_static) in order
 /// to provide a value that can be read wholesale or one field at a time.
 #[doc(hidden)]
 pub struct PerCpu<T: OsiType>(pub &'static str, pub T::MethodDispatcher);
@@ -56,7 +56,7 @@ impl<T: OsiType> Deref for PerCpu<T> {
     }
 }
 
-/// A type used internally by [`osi_static`](panda::plugins::osi2::osi_static) in order
+/// A type used internally by [`osi_static`](panda::plugins::cosi::osi_static) in order
 /// to provide a value that can be read wholesale or one field at a time.
 #[doc(hidden)]
 pub struct OsiGlobal<T: OsiType>(pub &'static str, pub T::MethodDispatcher);

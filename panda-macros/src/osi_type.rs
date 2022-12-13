@@ -56,7 +56,7 @@ impl OsiTypeInput {
 
             let read_func = if field.osi_type {
                 quote! {
-                    <#ty as ::panda::plugins::osi2::OsiType>::osi_read
+                    <#ty as ::panda::plugins::cosi::OsiType>::osi_read
                 }
             } else {
                 quote! {
@@ -91,7 +91,7 @@ impl OsiTypeInput {
 
             let read_func = if field.osi_type {
                 quote! {
-                    <#ty as ::panda::plugins::osi2::OsiType>::osi_read
+                    <#ty as ::panda::plugins::cosi::OsiType>::osi_read
                 }
             } else {
                 quote! {
@@ -101,18 +101,18 @@ impl OsiTypeInput {
 
             quote! {
                 pub(crate) fn #ident(&self, __cpu: &mut CPUState) -> Result<#ty, ::panda::GuestReadFail> {
-                    let __osi_type = ::panda::plugins::osi2::type_from_name(#type_name)
+                    let __osi_type = ::panda::plugins::cosi::type_from_name(#type_name)
                         .ok_or(::panda::GuestReadFail)?;
 
                     let is_per_cpu = self.1;
                     let __base_ptr = if is_per_cpu {
-                        ::panda::plugins::osi2::find_per_cpu_address(__cpu, self.0)?
+                        ::panda::plugins::cosi::find_per_cpu_address(__cpu, self.0)?
                     } else {
                         static SYMBOL_ADDR: ::panda::once_cell::sync::OnceCell<::panda::prelude::target_ptr_t>
                             = ::panda::once_cell::sync::OnceCell::new();
 
                         *SYMBOL_ADDR.get_or_init(|| {
-                            ::panda::plugins::osi2::symbol_addr_from_name(
+                            ::panda::plugins::cosi::symbol_addr_from_name(
                                 self.0
                             )
                         })
@@ -141,14 +141,14 @@ impl OsiTypeInput {
                 )*
             }
 
-            impl ::panda::plugins::osi2::OsiType for #self_ident {
+            impl ::panda::plugins::cosi::OsiType for #self_ident {
                 type MethodDispatcher = #method_dispatcher;
 
                 fn osi_read(
                     __cpu: &mut ::panda::prelude::CPUState,
                     __base_ptr: ::panda::prelude::target_ptr_t,
                 ) -> Result<Self, ::panda::GuestReadFail> {
-                    let __osi_type = ::panda::plugins::osi2::type_from_name(#type_name)
+                    let __osi_type = ::panda::plugins::cosi::type_from_name(#type_name)
                         .ok_or(::panda::GuestReadFail)?;
 
 

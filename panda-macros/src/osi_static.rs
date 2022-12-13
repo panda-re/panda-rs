@@ -55,9 +55,9 @@ impl quote::ToTokens for OsiStatics {
             match symbol {
                 Some(Ok(symbol)) => {
                     let osi_static_type = if is_per_cpu {
-                        quote! { ::panda::plugins::osi2::PerCpu }
+                        quote! { ::panda::plugins::cosi::PerCpu }
                     } else {
-                        quote! { ::panda::plugins::osi2::OsiGlobal }
+                        quote! { ::panda::plugins::cosi::OsiGlobal }
                     };
                     let ident = &item.ident;
                     let ty = &item.ty;
@@ -65,7 +65,7 @@ impl quote::ToTokens for OsiStatics {
                     tokens.extend(quote! {
                         static #ident: #osi_static_type<#ty> = #osi_static_type(
                             #symbol,
-                            <#ty as ::panda::plugins::osi2::OsiType>::MethodDispatcher::new(
+                            <#ty as ::panda::plugins::cosi::OsiType>::MethodDispatcher::new(
                                 #symbol, #is_per_cpu
                             ),
                         );

@@ -7,8 +7,8 @@
 //!
 //! See [`OsiType`] and [`osi_static`] for high-level usage.
 //!
-//! [`OsiType`]: macro@panda::plugins::osi2::OsiType
-//! [`osi_static`]: panda::plugins::osi2::osi_static
+//! [`OsiType`]: macro@panda::plugins::cosi::OsiType
+//! [`osi_static`]: panda::plugins::cosi::osi_static
 use crate::mem::read_guest_type;
 use crate::plugin_import;
 use crate::prelude::*;
@@ -43,7 +43,7 @@ pub use osi_statics::*;
 /// ## Example
 ///
 /// ```
-/// use panda::plugins::osi2::{OsiType, osi_static};
+/// use panda::plugins::cosi::{OsiType, osi_static};
 ///
 /// #[derive(OsiType, Debug)]
 /// #[osi(type_name = "task_struct")]
@@ -135,11 +135,11 @@ pub use panda_macros::osi_static;
 pub use panda_macros::OsiType;
 
 plugin_import! {
-    /// Raw bindings to the osi2 plugin. It is not recommended to use these directly
-    static OSI2: Osi2 = extern "osi2" {
+    /// Raw bindings to the cosi plugin. It is not recommended to use these directly
+    static OSI2: Osi2 = extern "cosi" {
         fn kaslr_offset(cpu: &mut CPUState) -> target_ptr_t;
         fn current_cpu_offset(cpu: &mut CPUState) -> target_ulong;
-        fn free_osi2_str(string: *mut c_char);
+        fn free_cosi_str(string: *mut c_char);
 
         fn symbol_from_name(name: *const c_char) -> Option<&'static VolatilitySymbol>;
         fn symbol_addr_from_name(name: *const c_char) -> target_ptr_t;
@@ -236,7 +236,7 @@ impl VolatilitySymbol {
             .expect("Invalid volatility symbol name, invalid UTF-8")
             .to_owned();
 
-        OSI2.free_osi2_str(name_ptr);
+        OSI2.free_cosi_str(name_ptr);
 
         Some(name)
     }
@@ -270,7 +270,7 @@ impl VolatilityStruct {
             .expect("Invalid volatility struct field type name, invalid UTF-8")
             .to_owned();
 
-        OSI2.free_osi2_str(type_ptr);
+        OSI2.free_cosi_str(type_ptr);
 
         type_name
     }
@@ -291,7 +291,7 @@ impl VolatilityStruct {
             .expect("Invalid volatility struct name, invalid UTF-8")
             .to_owned();
 
-        OSI2.free_osi2_str(name_ptr);
+        OSI2.free_cosi_str(name_ptr);
 
         name
     }
@@ -324,7 +324,7 @@ impl Iterator for VolatilityFieldIter<'_> {
             .expect("Invalid volatility field name, invalid UTF-8")
             .to_owned();
 
-        OSI2.free_osi2_str(name_ptr);
+        OSI2.free_cosi_str(name_ptr);
 
         Some((name, offset as target_ptr_t))
     }
@@ -347,7 +347,7 @@ impl VolatilityEnum {
             .expect("Invalid volatility struct name, invalid UTF-8")
             .to_owned();
 
-        OSI2.free_osi2_str(name_ptr);
+        OSI2.free_cosi_str(name_ptr);
 
         name
     }
@@ -370,7 +370,7 @@ impl VolatilityBaseType {
             .expect("Invalid volatility struct name, invalid UTF-8")
             .to_owned();
 
-        OSI2.free_osi2_str(name_ptr);
+        OSI2.free_cosi_str(name_ptr);
 
         name
     }

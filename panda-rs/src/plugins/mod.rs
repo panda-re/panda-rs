@@ -10,7 +10,7 @@ pub mod guest_plugin_manager;
 pub mod hooks;
 pub mod hooks2;
 pub mod osi;
-pub mod osi2;
+pub mod cosi;
 pub mod proc_start_linux;
 
 #[cfg(not(feature = "ppc"))]
