@@ -1,6 +1,6 @@
 [package]
 name = "panda-re"
-version = "0.45.0"
+version = "0.45.1"
 authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>", "tnballo <tnballo@users.noreply.github.com>"]
 edition = "2018"
 description = "The official library for interfacing with PANDA (Platform for Architecture-Neutral Dynamic Analysis)"
@@ -10,7 +10,7 @@ homepage = "https://panda-re.mit.edu"
 repository = "https://github.com/panda-re/panda-rs"
 
 [package.metadata.docs.rs]
-cargo-args = ["-Zunstable-options", "-Zrustdoc-scrape-examples=examples"]
+cargo-args = ["-Zunstable-options", "-Zrustdoc-scrape-examples"]
 rustdoc-args = ["--cfg", "doc_cfg"]
 
 [lib]
