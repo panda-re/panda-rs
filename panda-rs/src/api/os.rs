@@ -1,6 +1,7 @@
 use crate::sys::{
     panda_os_bits, panda_os_family, panda_os_familyno, panda_os_name, panda_os_variant,
 };
+use once_cell::sync::Lazy;
 
 use std::ffi::CStr;
 
@@ -15,6 +16,19 @@ macro_rules! convert_static_str {
         }
     };
 }
+
+/// Get the name of the OS currently set. This is typically set by the `-os` command line
+/// argument passed to a PANDA instance.
+pub static NAME: Lazy<Option<String>> = Lazy::new(|| unsafe {
+    if panda_os_name.is_null() {
+        None
+    } else {
+        CStr::from_ptr(panda_os_name)
+            .to_str()
+            .ok()
+            .map(String::from)
+    }
+});
 
 /// Get the name of the OS currently set. This is typically set by the `-os` command line
 /// argument passed to a PANDA instance.
