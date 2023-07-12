@@ -15,6 +15,13 @@ use std::iter;
 ///     println!("Plugin started up!");
 /// }
 /// ```
+///
+/// ### Allowed Return Types
+///
+/// - `()`: plugin load always succeeds
+/// - `bool`: plugin load is aborted if `false` is returned
+/// - `Result<T, E>`: plugin load is aborted on `Err`, prints the error beforehand
+/// - `i32`: plugin load succeeds if `0` is returned, otherwise abort
 #[proc_macro_attribute]
 pub fn init(_: TokenStream, function: TokenStream) -> TokenStream {
     let func = syn::parse_macro_input!(function as syn::ItemFn);
