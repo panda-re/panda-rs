@@ -2,6 +2,7 @@ use crate::{
     panda_physical_memory_read_external, panda_virtual_memory_read_external,
     panda_virtual_memory_write_external, target_ptr_t, target_ulong, CPUState,
 };
+use std::ffi::c_char;
 use std::mem::{size_of, transmute, MaybeUninit};
 
 const READ_CHUNK_SIZE: target_ptr_t = 0x10;
@@ -14,7 +15,7 @@ impl CPUState {
             if panda_virtual_memory_read_external(
                 self,
                 addr,
-                temp.as_mut_ptr() as *mut i8,
+                temp.as_mut_ptr() as *mut c_char,
                 len as _,
             ) != 0
             {
@@ -43,7 +44,12 @@ impl CPUState {
         let mut temp = vec![0; len];
 
         let ret = unsafe {
-            panda_virtual_memory_read_external(self, addr, temp.as_mut_ptr() as *mut i8, len as _)
+            panda_virtual_memory_read_external(
+                self,
+                addr,
+                temp.as_mut_ptr() as *mut c_char,
+                len as _,
+            )
         };
 
         if ret == 0 {
@@ -72,7 +78,7 @@ impl CPUState {
             if panda_virtual_memory_read_external(
                 self,
                 addr,
-                temp.as_mut_ptr() as *mut i8,
+                temp.as_mut_ptr() as *mut c_char,
                 size_of::<T>() as _,
             ) != 0
             {
@@ -91,7 +97,7 @@ impl CPUState {
                 panda_virtual_memory_read_external(
                     self,
                     addr,
-                    temp.as_mut_ptr() as *mut i8,
+                    temp.as_mut_ptr() as *mut c_char,
                     READ_CHUNK_SIZE as _,
                 );
             }
