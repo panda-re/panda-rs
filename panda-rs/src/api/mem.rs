@@ -182,7 +182,7 @@ pub fn virtual_memory_write(cpu: &mut CPUState, addr: target_ulong, data: &[u8])
         panda_sys::panda_virtual_memory_write_external(
             cpu,
             addr,
-            c_data.as_mut_ptr() as *mut i8,
+            c_data.as_mut_ptr() as *mut c_char,
             c_data.len() as i32,
         )
         .into()
@@ -290,7 +290,7 @@ pub fn virt_memory_dump(cpu: &mut CPUState, addr: target_ptr_t, len: usize) {
 
 // https://stackoverflow.com/questions/59707349/cast-vector-of-i8-to-vector-of-u8-in-rust/59707887#59707887
 // TODO: replace with https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_raw_parts, once on stable
-fn vec_i8_into_u8(v: Vec<i8>) -> Vec<u8> {
+fn vec_i8_into_u8(v: Vec<c_char>) -> Vec<u8> {
     // Make sure v's destructor doesn't free the data it thinks it owns when it goes out of scope
     let mut v = std::mem::ManuallyDrop::new(v);
 

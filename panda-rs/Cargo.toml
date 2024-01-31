@@ -1,6 +1,6 @@
 [package]
 name = "panda-re"
-version = "0.46.1"
+version = "0.46.2"
 authors = ["Jordan McLeod <Jordan.McLeod@ll.mit.edu>", "tnballo <tnballo@users.noreply.github.com>"]
 edition = "2018"
 description = "The official library for interfacing with PANDA (Platform for Architecture-Neutral Dynamic Analysis)"
