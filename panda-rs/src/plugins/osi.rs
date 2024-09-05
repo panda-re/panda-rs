@@ -85,6 +85,7 @@ pub type OsiModule = osi_module_struct;
 #[derive(Debug, Copy, Clone)]
 pub struct osi_proc_struct {
     pub taskd: target_ptr_t,
+    pub pgd: target_ptr_t,
     pub asid: target_ptr_t,
     pub pid: target_pid_t,
     pub ppid: target_pid_t,
