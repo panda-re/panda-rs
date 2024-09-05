@@ -25,7 +25,7 @@ fn sys_write_test(cpu: &mut CPUState, _pc: SyscallPc, _fd: u32, buf: target_ulon
 // print out the pc and syscall number of the first syscall to run
 #[panda::on_all_sys_enter]
 fn on_sys_enter(cpu: &mut CPUState, pc: SyscallPc, callno: target_ulong) {
-    println!("pc: {:#x?} | syscall: {}", pc, callno);
+    println!("pc: {:#x?} | syscall: {}", pc.pc(), callno);
 
     // remove the hook once the first syscall has been printed out
     SYSCALLS.remove_callback_on_all_sys_enter(on_sys_enter);
@@ -43,7 +43,10 @@ fn every_basic_block(cpu: &mut CPUState, tb: &mut TranslationBlock) {
     // every 1000 basic blocks visited
     if NUM_BB.fetch_add(1, Ordering::SeqCst) % 1000 == 0 {
         println!("pc: {:X}", tb.pc);
-        let proc = OSI.get_current_process(cpu);
+        let Some(proc) = OSI.get_current_process(cpu) else {
+            println!("Current Process is null");
+            return;
+        };
         println!("pid: {:X}", (*proc).pid);
 
         if (*proc).pid == 0x1f {
