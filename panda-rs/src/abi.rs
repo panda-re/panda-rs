@@ -1,3 +1,4 @@
+#![allow(unused_macros, unused_imports)]
 use crate::prelude::*;
 use crate::regs::Reg::{self, *};
 

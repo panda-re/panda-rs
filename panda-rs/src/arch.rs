@@ -40,6 +40,9 @@ const ARCH: &str = "aarch64";
 #[cfg(feature = "mips64")]
 const ARCH: &str = "mips64";
 
+#[cfg(feature = "mips64el")]
+const ARCH: &str = "mips64el";
+
 // ================ ARCH_ENDIAN ================
 
 /// The byte order of the guest architecture being targetted by PANDA
@@ -68,3 +71,6 @@ const ENDIAN: Endian = Endian::Little;
 
 #[cfg(feature = "mips64")]
 const ENDIAN: Endian = Endian::Big;
+
+#[cfg(feature = "mips64el")]
+const ENDIAN: Endian = Endian::Little;

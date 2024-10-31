@@ -4,7 +4,12 @@ pub type CPUArchPtr = *mut panda_sys::CPUX86State;
 #[cfg(any(feature = "arm", feature = "aarch64"))]
 pub type CPUArchPtr = *mut panda_sys::CPUARMState;
 
-#[cfg(any(feature = "mips", feature = "mipsel", feature = "mips64"))]
+#[cfg(any(
+    feature = "mips",
+    feature = "mipsel",
+    feature = "mips64",
+    feature = "mips64el"
+))]
 pub type CPUArchPtr = *mut panda_sys::CPUMIPSState;
 
 #[cfg(feature = "ppc")]
