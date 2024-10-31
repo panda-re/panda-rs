@@ -70,6 +70,9 @@ const ARCH: &str = "mipsel";
 #[cfg(feature = "mips64")]
 const ARCH: &str = "mips64";
 
+#[cfg(feature = "mips64el")]
+const ARCH: &str = "mips64el";
+
 fn main() {
     if cfg!(feature = "libpanda") {
         println!("libpanda mode enabled");

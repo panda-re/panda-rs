@@ -18,6 +18,7 @@ macro_rules! align {
     feature = "mips",
     feature = "mipsel",
     feature = "mips64",
+    feature = "mips64el",
     feature = "ppc",
 ))]
 macro_rules! alignments {

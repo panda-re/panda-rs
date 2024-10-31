@@ -5,12 +5,12 @@ use libloading::Symbol;
 use std::ffi::CString;
 use std::path::Path;
 
+pub mod cosi;
 pub mod glib;
 pub mod guest_plugin_manager;
 pub mod hooks;
 pub mod hooks2;
 pub mod osi;
-pub mod cosi;
 pub mod proc_start_linux;
 
 #[cfg(not(feature = "ppc"))]
@@ -408,6 +408,9 @@ const PLUGIN_DIR: &str = "mipsel-softmmu/panda/plugins";
 
 #[cfg(feature = "mips64")]
 const PLUGIN_DIR: &str = "mips64-softmmu/panda/plugins";
+
+#[cfg(feature = "mips64el")]
+const PLUGIN_DIR: &str = "mips64el-softmmu/panda/plugins";
 
 #[cfg(feature = "ppc")]
 const PLUGIN_DIR: &str = "ppc-softmmu/panda/plugins";
