@@ -698,3 +698,6 @@ include!("syscalls/mipsel.rs");
 
 #[cfg(feature = "mips64")]
 include!("syscalls/mips64.rs");
+
+#[cfg(feature = "mips64el")]
+include!("syscalls/mips64el.rs");
