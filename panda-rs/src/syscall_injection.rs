@@ -203,6 +203,7 @@ fn restart_syscall(cpu: &mut CPUState, pc: target_ulong) {
     }
 }
 
+#[cfg(any(feature = "x86_64", feature = "i386"))]
 const SYSENTER_INSTR: &[u8] = &[0xf, 0x34];
 
 /// Run a syscall injector in the form as an async block/value to be evaluated. If

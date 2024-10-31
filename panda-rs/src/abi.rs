@@ -106,7 +106,7 @@ pub mod syscall {
             syscall_number = V0;
         }
 
-        #[cfg(arch = "mips64")] {
+        #[cfg(arch = "mips64", arch = "mips64el")] {
             // n32 ABI
             args = [A0, A1, A2, A3, T0, T1];
             return = V0;
