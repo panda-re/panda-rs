@@ -197,22 +197,22 @@ pub const PANDA_LOG_WARNING: u32 = 2;
 pub const PANDA_LOG_INFO: u32 = 3;
 pub const PANDA_LOG_DEBUG: u32 = 4;
 pub const PANDA_LOG_LEVEL: u32 = 2;
-pub const CONFIG_QEMU_CONFDIR: &'static [u8; 48usize] =
-    b"/home/jmcleod/dev/panda/build/install/etc/panda\0";
-pub const CONFIG_QEMU_DATADIR: &'static [u8; 50usize] =
-    b"/home/jmcleod/dev/panda/build/install/share/panda\0";
-pub const CONFIG_QEMU_DOCDIR: &'static [u8; 53usize] =
-    b"/home/jmcleod/dev/panda/build/install/share/doc/qemu\0";
-pub const CONFIG_QEMU_MODDIR: &'static [u8; 48usize] =
-    b"/home/jmcleod/dev/panda/build/install/lib/panda\0";
-pub const CONFIG_PANDA_PLUGINDIR: &'static [u8; 48usize] =
-    b"/home/jmcleod/dev/panda/build/install/lib/panda\0";
-pub const CONFIG_QEMU_LOCALSTATEDIR: &'static [u8; 42usize] =
-    b"/home/jmcleod/dev/panda/build/install/var\0";
-pub const CONFIG_QEMU_HELPERDIR: &'static [u8; 46usize] =
-    b"/home/jmcleod/dev/panda/build/install/libexec\0";
-pub const CONFIG_QEMU_LOCALEDIR: &'static [u8; 51usize] =
-    b"/home/jmcleod/dev/panda/build/install/share/locale\0";
+pub const CONFIG_QEMU_CONFDIR: &'static [u8; 51usize] =
+    b"/home/luke/workspace/panda/build/install/etc/panda\0";
+pub const CONFIG_QEMU_DATADIR: &'static [u8; 53usize] =
+    b"/home/luke/workspace/panda/build/install/share/panda\0";
+pub const CONFIG_QEMU_DOCDIR: &'static [u8; 56usize] =
+    b"/home/luke/workspace/panda/build/install/share/doc/qemu\0";
+pub const CONFIG_QEMU_MODDIR: &'static [u8; 51usize] =
+    b"/home/luke/workspace/panda/build/install/lib/panda\0";
+pub const CONFIG_PANDA_PLUGINDIR: &'static [u8; 51usize] =
+    b"/home/luke/workspace/panda/build/install/lib/panda\0";
+pub const CONFIG_QEMU_LOCALSTATEDIR: &'static [u8; 45usize] =
+    b"/home/luke/workspace/panda/build/install/var\0";
+pub const CONFIG_QEMU_HELPERDIR: &'static [u8; 49usize] =
+    b"/home/luke/workspace/panda/build/install/libexec\0";
+pub const CONFIG_QEMU_LOCALEDIR: &'static [u8; 54usize] =
+    b"/home/luke/workspace/panda/build/install/share/locale\0";
 pub const HOST_X86_64: u32 = 1;
 pub const CONFIG_POSIX: u32 = 1;
 pub const CONFIG_LINUX: u32 = 1;
@@ -231,6 +231,8 @@ pub const QEMU_VERSION: &'static [u8; 6usize] = b"2.9.1\0";
 pub const QEMU_VERSION_MAJOR: u32 = 2;
 pub const QEMU_VERSION_MINOR: u32 = 9;
 pub const QEMU_VERSION_MICRO: u32 = 1;
+pub const CONFIG_SDL: u32 = 1;
+pub const CONFIG_SDLABI: f64 = 2.0;
 pub const CONFIG_CURSES: u32 = 1;
 pub const CONFIG_UTIMENSAT: u32 = 1;
 pub const CONFIG_PIPE2: u32 = 1;
@@ -269,13 +271,12 @@ pub const HAVE_IFADDRS_H: u32 = 1;
 pub const HAVE_FSXATTR: u32 = 1;
 pub const CONFIG_VIRGL: u32 = 1;
 pub const CONFIG_LLVM: u32 = 1;
-pub const CONFIG_XEN_BACKEND: u32 = 1;
-pub const CONFIG_XEN_CTRL_INTERFACE_VERSION: u32 = 480;
 pub const CONFIG_LINUX_AIO: u32 = 1;
 pub const CONFIG_ATTR: u32 = 1;
 pub const CONFIG_VIRTFS: u32 = 1;
 pub const CONFIG_VHOST_SCSI: u32 = 1;
 pub const CONFIG_VHOST_VSOCK: u32 = 1;
+pub const CONFIG_VHOST_USER_VSOCK: u32 = 1;
 pub const CONFIG_IOVEC: u32 = 1;
 pub const CONFIG_PREADV: u32 = 1;
 pub const CONFIG_FDT: u32 = 1;
@@ -291,12 +292,15 @@ pub const CONFIG_USB_REDIR: u32 = 1;
 pub const CONFIG_OPENGL: u32 = 1;
 pub const CONFIG_OPENGL_DMABUF: u32 = 1;
 pub const CONFIG_AVX2_OPT: u32 = 1;
+pub const CONFIG_LZO: u32 = 1;
+pub const CONFIG_BZIP2: u32 = 1;
 pub const CONFIG_SECCOMP: u32 = 1;
 pub const CONFIG_QOM_CAST_DEBUG: u32 = 1;
 pub const CONFIG_COROUTINE_POOL: u32 = 1;
 pub const CONFIG_OPEN_BY_HANDLE: u32 = 1;
 pub const CONFIG_LINUX_MAGIC_H: u32 = 1;
 pub const CONFIG_PRAGMA_DIAGNOSTIC_AVAILABLE: u32 = 1;
+pub const CONFIG_VALGRIND_H: u32 = 1;
 pub const CONFIG_HAS_ENVIRON: u32 = 1;
 pub const CONFIG_CPUID_H: u32 = 1;
 pub const CONFIG_INT128: u32 = 1;
@@ -316,8 +320,6 @@ pub const HOST_DSOSUF: &'static [u8; 4usize] = b".so\0";
 pub const CONFIG_NUMA: u32 = 1;
 pub const TARGET_I386: u32 = 1;
 pub const TARGET_NAME: &'static [u8; 5usize] = b"i386\0";
-pub const CONFIG_XEN: u32 = 1;
-pub const CONFIG_XEN_PCI_PASSTHROUGH: u32 = 1;
 pub const CONFIG_KVM: u32 = 1;
 pub const CONFIG_SOFTMMU: u32 = 1;
 pub const CONFIG_I386_DIS: u32 = 1;
@@ -2788,6 +2790,7 @@ pub const TCG_PHYS_ADDR_BITS: u32 = 36;
 pub const MMU_KSMAP_IDX: u32 = 0;
 pub const MMU_USER_IDX: u32 = 1;
 pub const MMU_KNOSMAP_IDX: u32 = 2;
+pub const RAM_ADDR_MAX: i32 = -1;
 pub const RAM_ADDR_FMT: &'static [u8; 4usize] = b"%lx\0";
 pub const DIRTY_MEMORY_VGA: u32 = 0;
 pub const DIRTY_MEMORY_CODE: u32 = 1;
@@ -2969,6 +2972,8 @@ pub const CPU_LOG_TB_NOCHAIN: u32 = 8192;
 pub const CPU_LOG_PAGE: u32 = 16384;
 pub const LOG_TRACE: u32 = 32768;
 pub const CPU_LOG_TB_OP_IND: u32 = 65536;
+pub const LOG_PANDA: u32 = 131072;
+pub const LOG_AVATAR: u32 = 262144;
 pub const CPU_LOG_TAINT_OPS: u32 = 268435456;
 pub const CPU_LOG_RR: u32 = 536870912;
 pub const CPU_LOG_LLVM_IR: u32 = 1073741824;
@@ -3037,6 +3042,162 @@ pub const RTLD_GLOBAL: u32 = 256;
 pub const RTLD_LOCAL: u32 = 0;
 pub const RTLD_NODELETE: u32 = 4096;
 pub const PPP_MAX_CB: u32 = 256;
+pub const ARCHIVE_VERSION_NUMBER: u32 = 3004000;
+pub const ARCHIVE_VERSION_ONLY_STRING: &'static [u8; 6usize] = b"3.4.0\0";
+pub const ARCHIVE_VERSION_STRING: &'static [u8; 17usize] = b"libarchive 3.4.0\0";
+pub const ARCHIVE_EOF: u32 = 1;
+pub const ARCHIVE_OK: u32 = 0;
+pub const ARCHIVE_RETRY: i32 = -10;
+pub const ARCHIVE_WARN: i32 = -20;
+pub const ARCHIVE_FAILED: i32 = -25;
+pub const ARCHIVE_FATAL: i32 = -30;
+pub const ARCHIVE_FILTER_NONE: u32 = 0;
+pub const ARCHIVE_FILTER_GZIP: u32 = 1;
+pub const ARCHIVE_FILTER_BZIP2: u32 = 2;
+pub const ARCHIVE_FILTER_COMPRESS: u32 = 3;
+pub const ARCHIVE_FILTER_PROGRAM: u32 = 4;
+pub const ARCHIVE_FILTER_LZMA: u32 = 5;
+pub const ARCHIVE_FILTER_XZ: u32 = 6;
+pub const ARCHIVE_FILTER_UU: u32 = 7;
+pub const ARCHIVE_FILTER_RPM: u32 = 8;
+pub const ARCHIVE_FILTER_LZIP: u32 = 9;
+pub const ARCHIVE_FILTER_LRZIP: u32 = 10;
+pub const ARCHIVE_FILTER_LZOP: u32 = 11;
+pub const ARCHIVE_FILTER_GRZIP: u32 = 12;
+pub const ARCHIVE_FILTER_LZ4: u32 = 13;
+pub const ARCHIVE_FILTER_ZSTD: u32 = 14;
+pub const ARCHIVE_COMPRESSION_NONE: u32 = 0;
+pub const ARCHIVE_COMPRESSION_GZIP: u32 = 1;
+pub const ARCHIVE_COMPRESSION_BZIP2: u32 = 2;
+pub const ARCHIVE_COMPRESSION_COMPRESS: u32 = 3;
+pub const ARCHIVE_COMPRESSION_PROGRAM: u32 = 4;
+pub const ARCHIVE_COMPRESSION_LZMA: u32 = 5;
+pub const ARCHIVE_COMPRESSION_XZ: u32 = 6;
+pub const ARCHIVE_COMPRESSION_UU: u32 = 7;
+pub const ARCHIVE_COMPRESSION_RPM: u32 = 8;
+pub const ARCHIVE_COMPRESSION_LZIP: u32 = 9;
+pub const ARCHIVE_COMPRESSION_LRZIP: u32 = 10;
+pub const ARCHIVE_FORMAT_BASE_MASK: u32 = 16711680;
+pub const ARCHIVE_FORMAT_CPIO: u32 = 65536;
+pub const ARCHIVE_FORMAT_CPIO_POSIX: u32 = 65537;
+pub const ARCHIVE_FORMAT_CPIO_BIN_LE: u32 = 65538;
+pub const ARCHIVE_FORMAT_CPIO_BIN_BE: u32 = 65539;
+pub const ARCHIVE_FORMAT_CPIO_SVR4_NOCRC: u32 = 65540;
+pub const ARCHIVE_FORMAT_CPIO_SVR4_CRC: u32 = 65541;
+pub const ARCHIVE_FORMAT_CPIO_AFIO_LARGE: u32 = 65542;
+pub const ARCHIVE_FORMAT_SHAR: u32 = 131072;
+pub const ARCHIVE_FORMAT_SHAR_BASE: u32 = 131073;
+pub const ARCHIVE_FORMAT_SHAR_DUMP: u32 = 131074;
+pub const ARCHIVE_FORMAT_TAR: u32 = 196608;
+pub const ARCHIVE_FORMAT_TAR_USTAR: u32 = 196609;
+pub const ARCHIVE_FORMAT_TAR_PAX_INTERCHANGE: u32 = 196610;
+pub const ARCHIVE_FORMAT_TAR_PAX_RESTRICTED: u32 = 196611;
+pub const ARCHIVE_FORMAT_TAR_GNUTAR: u32 = 196612;
+pub const ARCHIVE_FORMAT_ISO9660: u32 = 262144;
+pub const ARCHIVE_FORMAT_ISO9660_ROCKRIDGE: u32 = 262145;
+pub const ARCHIVE_FORMAT_ZIP: u32 = 327680;
+pub const ARCHIVE_FORMAT_EMPTY: u32 = 393216;
+pub const ARCHIVE_FORMAT_AR: u32 = 458752;
+pub const ARCHIVE_FORMAT_AR_GNU: u32 = 458753;
+pub const ARCHIVE_FORMAT_AR_BSD: u32 = 458754;
+pub const ARCHIVE_FORMAT_MTREE: u32 = 524288;
+pub const ARCHIVE_FORMAT_RAW: u32 = 589824;
+pub const ARCHIVE_FORMAT_XAR: u32 = 655360;
+pub const ARCHIVE_FORMAT_LHA: u32 = 720896;
+pub const ARCHIVE_FORMAT_CAB: u32 = 786432;
+pub const ARCHIVE_FORMAT_RAR: u32 = 851968;
+pub const ARCHIVE_FORMAT_7ZIP: u32 = 917504;
+pub const ARCHIVE_FORMAT_WARC: u32 = 983040;
+pub const ARCHIVE_FORMAT_RAR_V5: u32 = 1048576;
+pub const ARCHIVE_READ_FORMAT_CAPS_NONE: u32 = 0;
+pub const ARCHIVE_READ_FORMAT_CAPS_ENCRYPT_DATA: u32 = 1;
+pub const ARCHIVE_READ_FORMAT_CAPS_ENCRYPT_METADATA: u32 = 2;
+pub const ARCHIVE_READ_FORMAT_ENCRYPTION_UNSUPPORTED: i32 = -2;
+pub const ARCHIVE_READ_FORMAT_ENCRYPTION_DONT_KNOW: i32 = -1;
+pub const ARCHIVE_EXTRACT_OWNER: u32 = 1;
+pub const ARCHIVE_EXTRACT_PERM: u32 = 2;
+pub const ARCHIVE_EXTRACT_TIME: u32 = 4;
+pub const ARCHIVE_EXTRACT_NO_OVERWRITE: u32 = 8;
+pub const ARCHIVE_EXTRACT_UNLINK: u32 = 16;
+pub const ARCHIVE_EXTRACT_ACL: u32 = 32;
+pub const ARCHIVE_EXTRACT_FFLAGS: u32 = 64;
+pub const ARCHIVE_EXTRACT_XATTR: u32 = 128;
+pub const ARCHIVE_EXTRACT_SECURE_SYMLINKS: u32 = 256;
+pub const ARCHIVE_EXTRACT_SECURE_NODOTDOT: u32 = 512;
+pub const ARCHIVE_EXTRACT_NO_AUTODIR: u32 = 1024;
+pub const ARCHIVE_EXTRACT_NO_OVERWRITE_NEWER: u32 = 2048;
+pub const ARCHIVE_EXTRACT_SPARSE: u32 = 4096;
+pub const ARCHIVE_EXTRACT_MAC_METADATA: u32 = 8192;
+pub const ARCHIVE_EXTRACT_NO_HFS_COMPRESSION: u32 = 16384;
+pub const ARCHIVE_EXTRACT_HFS_COMPRESSION_FORCED: u32 = 32768;
+pub const ARCHIVE_EXTRACT_SECURE_NOABSOLUTEPATHS: u32 = 65536;
+pub const ARCHIVE_EXTRACT_CLEAR_NOCHANGE_FFLAGS: u32 = 131072;
+pub const ARCHIVE_READDISK_RESTORE_ATIME: u32 = 1;
+pub const ARCHIVE_READDISK_HONOR_NODUMP: u32 = 2;
+pub const ARCHIVE_READDISK_MAC_COPYFILE: u32 = 4;
+pub const ARCHIVE_READDISK_NO_TRAVERSE_MOUNTS: u32 = 8;
+pub const ARCHIVE_READDISK_NO_XATTR: u32 = 16;
+pub const ARCHIVE_READDISK_NO_ACL: u32 = 32;
+pub const ARCHIVE_READDISK_NO_FFLAGS: u32 = 64;
+pub const ARCHIVE_MATCH_MTIME: u32 = 256;
+pub const ARCHIVE_MATCH_CTIME: u32 = 512;
+pub const ARCHIVE_MATCH_NEWER: u32 = 1;
+pub const ARCHIVE_MATCH_OLDER: u32 = 2;
+pub const ARCHIVE_MATCH_EQUAL: u32 = 16;
+pub const AE_SYMLINK_TYPE_UNDEFINED: u32 = 0;
+pub const AE_SYMLINK_TYPE_FILE: u32 = 1;
+pub const AE_SYMLINK_TYPE_DIRECTORY: u32 = 2;
+pub const ARCHIVE_ENTRY_ACL_EXECUTE: u32 = 1;
+pub const ARCHIVE_ENTRY_ACL_WRITE: u32 = 2;
+pub const ARCHIVE_ENTRY_ACL_READ: u32 = 4;
+pub const ARCHIVE_ENTRY_ACL_READ_DATA: u32 = 8;
+pub const ARCHIVE_ENTRY_ACL_LIST_DIRECTORY: u32 = 8;
+pub const ARCHIVE_ENTRY_ACL_WRITE_DATA: u32 = 16;
+pub const ARCHIVE_ENTRY_ACL_ADD_FILE: u32 = 16;
+pub const ARCHIVE_ENTRY_ACL_APPEND_DATA: u32 = 32;
+pub const ARCHIVE_ENTRY_ACL_ADD_SUBDIRECTORY: u32 = 32;
+pub const ARCHIVE_ENTRY_ACL_READ_NAMED_ATTRS: u32 = 64;
+pub const ARCHIVE_ENTRY_ACL_WRITE_NAMED_ATTRS: u32 = 128;
+pub const ARCHIVE_ENTRY_ACL_DELETE_CHILD: u32 = 256;
+pub const ARCHIVE_ENTRY_ACL_READ_ATTRIBUTES: u32 = 512;
+pub const ARCHIVE_ENTRY_ACL_WRITE_ATTRIBUTES: u32 = 1024;
+pub const ARCHIVE_ENTRY_ACL_DELETE: u32 = 2048;
+pub const ARCHIVE_ENTRY_ACL_READ_ACL: u32 = 4096;
+pub const ARCHIVE_ENTRY_ACL_WRITE_ACL: u32 = 8192;
+pub const ARCHIVE_ENTRY_ACL_WRITE_OWNER: u32 = 16384;
+pub const ARCHIVE_ENTRY_ACL_SYNCHRONIZE: u32 = 32768;
+pub const ARCHIVE_ENTRY_ACL_PERMS_POSIX1E: u32 = 7;
+pub const ARCHIVE_ENTRY_ACL_PERMS_NFS4: u32 = 65529;
+pub const ARCHIVE_ENTRY_ACL_ENTRY_INHERITED: u32 = 16777216;
+pub const ARCHIVE_ENTRY_ACL_ENTRY_FILE_INHERIT: u32 = 33554432;
+pub const ARCHIVE_ENTRY_ACL_ENTRY_DIRECTORY_INHERIT: u32 = 67108864;
+pub const ARCHIVE_ENTRY_ACL_ENTRY_NO_PROPAGATE_INHERIT: u32 = 134217728;
+pub const ARCHIVE_ENTRY_ACL_ENTRY_INHERIT_ONLY: u32 = 268435456;
+pub const ARCHIVE_ENTRY_ACL_ENTRY_SUCCESSFUL_ACCESS: u32 = 536870912;
+pub const ARCHIVE_ENTRY_ACL_ENTRY_FAILED_ACCESS: u32 = 1073741824;
+pub const ARCHIVE_ENTRY_ACL_INHERITANCE_NFS4: u32 = 2130706432;
+pub const ARCHIVE_ENTRY_ACL_TYPE_ACCESS: u32 = 256;
+pub const ARCHIVE_ENTRY_ACL_TYPE_DEFAULT: u32 = 512;
+pub const ARCHIVE_ENTRY_ACL_TYPE_ALLOW: u32 = 1024;
+pub const ARCHIVE_ENTRY_ACL_TYPE_DENY: u32 = 2048;
+pub const ARCHIVE_ENTRY_ACL_TYPE_AUDIT: u32 = 4096;
+pub const ARCHIVE_ENTRY_ACL_TYPE_ALARM: u32 = 8192;
+pub const ARCHIVE_ENTRY_ACL_TYPE_POSIX1E: u32 = 768;
+pub const ARCHIVE_ENTRY_ACL_TYPE_NFS4: u32 = 15360;
+pub const ARCHIVE_ENTRY_ACL_USER: u32 = 10001;
+pub const ARCHIVE_ENTRY_ACL_USER_OBJ: u32 = 10002;
+pub const ARCHIVE_ENTRY_ACL_GROUP: u32 = 10003;
+pub const ARCHIVE_ENTRY_ACL_GROUP_OBJ: u32 = 10004;
+pub const ARCHIVE_ENTRY_ACL_MASK: u32 = 10005;
+pub const ARCHIVE_ENTRY_ACL_OTHER: u32 = 10006;
+pub const ARCHIVE_ENTRY_ACL_EVERYONE: u32 = 10107;
+pub const ARCHIVE_ENTRY_ACL_STYLE_EXTRA_ID: u32 = 1;
+pub const ARCHIVE_ENTRY_ACL_STYLE_MARK_DEFAULT: u32 = 2;
+pub const ARCHIVE_ENTRY_ACL_STYLE_SOLARIS: u32 = 4;
+pub const ARCHIVE_ENTRY_ACL_STYLE_SEPARATOR_COMMA: u32 = 8;
+pub const ARCHIVE_ENTRY_ACL_STYLE_COMPACT: u32 = 16;
+pub const OLD_ARCHIVE_ENTRY_ACL_STYLE_EXTRA_ID: u32 = 1024;
+pub const OLD_ARCHIVE_ENTRY_ACL_STYLE_MARK_DEFAULT: u32 = 2048;
 pub const MAX_MEM_LEVEL: u32 = 9;
 pub const MAX_WBITS: u32 = 15;
 pub const ZLIB_VERSION: &'static [u8; 7usize] = b"1.2.11\0";
@@ -33061,7 +33222,7 @@ pub const device_endian_DEVICE_NATIVE_ENDIAN: device_endian = 0;
 pub const device_endian_DEVICE_BIG_ENDIAN: device_endian = 1;
 pub const device_endian_DEVICE_LITTLE_ENDIAN: device_endian = 2;
 pub type device_endian = ::std::os::raw::c_uint;
-pub type ram_addr_t = u64;
+pub type ram_addr_t = usize;
 extern "C" {
     pub static mut ram_size: ram_addr_t;
 }
@@ -35542,20 +35703,54 @@ extern "C" {
     pub static mut panda_break_vl_loop_req: bool;
 }
 extern "C" {
+    #[doc = " panda_current_asid() - Obtain guest ASID."]
+    #[doc = " @env: Pointer to cpu state."]
+    #[doc = ""]
+    #[doc = " This function figures out and returns the ASID (address space"]
+    #[doc = " identifier) for a number of archiectures (e.g., cr3 for x86). In"]
+    #[doc = " many cases, this can be used to distinguish between processes."]
+    #[doc = ""]
+    #[doc = " Return: A guest pointer is returned, the ASID."]
     pub fn panda_current_asid(env: *mut CPUState) -> target_ulong;
 }
 extern "C" {
-    #[doc = " @brief Returns the guest program counter."]
+    #[doc = " panda_current_pc() - Get current program counter."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = ""]
+    #[doc = " Note that Qemu typically only updates the pc after executing each"]
+    #[doc = " basic block of code. If you want this value to be more accurate,"]
+    #[doc = " you will have to call panda_enable_precise_pc."]
+    #[doc = ""]
+    #[doc = " Return: Program counter is returned."]
     pub fn panda_current_pc(cpu: *mut CPUState) -> target_ulong;
 }
 extern "C" {
-    #[doc = " @brief If required for the target architecture, enter into a high-privilege mode in"]
-    #[doc = " order to conduct some memory access. Returns true if a switch into high-privilege"]
-    #[doc = " mode has been made. A NO-OP on systems where such changes are unnecessary."]
+    #[doc = " panda_find_max_ram_address() - Get max guest ram address."]
+    #[doc = ""]
+    #[doc = " Computes the maximum address of guest system memory that maps to"]
+    #[doc = " RAM."]
+    #[doc = ""]
+    #[doc = " Return: The max ram address is returned."]
+    pub fn panda_find_max_ram_address() -> Int128;
+}
+extern "C" {
+    #[doc = " enter_priv() - Enter privileged mode."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = ""]
+    #[doc = " Enter into a higher-privileged mode, e.g., in order to conduct some"]
+    #[doc = " memory access. This is a NO-OP on systems without different"]
+    #[doc = " privilege modes."]
+    #[doc = ""]
+    #[doc = " Return:"]
+    #[doc = " * True      -  Switch into high-privilege happened."]
+    #[doc = " * False     -  Switch did not happen."]
     pub fn enter_priv(cpu: *mut CPUState) -> bool;
 }
 extern "C" {
-    #[doc = " @brief Revert the guest to the privilege mode it was in prior to the last call"]
+    #[doc = " exit_priv() - Exit privileged mode."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = ""]
+    #[doc = " Revert the guest to the privilege mode it was in prior to the last call"]
     #[doc = " to enter_priv(). A NO-OP for architectures where enter_priv() is a NO-OP."]
     pub fn exit_priv(cpu: *mut CPUState);
 }
@@ -38259,33 +38454,34 @@ pub const panda_cb_type_PANDA_CB_HD_READ: panda_cb_type = 20;
 pub const panda_cb_type_PANDA_CB_HD_WRITE: panda_cb_type = 21;
 pub const panda_cb_type_PANDA_CB_GUEST_HYPERCALL: panda_cb_type = 22;
 pub const panda_cb_type_PANDA_CB_MONITOR: panda_cb_type = 23;
-pub const panda_cb_type_PANDA_CB_CPU_RESTORE_STATE: panda_cb_type = 24;
-pub const panda_cb_type_PANDA_CB_BEFORE_LOADVM: panda_cb_type = 25;
-pub const panda_cb_type_PANDA_CB_ASID_CHANGED: panda_cb_type = 26;
-pub const panda_cb_type_PANDA_CB_REPLAY_HD_TRANSFER: panda_cb_type = 27;
-pub const panda_cb_type_PANDA_CB_REPLAY_NET_TRANSFER: panda_cb_type = 28;
-pub const panda_cb_type_PANDA_CB_REPLAY_SERIAL_RECEIVE: panda_cb_type = 29;
-pub const panda_cb_type_PANDA_CB_REPLAY_SERIAL_READ: panda_cb_type = 30;
-pub const panda_cb_type_PANDA_CB_REPLAY_SERIAL_SEND: panda_cb_type = 31;
-pub const panda_cb_type_PANDA_CB_REPLAY_SERIAL_WRITE: panda_cb_type = 32;
-pub const panda_cb_type_PANDA_CB_REPLAY_BEFORE_DMA: panda_cb_type = 33;
-pub const panda_cb_type_PANDA_CB_REPLAY_AFTER_DMA: panda_cb_type = 34;
-pub const panda_cb_type_PANDA_CB_REPLAY_HANDLE_PACKET: panda_cb_type = 35;
-pub const panda_cb_type_PANDA_CB_AFTER_CPU_EXEC_ENTER: panda_cb_type = 36;
-pub const panda_cb_type_PANDA_CB_BEFORE_CPU_EXEC_EXIT: panda_cb_type = 37;
-pub const panda_cb_type_PANDA_CB_AFTER_MACHINE_INIT: panda_cb_type = 38;
-pub const panda_cb_type_PANDA_CB_AFTER_LOADVM: panda_cb_type = 39;
-pub const panda_cb_type_PANDA_CB_TOP_LOOP: panda_cb_type = 40;
-pub const panda_cb_type_PANDA_CB_DURING_MACHINE_INIT: panda_cb_type = 41;
-pub const panda_cb_type_PANDA_CB_MAIN_LOOP_WAIT: panda_cb_type = 42;
-pub const panda_cb_type_PANDA_CB_PRE_SHUTDOWN: panda_cb_type = 43;
-pub const panda_cb_type_PANDA_CB_UNASSIGNED_IO_READ: panda_cb_type = 44;
-pub const panda_cb_type_PANDA_CB_UNASSIGNED_IO_WRITE: panda_cb_type = 45;
-pub const panda_cb_type_PANDA_CB_BEFORE_HANDLE_EXCEPTION: panda_cb_type = 46;
-pub const panda_cb_type_PANDA_CB_BEFORE_HANDLE_INTERRUPT: panda_cb_type = 47;
-pub const panda_cb_type_PANDA_CB_START_BLOCK_EXEC: panda_cb_type = 48;
-pub const panda_cb_type_PANDA_CB_END_BLOCK_EXEC: panda_cb_type = 49;
-pub const panda_cb_type_PANDA_CB_LAST: panda_cb_type = 50;
+pub const panda_cb_type_PANDA_CB_QMP: panda_cb_type = 24;
+pub const panda_cb_type_PANDA_CB_CPU_RESTORE_STATE: panda_cb_type = 25;
+pub const panda_cb_type_PANDA_CB_BEFORE_LOADVM: panda_cb_type = 26;
+pub const panda_cb_type_PANDA_CB_ASID_CHANGED: panda_cb_type = 27;
+pub const panda_cb_type_PANDA_CB_REPLAY_HD_TRANSFER: panda_cb_type = 28;
+pub const panda_cb_type_PANDA_CB_REPLAY_NET_TRANSFER: panda_cb_type = 29;
+pub const panda_cb_type_PANDA_CB_REPLAY_SERIAL_RECEIVE: panda_cb_type = 30;
+pub const panda_cb_type_PANDA_CB_REPLAY_SERIAL_READ: panda_cb_type = 31;
+pub const panda_cb_type_PANDA_CB_REPLAY_SERIAL_SEND: panda_cb_type = 32;
+pub const panda_cb_type_PANDA_CB_REPLAY_SERIAL_WRITE: panda_cb_type = 33;
+pub const panda_cb_type_PANDA_CB_REPLAY_BEFORE_DMA: panda_cb_type = 34;
+pub const panda_cb_type_PANDA_CB_REPLAY_AFTER_DMA: panda_cb_type = 35;
+pub const panda_cb_type_PANDA_CB_REPLAY_HANDLE_PACKET: panda_cb_type = 36;
+pub const panda_cb_type_PANDA_CB_AFTER_CPU_EXEC_ENTER: panda_cb_type = 37;
+pub const panda_cb_type_PANDA_CB_BEFORE_CPU_EXEC_EXIT: panda_cb_type = 38;
+pub const panda_cb_type_PANDA_CB_AFTER_MACHINE_INIT: panda_cb_type = 39;
+pub const panda_cb_type_PANDA_CB_AFTER_LOADVM: panda_cb_type = 40;
+pub const panda_cb_type_PANDA_CB_TOP_LOOP: panda_cb_type = 41;
+pub const panda_cb_type_PANDA_CB_DURING_MACHINE_INIT: panda_cb_type = 42;
+pub const panda_cb_type_PANDA_CB_MAIN_LOOP_WAIT: panda_cb_type = 43;
+pub const panda_cb_type_PANDA_CB_PRE_SHUTDOWN: panda_cb_type = 44;
+pub const panda_cb_type_PANDA_CB_UNASSIGNED_IO_READ: panda_cb_type = 45;
+pub const panda_cb_type_PANDA_CB_UNASSIGNED_IO_WRITE: panda_cb_type = 46;
+pub const panda_cb_type_PANDA_CB_BEFORE_HANDLE_EXCEPTION: panda_cb_type = 47;
+pub const panda_cb_type_PANDA_CB_BEFORE_HANDLE_INTERRUPT: panda_cb_type = 48;
+pub const panda_cb_type_PANDA_CB_START_BLOCK_EXEC: panda_cb_type = 49;
+pub const panda_cb_type_PANDA_CB_END_BLOCK_EXEC: panda_cb_type = 50;
+pub const panda_cb_type_PANDA_CB_LAST: panda_cb_type = 51;
 pub type panda_cb_type = ::std::os::raw::c_uint;
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -38413,6 +38609,13 @@ pub union panda_cb {
             mon: *mut Monitor,
             cmd: *const ::std::os::raw::c_char,
         ) -> ::std::os::raw::c_int,
+    >,
+    pub qmp: ::std::option::Option<
+        unsafe extern "C" fn(
+            command: *mut ::std::os::raw::c_char,
+            args: *mut ::std::os::raw::c_char,
+            result: *mut *mut ::std::os::raw::c_char,
+        ) -> bool,
     >,
     pub cpu_restore_state:
         ::std::option::Option<unsafe extern "C" fn(env: *mut CPUState, tb: *mut TranslationBlock)>,
@@ -38726,6 +38929,14 @@ pub union panda_cb_with_context {
             cmd: *const ::std::os::raw::c_char,
         ) -> ::std::os::raw::c_int,
     >,
+    pub qmp: ::std::option::Option<
+        unsafe extern "C" fn(
+            context: *mut ::std::os::raw::c_void,
+            command: *mut ::std::os::raw::c_char,
+            args: *mut ::std::os::raw::c_char,
+            result: *mut *mut ::std::os::raw::c_char,
+        ) -> bool,
+    >,
     pub cpu_restore_state: ::std::option::Option<
         unsafe extern "C" fn(
             context: *mut ::std::os::raw::c_void,
@@ -38909,21 +39120,47 @@ extern "C" {
     pub fn panda_cb_list_next(plist: *mut panda_cb_list) -> *mut panda_cb_list;
 }
 extern "C" {
+    #[doc = " panda_enable_plugin() - Enable this plugin."]
+    #[doc = " @plugin: Pointer to the plugin (handle)."]
+    #[doc = ""]
+    #[doc = " Mark plugin as enabled so that its callbacks will run in future."]
     pub fn panda_enable_plugin(plugin: *mut ::std::os::raw::c_void);
 }
 extern "C" {
+    #[doc = " panda_disable_plugin() - Disable this plugin."]
+    #[doc = " @plugin: Pointer to the plugin (handle)."]
+    #[doc = ""]
+    #[doc = " Mark plugin as disabled so that its callbacks will NOT run in future."]
     pub fn panda_disable_plugin(plugin: *mut ::std::os::raw::c_void);
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct panda_plugin {
-    pub name: [::std::os::raw::c_char; 256usize],
+    pub name: *mut ::std::os::raw::c_char,
     pub plugin: *mut ::std::os::raw::c_void,
+    pub unload: bool,
+    pub exported_symbols: bool,
 }
 extern "C" {
     pub fn panda_get_cb_trampoline(type_: panda_cb_type) -> panda_cb_with_context;
 }
 extern "C" {
+    #[doc = " panda_register_callback() - Register a callback for a plugin, and enable it."]
+    #[doc = " @plugin: Pointer to plugin."]
+    #[doc = " @type: Type of callback, indicating when cb function will run."]
+    #[doc = " @cb: The callback function itself and other info."]
+    #[doc = ""]
+    #[doc = " This function will register a callback to run in panda and is"]
+    #[doc = " typically called from plugin code."]
+    #[doc = ""]
+    #[doc = " The order of callback registration will determine the order in which"]
+    #[doc = " callbacks of the same type will be invoked."]
+    #[doc = ""]
+    #[doc = " NB: Registering a callback function twice from the same plugin will"]
+    #[doc = " trigger an assertion error."]
+    #[doc = ""]
+    #[doc = " type is number. See typedef panda_cb_type."]
+    #[doc = " cb is a pointer to a struct. See typedef panda_cb."]
     pub fn panda_register_callback(
         plugin: *mut ::std::os::raw::c_void,
         type_: panda_cb_type,
@@ -38931,6 +39168,13 @@ extern "C" {
     );
 }
 extern "C" {
+    #[doc = " panda_register_callback_with_context() - Register a callback for a plugin with context."]
+    #[doc = " @plugin: Pointer to plugin."]
+    #[doc = " @type: Type of callback, indicating when cb function will run."]
+    #[doc = " @cb: The callback function itself and other info."]
+    #[doc = " @context: Pointer to context."]
+    #[doc = ""]
+    #[doc = " Same as panda_register_callback, but with context."]
     pub fn panda_register_callback_with_context(
         plugin: *mut ::std::os::raw::c_void,
         type_: panda_cb_type,
@@ -38939,6 +39183,15 @@ extern "C" {
     );
 }
 extern "C" {
+    #[doc = " panda_disable_callback() - Disable callback for this plugin from running."]
+    #[doc = " @plugin: Pointer to plugin."]
+    #[doc = " @type: Type of callback, indicating when cb function will run."]
+    #[doc = " @cb: The callback function itself and other info."]
+    #[doc = ""]
+    #[doc = " Mark this callback as disabled so that it stops running."]
+    #[doc = ""]
+    #[doc = " NB: enable/disable are faster than register/unregister since they"]
+    #[doc = " set a flag rather than adding/removing something from a list."]
     pub fn panda_disable_callback(
         plugin: *mut ::std::os::raw::c_void,
         type_: panda_cb_type,
@@ -38946,13 +39199,13 @@ extern "C" {
     );
 }
 extern "C" {
-    pub fn panda_enable_callback(
-        plugin: *mut ::std::os::raw::c_void,
-        type_: panda_cb_type,
-        cb: panda_cb,
-    );
-}
-extern "C" {
+    #[doc = " panda_disable_callback_with_context() - Disable callback for this plugin from running (with context)."]
+    #[doc = " @plugin: Pointer to plugin."]
+    #[doc = " @type: Type of callback, indicating when cb function will run."]
+    #[doc = " @cb: The callback function itself and other info."]
+    #[doc = " @context: Pointer to context."]
+    #[doc = ""]
+    #[doc = " Same as padna_disable_callback, but with context."]
     pub fn panda_disable_callback_with_context(
         plugin: *mut ::std::os::raw::c_void,
         type_: panda_cb_type,
@@ -38961,6 +39214,29 @@ extern "C" {
     );
 }
 extern "C" {
+    #[doc = " panda_enable_callback() - Enable callback for this plugin so that it can run."]
+    #[doc = " @plugin: Pointer to plugin."]
+    #[doc = " @type: Type of callback, indicating when cb function will run."]
+    #[doc = " @cb: The callback function itself and other info."]
+    #[doc = ""]
+    #[doc = " Mark this callback as enabled so that it will run from now on."]
+    #[doc = ""]
+    #[doc = " NB: enable/disable are faster than register/unregister since they"]
+    #[doc = " set a flag rather than adding/removing something from a list."]
+    pub fn panda_enable_callback(
+        plugin: *mut ::std::os::raw::c_void,
+        type_: panda_cb_type,
+        cb: panda_cb,
+    );
+}
+extern "C" {
+    #[doc = " panda_enable_callback_with_context() - Enable this callback for this plugin so that it can run (with context)/"]
+    #[doc = " @plugin: Pointer to plugin."]
+    #[doc = " @type: Type of callback, indicating when cb function will run."]
+    #[doc = " @cb: The callback function itself and other info."]
+    #[doc = " @context: Pointer to context."]
+    #[doc = ""]
+    #[doc = " Same as panda_enable_callback, but with context."]
     pub fn panda_enable_callback_with_context(
         plugin: *mut ::std::os::raw::c_void,
         type_: panda_cb_type,
@@ -38969,53 +39245,62 @@ extern "C" {
     );
 }
 extern "C" {
+    #[doc = " panda_unregister_callbacks() - Unregister all callbacks for this plugin."]
+    #[doc = " @plugin: Pointer to plugin."]
+    #[doc = ""]
     pub fn panda_unregister_callbacks(plugin: *mut ::std::os::raw::c_void);
 }
 extern "C" {
+    #[doc = " panda_load_plugin() - Load this plugin into panda."]
+    #[doc = " @filename: The path to the shared object plugin code."]
+    #[doc = " @plugin_name: The name of the plugin."]
+    #[doc = ""]
+    #[doc = " This will load the code for this plugin and run its init_plugin function."]
+    #[doc = ""]
+    #[doc = " Return: True if success, False otherwise."]
     pub fn panda_load_plugin(
         filename: *const ::std::os::raw::c_char,
         plugin_name: *const ::std::os::raw::c_char,
     ) -> bool;
 }
 extern "C" {
-    pub fn _panda_load_plugin(
-        filename: *const ::std::os::raw::c_char,
-        plugin_name: *const ::std::os::raw::c_char,
-        library_mode: bool,
-    ) -> bool;
-}
-extern "C" {
+    #[doc = " panda_add_arg() - Add an argument to those for a plugin."]
+    #[doc = " @plugin_name: The name of the plugin."]
+    #[doc = " @plugin_arg: The plugin argument, unparsed."]
+    #[doc = ""]
+    #[doc = " Return: Always returns True"]
     pub fn panda_add_arg(
         plugin_name: *const ::std::os::raw::c_char,
         plugin_arg: *const ::std::os::raw::c_char,
     ) -> bool;
 }
 extern "C" {
-    pub fn panda_load_external_plugin(
-        filename: *const ::std::os::raw::c_char,
-        plugin_name: *const ::std::os::raw::c_char,
-        plugin_uuid: *mut ::std::os::raw::c_void,
-        init_fn_ptr: *mut ::std::os::raw::c_void,
-    ) -> bool;
-}
-extern "C" {
+    #[doc = " panda_get_plugin_by_name() - Returns pointer to the plugin of this name."]
+    #[doc = " @name: The name of the desired plugin."]
+    #[doc = ""]
+    #[doc = " Return: Pointer to plugin (handle)"]
     pub fn panda_get_plugin_by_name(
         name: *const ::std::os::raw::c_char,
     ) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
+    #[doc = " panda_unload_plugin_by_name() - Unload plugin."]
+    #[doc = " @name: The name of the plugin to unload."]
     pub fn panda_unload_plugin_by_name(name: *const ::std::os::raw::c_char);
 }
 extern "C" {
     pub fn panda_do_unload_plugin(index: ::std::os::raw::c_int);
 }
 extern "C" {
+    #[doc = " panda_unload_plugin() - Unload plugin."]
+    #[doc = " @plugin: Pointer to the plugin (handle) to unload."]
     pub fn panda_unload_plugin(plugin: *mut ::std::os::raw::c_void);
 }
 extern "C" {
     pub fn panda_unload_plugin_idx(idx: ::std::os::raw::c_int);
 }
 extern "C" {
+    #[doc = " panda_unload_plugins() - Unload all the plugins currently loaded."]
     pub fn panda_unload_plugins();
 }
 extern "C" {
@@ -39025,13 +39310,7 @@ extern "C" {
     pub static mut panda_use_memcb: bool;
 }
 extern "C" {
-    pub static mut panda_cbs: [*mut panda_cb_list; 50usize];
-}
-extern "C" {
-    pub static mut panda_plugins_to_unload: [bool; 16usize];
-}
-extern "C" {
-    pub static mut panda_plugin_to_unload: bool;
+    pub static mut panda_cbs: [*mut panda_cb_list; 51usize];
 }
 extern "C" {
     pub static mut panda_tb_chaining: bool;
@@ -39058,30 +39337,82 @@ extern "C" {
     pub static mut panda_os_familyno: PandaOsFamily;
 }
 extern "C" {
+    pub fn panda_break_exec() -> bool;
+}
+extern "C" {
     pub fn panda_flush_tb() -> bool;
 }
 extern "C" {
+    #[doc = " panda_do_flush_tb() - Request flush of translation block cache."]
+    #[doc = ""]
+    #[doc = " Qemu's emulation operates on basic blocks of translated code (a"]
+    #[doc = " basic block is a sequence of instructions without control flow)."]
+    #[doc = " These blocks are cached which means if an analysis wants to change"]
+    #[doc = " how translation injects instrumentation, then the cache should be"]
+    #[doc = " flushed so that new instrumentation can appear."]
     pub fn panda_do_flush_tb();
 }
 extern "C" {
+    #[doc = " panda_do_break_exec() - Request break out of emulation loop."]
+    #[doc = ""]
+    #[doc = " Qemu emulates using a cache (see panda_do_flush_tb) but also tends"]
+    #[doc = " to mostly sit in a tight loop executing basic blocks in succession."]
+    #[doc = " Sometimes an anlysis will want to force an exit from that loop,"]
+    #[doc = " which causes interrupts and device housekeeping code to run."]
+    pub fn panda_do_break_exec();
+}
+extern "C" {
+    #[doc = " panda_enable_precise_pc() - Turn on accurate PC mode."]
+    #[doc = ""]
+    #[doc = " Qemu does not update the program counter in the middle of a basic"]
+    #[doc = " block. However, for many analyses, we might want to know the PC at"]
+    #[doc = " the instruction level, accurately. This enables a mode in which"]
+    #[doc = " panda updates a shadow PC to serve that purpose."]
     pub fn panda_enable_precise_pc();
 }
 extern "C" {
+    #[doc = " panda_disable_precise_pc() - Turn off accurate PC mode."]
     pub fn panda_disable_precise_pc();
 }
 extern "C" {
+    #[doc = " panda_enable_memcb() - Turn on memory callbacks."]
+    #[doc = ""]
+    #[doc = " Callbacks on LD/ST are expensive in panda. If required, they must"]
+    #[doc = " be enabled explicitly using this function which swaps out the"]
+    #[doc = " helper functions used by qemu for loads and stores."]
     pub fn panda_enable_memcb();
 }
 extern "C" {
+    #[doc = " panda_disable_memcb() - Turn on memory callbacks."]
     pub fn panda_disable_memcb();
 }
 extern "C" {
+    #[doc = " panda_enable_llvm() - Turn on LLVM translation-mediated emulation."]
+    #[doc = ""]
+    #[doc = " Analyses involving all or most machine instructions on many"]
+    #[doc = " architectures are well served by translating emulated code to a"]
+    #[doc = " simple, common intermediate language first. This function enables a"]
+    #[doc = " mode in which every basic block of emualted code is translated from"]
+    #[doc = " TCG to LLVM which can be analyzed or instrumented via LLVM passes."]
+    #[doc = " In addition, a benefit of using LLVM, even C-implementations of"]
+    #[doc = " functionality in \"helpers\" can additionally be subject to analysis"]
+    #[doc = " if they compiled with CLANG and thus their code made available for"]
+    #[doc = " analysis as LLVM."]
+    #[doc = ""]
+    #[doc = " NB: Beware that LLVM emulation mode is slow. The resulting object"]
+    #[doc = " code is highly un-optimized."]
     pub fn panda_enable_llvm();
 }
 extern "C" {
+    #[doc = " panda_enable_llvm_no_exec() - Turn on LLVM translation for inspection."]
+    #[doc = ""]
+    #[doc = " Enable translation of basic blocks to LLVM and make this available"]
+    #[doc = " for perusal via `-d llvm_ir`.  Whole-system emulation will continue"]
+    #[doc = " to use its normal faster emultion."]
     pub fn panda_enable_llvm_no_exec();
 }
 extern "C" {
+    #[doc = " panda_disable_llvm() - Turn off LLVM translation-mediated emulation."]
     pub fn panda_disable_llvm();
 }
 extern "C" {
@@ -39099,13 +39430,36 @@ extern "C" {
     pub fn panda_get_current_llvm_module() -> usize;
 }
 extern "C" {
-    pub fn panda_enable_tb_chaining();
-}
-extern "C" {
+    #[doc = " panda_disable_tb_chaining() - Turn off translation block chaining."]
+    #[doc = ""]
+    #[doc = " Qemu typically emulates by *chaining* the execution of emulated"]
+    #[doc = " basic blocks of guest code, meaning the execution of one follows"]
+    #[doc = " another without returning control to the emulation loop. This is"]
+    #[doc = " fast because qemu just lets translated code execute, one block"]
+    #[doc = " after another."]
+    #[doc = ""]
+    #[doc = " For some analyses this is problematic and so this function disables"]
+    #[doc = " the behavior, meaning that emulation of a basic block of guest code"]
+    #[doc = " always returns control to the main emulation loop after it is done."]
     pub fn panda_disable_tb_chaining();
 }
 extern "C" {
-    pub fn panda_memsavep(f: *mut FILE);
+    #[doc = " panda_enable_tb_chaining() - Turn on translation block chaining."]
+    #[doc = ""]
+    #[doc = " Turns on the chaining behavior described in panda_disable_tb_chaining."]
+    pub fn panda_enable_tb_chaining();
+}
+extern "C" {
+    #[doc = " panda_memsavep() - Save RAM to a file."]
+    #[doc = " @file: An open and writeable file pointer."]
+    #[doc = ""]
+    #[doc = " This function should simply copy the contents of RAM to the"]
+    #[doc = " provided file pointer. One possible use is to provide this file to"]
+    #[doc = " memory forensic tools like Volatility."]
+    pub fn panda_memsavep(file: *mut FILE);
+}
+extern "C" {
+    pub fn panda_get_rr_name() -> *mut ::std::os::raw::c_char;
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -39122,12 +39476,34 @@ pub struct panda_arg_list {
     pub plugin_name: *mut ::std::os::raw::c_char,
 }
 extern "C" {
+    #[doc = " panda_get_args() - Parse arguments for a plugin into panda_arg_list."]
+    #[doc = " @plugin_name: The plugin name."]
+    #[doc = ""]
+    #[doc = " This function is used in a plugin's initialization to parse"]
+    #[doc = " arguments to a plugin into a panda_arg_list. Arguments are"]
+    #[doc = " key/value string pairs."]
+    #[doc = ""]
+    #[doc = " Return: pointer to panda_arg_list."]
     pub fn panda_get_args(plugin_name: *const ::std::os::raw::c_char) -> *mut panda_arg_list;
 }
 extern "C" {
+    #[doc = " panda_free_args() - Free plugin arguments from a panda_arg_list."]
+    #[doc = " @args: Pointer to panda_arg_list struct."]
+    #[doc = ""]
+    #[doc = " Use this to free the memory allocated by panda_get_args."]
     pub fn panda_free_args(args: *mut panda_arg_list);
 }
 extern "C" {
+    #[doc = " panda_parse_ulong() - Get value corresponding to this plugin arg as a ulong, with default."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a ulong and return it.  If no"]
+    #[doc = " such name is found, use the provided default."]
+    #[doc = ""]
+    #[doc = " Return: a ulong from args or default."]
     pub fn panda_parse_ulong(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39135,6 +39511,17 @@ extern "C" {
     ) -> target_ulong;
 }
 extern "C" {
+    #[doc = " panda_parse_ulong_req() - Get required value corresponding to this plugin arg as a ulong."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a ulong and return it. As this"]
+    #[doc = " argument is required, if no such name is found, plugin load should"]
+    #[doc = " fail."]
+    #[doc = ""]
+    #[doc = " Return: a ulong from args."]
     pub fn panda_parse_ulong_req(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39142,6 +39529,17 @@ extern "C" {
     ) -> target_ulong;
 }
 extern "C" {
+    #[doc = " panda_parse_ulong_opt() - Get optional value corresponding to this plugin arg as a ulong."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a ulong and return it.  If no"]
+    #[doc = " such name is found, use the default."]
+    #[doc = ""]
+    #[doc = " Return: a ulong from args."]
     pub fn panda_parse_ulong_opt(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39150,6 +39548,16 @@ extern "C" {
     ) -> target_ulong;
 }
 extern "C" {
+    #[doc = " panda_parse_uint32() - Get value corresponding to this plugin arg as a uint32, with default."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a uint32 and return it.  If no"]
+    #[doc = " such name is found, use the provided default."]
+    #[doc = ""]
+    #[doc = " Return: a uint32 from args or default."]
     pub fn panda_parse_uint32(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39157,6 +39565,17 @@ extern "C" {
     ) -> u32;
 }
 extern "C" {
+    #[doc = " panda_parse_uint32_req() - Get required value corresponding to this plugin arg as a uint32."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a uint32 and return it. As this"]
+    #[doc = " argument is required, if no such name is found, plugin load should"]
+    #[doc = " fail."]
+    #[doc = ""]
+    #[doc = " Return: a uint32 from args."]
     pub fn panda_parse_uint32_req(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39164,6 +39583,17 @@ extern "C" {
     ) -> u32;
 }
 extern "C" {
+    #[doc = " panda_parse_uint32_opt() - Get optional value corresponding to this plugin arg as a uint32."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a uint32 and return it.  If no"]
+    #[doc = " such name is found, use the default."]
+    #[doc = ""]
+    #[doc = " Return: a uint32 from args."]
     pub fn panda_parse_uint32_opt(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39172,6 +39602,16 @@ extern "C" {
     ) -> u32;
 }
 extern "C" {
+    #[doc = " panda_parse_uint64() - Get value corresponding to this plugin arg as a uint64, with default."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a uint64 and return it.  If no"]
+    #[doc = " such name is found, use the provided default."]
+    #[doc = ""]
+    #[doc = " Return: a uint64 from args or default."]
     pub fn panda_parse_uint64(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39179,6 +39619,17 @@ extern "C" {
     ) -> u64;
 }
 extern "C" {
+    #[doc = " panda_parse_uint64_req() - Get required value corresponding to this plugin arg as a uint64."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a uint64 and return it. As this"]
+    #[doc = " argument is required, if no such name is found, plugin load should"]
+    #[doc = " fail."]
+    #[doc = ""]
+    #[doc = " Return: a uint64 from args."]
     pub fn panda_parse_uint64_req(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39186,6 +39637,17 @@ extern "C" {
     ) -> u64;
 }
 extern "C" {
+    #[doc = " panda_parse_uint64_opt() - Get optional value corresponding to this plugin arg as a uint64."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a uint64 and return it.  If no"]
+    #[doc = " such name is found, use the default."]
+    #[doc = ""]
+    #[doc = " Return: a uint64 from args."]
     pub fn panda_parse_uint64_opt(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39194,6 +39656,16 @@ extern "C" {
     ) -> u64;
 }
 extern "C" {
+    #[doc = " panda_parse_double() - Get value corresponding to this plugin arg as a double, with default."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a double and return it.  If no"]
+    #[doc = " such name is found, use the provided default."]
+    #[doc = ""]
+    #[doc = " Return: a double from args or default."]
     pub fn panda_parse_double(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39201,6 +39673,17 @@ extern "C" {
     ) -> f64;
 }
 extern "C" {
+    #[doc = " panda_parse_double_req() - Get required value corresponding to this plugin arg as a double."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a double and return it. As this"]
+    #[doc = " argument is required, if no such name is found, plugin load should"]
+    #[doc = " fail."]
+    #[doc = ""]
+    #[doc = " Return: a double from args."]
     pub fn panda_parse_double_req(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39208,6 +39691,17 @@ extern "C" {
     ) -> f64;
 }
 extern "C" {
+    #[doc = " panda_parse_double_opt() - Get optional value corresponding to this plugin arg as a double."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " translate the associated value into a double and return it.  If no"]
+    #[doc = " such name is found, use the default."]
+    #[doc = ""]
+    #[doc = " Return: a double from args."]
     pub fn panda_parse_double_opt(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39216,12 +39710,42 @@ extern "C" {
     ) -> f64;
 }
 extern "C" {
+    #[doc = " panda_parse_bool() - Determine if this boolean argument is set for this plugin."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " compare the associated value with a set of strings that likely mean"]
+    #[doc = " \"true\" and another set that likely mean \"false\" in order to"]
+    #[doc = " determine the boolean setting for that argument, which is returned."]
+    #[doc = " Note: This means to set a boolean argument for a panda plugin you"]
+    #[doc = " need something like '-panda taint2:opt=true'."]
+    #[doc = ""]
+    #[doc = " NB: If the argument is missing, false will be returned."]
+    #[doc = ""]
+    #[doc = " Return: the boolean setting, true/false."]
     pub fn panda_parse_bool(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
     ) -> bool;
 }
 extern "C" {
+    #[doc = " panda_parse_bool_req() - Determine if this required boolean argument is set for this plugin."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " compare the associated value with a set of strings that likely mean"]
+    #[doc = " \"true\" and another set that likely mean \"false\" in order to"]
+    #[doc = " determine the boolean setting for that argument, which is returned."]
+    #[doc = " Note: This means to set a boolean argument for a panda plugin you"]
+    #[doc = " need something like '-panda taint2:opt=true'."]
+    #[doc = ""]
+    #[doc = " As this argument is required, if it is not found, plugin load"]
+    #[doc = " should fail."]
+    #[doc = ""]
+    #[doc = " Return: the boolean setting, true/false."]
     pub fn panda_parse_bool_req(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39229,6 +39753,14 @@ extern "C" {
     ) -> bool;
 }
 extern "C" {
+    #[doc = " panda_parse_bool_opt() - Determine if this optional boolean argument is set for this plugin."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Same behavior as panda_parse_bool."]
+    #[doc = ""]
+    #[doc = " Return: the boolean setting, true/false."]
     pub fn panda_parse_bool_opt(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39236,6 +39768,16 @@ extern "C" {
     ) -> bool;
 }
 extern "C" {
+    #[doc = " panda_parse_string() - Get required value corresponding to this plugin arg as a string."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " return the associated string value.  If the arg is not found, the"]
+    #[doc = " default will be returned."]
+    #[doc = ""]
+    #[doc = " Return: a string value."]
     pub fn panda_parse_string(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39243,6 +39785,18 @@ extern "C" {
     ) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
+    #[doc = " panda_parse_string_req() - Get value corresponding to this plugin arg as a string."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @help: Help text."]
+    #[doc = ""]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " return the associated string value."]
+    #[doc = ""]
+    #[doc = " As this argument is required, if it is not found, plugin load"]
+    #[doc = " should fail."]
+    #[doc = ""]
+    #[doc = " Return: a string value."]
     pub fn panda_parse_string_req(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39250,6 +39804,17 @@ extern "C" {
     ) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
+    #[doc = " panda_parse_string_opt() - Look for optional string value corresponding to this plugin arg."]
+    #[doc = " @args: The previously parsed panda_arg_list."]
+    #[doc = " @argname: The name of the argument in args."]
+    #[doc = " @defval: A default value."]
+    #[doc = " @help: Help text."]
+    #[doc = " *"]
+    #[doc = " Look through the arguments in args, and if any have name argname,"]
+    #[doc = " return the associated string value.  If the arg is not found, the"]
+    #[doc = " default will be returned."]
+    #[doc = ""]
+    #[doc = " Return: a string value."]
     pub fn panda_parse_string_opt(
         args: *mut panda_arg_list,
         argname: *const ::std::os::raw::c_char,
@@ -39258,21 +39823,57 @@ extern "C" {
     ) -> *const ::std::os::raw::c_char;
 }
 extern "C" {
-    pub fn str_split(
-        a_str: *mut ::std::os::raw::c_char,
-        a_delim: ::std::os::raw::c_char,
-    ) -> *mut *mut ::std::os::raw::c_char;
-}
-extern "C" {
     pub static mut panda_argv: [*mut gchar; 32usize];
 }
 extern "C" {
     pub static mut panda_argc: ::std::os::raw::c_int;
 }
 extern "C" {
+    pub fn str_split(
+        a_str: *mut ::std::os::raw::c_char,
+        a_delim: ::std::os::raw::c_char,
+    ) -> *mut *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn resolve_file_from_plugin_directory(
+        file_name_fmt: *const ::std::os::raw::c_char,
+        name: *const ::std::os::raw::c_char,
+    ) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    #[doc = " panda_plugin_path() - Get path to plugin shared object."]
+    #[doc = " @name: Plugin name."]
+    #[doc = ""]
+    #[doc = " Python magic needs this. Returns full path to shared object for this plugin."]
+    #[doc = " For example, \"taint2\" might resolve to /path/to/build/x86_64-softmmu/panda/plugins/panda_taint2.so"]
+    #[doc = ""]
+    #[doc = " Return: A filesystem path."]
     pub fn panda_plugin_path(name: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
+    #[doc = " panda_shared_library_path() - Get path for plugin shared library."]
+    #[doc = " @name: Plugin name."]
+    #[doc = ""]
+    #[doc = " Find full path to shared library (not plugin .so)."]
+    #[doc = " For example, \"libso.so\" might resolve to"]
+    #[doc = " /path/to/build/x86_64-softmmu/panda/plugins/libso.so"]
+    pub fn panda_shared_library_path(
+        name: *const ::std::os::raw::c_char,
+    ) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    #[doc = " panda_require() - Require (import) a plugin by name, library mode."]
+    #[doc = " @name: Plugin name."]
+    #[doc = " Load this plugin bc caller requires (depends upon) it."]
+    pub fn panda_require(name: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    #[doc = " panda_require_from_library() - Require (import) a plugin by name, library mode."]
+    #[doc = " @plugin_name: Plugin name."]
+    #[doc = " @plugin_args: Plugin args."]
+    #[doc = " @num_args: Number of args."]
+    #[doc = ""]
+    #[doc = " Same as panda_require but in library mode we have to pass plugin args manually."]
     pub fn panda_require_from_library(
         plugin_name: *const ::std::os::raw::c_char,
         plugin_args: *mut *mut ::std::os::raw::c_char,
@@ -39280,9 +39881,20 @@ extern "C" {
     );
 }
 extern "C" {
-    pub fn panda_require(plugin_name: *const ::std::os::raw::c_char);
-}
-extern "C" {
+    #[doc = " panda_is_callback_enabled() - Determine if this plugin is loaded and enabled."]
+    #[doc = " @plugin: Pointer to plugin (handle)."]
+    #[doc = " @type: Type of callback"]
+    #[doc = " @cb: The callback fn."]
+    #[doc = ""]
+    #[doc = " Oddly, this function requires not the name of the plugin but"]
+    #[doc = " handle. Given that and callback type and fn, search the list of"]
+    #[doc = " callbacks and return true iff that one is both registered and"]
+    #[doc = " enabled."]
+    #[doc = ""]
+    #[doc = " See panda_cb_type."]
+    #[doc = " See panda_cb."]
+    #[doc = ""]
+    #[doc = " Return: True if enabled, false otherwise."]
     pub fn panda_is_callback_enabled(
         plugin: *mut ::std::os::raw::c_void,
         type_: panda_cb_type,
@@ -39356,16 +39968,25 @@ extern "C" {
     pub fn panda_replay_end() -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn rr_create_record_log(filename: *const ::std::os::raw::c_char);
+    pub fn rr2_create_replay_log();
+}
+extern "C" {
+    pub fn rr1_create_replay_log();
 }
 extern "C" {
     pub fn rr_create_replay_log(filename: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn rr_create_record_log(filename: *const ::std::os::raw::c_char);
 }
 extern "C" {
     pub fn rr_destroy_log();
 }
 extern "C" {
     pub fn rr_replay_finished() -> u8;
+}
+extern "C" {
+    pub fn rr_fseek_cur(size: size_t);
 }
 extern "C" {
     pub fn rr_do_begin_record(
@@ -39375,6 +39996,9 @@ extern "C" {
 }
 extern "C" {
     pub fn rr_do_end_record();
+}
+extern "C" {
+    pub fn load_snapshot_state(snp: *mut QEMUFile) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn rr_do_begin_replay(
@@ -39387,6 +40011,27 @@ extern "C" {
 }
 extern "C" {
     pub fn rr_reset_state(cpu_state: *mut CPUState);
+}
+extern "C" {
+    pub fn rr2_add_recording_files(
+        rr_name: *mut ::std::os::raw::c_char,
+        rr_path: *mut ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn rr2_load_snapshot(
+        name_buf: *mut ::std::os::raw::c_char,
+        name_buf_size: ::std::os::raw::c_int,
+        file_name_full: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn rr1_load_snapshot(
+        rr_name: *mut ::std::os::raw::c_char,
+        rr_path: *mut ::std::os::raw::c_char,
+        name_buf: *mut ::std::os::raw::c_char,
+        name_buf_size: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn replay_progress();
@@ -39704,6 +40349,2149 @@ extern "C" {
 extern "C" {
     pub fn rr_end_main_loop_wait();
 }
+pub type la_int64_t = i64;
+pub type la_ssize_t = ssize_t;
+extern "C" {
+    pub fn archive_version_number() -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_version_string() -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_version_details() -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_zlib_version() -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_liblzma_version() -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_bzlib_version() -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_liblz4_version() -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_libzstd_version() -> *const ::std::os::raw::c_char;
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct archive {
+    _unused: [u8; 0],
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct archive_entry {
+    _unused: [u8; 0],
+}
+pub type archive_read_callback = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: *mut archive,
+        _client_data: *mut ::std::os::raw::c_void,
+        _buffer: *mut *const ::std::os::raw::c_void,
+    ) -> la_ssize_t,
+>;
+pub type archive_skip_callback = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: *mut archive,
+        _client_data: *mut ::std::os::raw::c_void,
+        request: la_int64_t,
+    ) -> la_int64_t,
+>;
+pub type archive_seek_callback = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: *mut archive,
+        _client_data: *mut ::std::os::raw::c_void,
+        offset: la_int64_t,
+        whence: ::std::os::raw::c_int,
+    ) -> la_int64_t,
+>;
+pub type archive_write_callback = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: *mut archive,
+        _client_data: *mut ::std::os::raw::c_void,
+        _buffer: *const ::std::os::raw::c_void,
+        _length: size_t,
+    ) -> la_ssize_t,
+>;
+pub type archive_open_callback = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: *mut archive,
+        _client_data: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int,
+>;
+pub type archive_close_callback = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: *mut archive,
+        _client_data: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int,
+>;
+pub type archive_switch_callback = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: *mut archive,
+        _client_data1: *mut ::std::os::raw::c_void,
+        _client_data2: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int,
+>;
+pub type archive_passphrase_callback = ::std::option::Option<
+    unsafe extern "C" fn(
+        arg1: *mut archive,
+        _client_data: *mut ::std::os::raw::c_void,
+    ) -> *const ::std::os::raw::c_char,
+>;
+extern "C" {
+    pub fn archive_read_new() -> *mut archive;
+}
+extern "C" {
+    pub fn archive_read_support_compression_all(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_bzip2(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_compress(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_gzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_lzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_lzma(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_none(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_program(
+        arg1: *mut archive,
+        command: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_program_signature(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: *const ::std::os::raw::c_void,
+        arg4: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_rpm(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_uu(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_compression_xz(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_all(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_bzip2(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_compress(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_gzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_grzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_lrzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_lz4(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_lzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_lzma(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_lzop(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_none(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_program(
+        arg1: *mut archive,
+        command: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_program_signature(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: *const ::std::os::raw::c_void,
+        arg4: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_rpm(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_uu(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_xz(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_filter_zstd(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_7zip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_all(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_ar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_by_code(
+        arg1: *mut archive,
+        arg2: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_cab(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_cpio(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_empty(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_gnutar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_iso9660(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_lha(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_mtree(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_rar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_rar5(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_raw(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_tar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_warc(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_xar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_zip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_zip_streamable(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_support_format_zip_seekable(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_format(
+        arg1: *mut archive,
+        arg2: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_append_filter(
+        arg1: *mut archive,
+        arg2: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_append_filter_program(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_append_filter_program_signature(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: *const ::std::os::raw::c_void,
+        arg4: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_open_callback(
+        arg1: *mut archive,
+        arg2: archive_open_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_read_callback(
+        arg1: *mut archive,
+        arg2: archive_read_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_seek_callback(
+        arg1: *mut archive,
+        arg2: archive_seek_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_skip_callback(
+        arg1: *mut archive,
+        arg2: archive_skip_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_close_callback(
+        arg1: *mut archive,
+        arg2: archive_close_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_switch_callback(
+        arg1: *mut archive,
+        arg2: archive_switch_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_callback_data(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_callback_data2(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: ::std::os::raw::c_uint,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_add_callback_data(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: ::std::os::raw::c_uint,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_append_callback_data(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_prepend_callback_data(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open1(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open(
+        arg1: *mut archive,
+        _client_data: *mut ::std::os::raw::c_void,
+        arg2: archive_open_callback,
+        arg3: archive_read_callback,
+        arg4: archive_close_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open2(
+        arg1: *mut archive,
+        _client_data: *mut ::std::os::raw::c_void,
+        arg2: archive_open_callback,
+        arg3: archive_read_callback,
+        arg4: archive_skip_callback,
+        arg5: archive_close_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open_filename(
+        arg1: *mut archive,
+        _filename: *const ::std::os::raw::c_char,
+        _block_size: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open_filenames(
+        arg1: *mut archive,
+        _filenames: *mut *const ::std::os::raw::c_char,
+        _block_size: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open_filename_w(
+        arg1: *mut archive,
+        _filename: *const wchar_t,
+        _block_size: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open_file(
+        arg1: *mut archive,
+        _filename: *const ::std::os::raw::c_char,
+        _block_size: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open_memory(
+        arg1: *mut archive,
+        buff: *const ::std::os::raw::c_void,
+        size: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open_memory2(
+        a: *mut archive,
+        buff: *const ::std::os::raw::c_void,
+        size: size_t,
+        read_size: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open_fd(
+        arg1: *mut archive,
+        _fd: ::std::os::raw::c_int,
+        _block_size: size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_open_FILE(arg1: *mut archive, _file: *mut FILE) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_next_header(
+        arg1: *mut archive,
+        arg2: *mut *mut archive_entry,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_next_header2(
+        arg1: *mut archive,
+        arg2: *mut archive_entry,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_header_position(arg1: *mut archive) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_read_has_encrypted_entries(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_format_capabilities(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_data(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: size_t,
+    ) -> la_ssize_t;
+}
+extern "C" {
+    pub fn archive_seek_data(
+        arg1: *mut archive,
+        arg2: la_int64_t,
+        arg3: ::std::os::raw::c_int,
+    ) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_read_data_block(
+        a: *mut archive,
+        buff: *mut *const ::std::os::raw::c_void,
+        size: *mut size_t,
+        offset: *mut la_int64_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_data_skip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_data_into_fd(
+        arg1: *mut archive,
+        fd: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_format_option(
+        _a: *mut archive,
+        m: *const ::std::os::raw::c_char,
+        o: *const ::std::os::raw::c_char,
+        v: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_filter_option(
+        _a: *mut archive,
+        m: *const ::std::os::raw::c_char,
+        o: *const ::std::os::raw::c_char,
+        v: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_option(
+        _a: *mut archive,
+        m: *const ::std::os::raw::c_char,
+        o: *const ::std::os::raw::c_char,
+        v: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_options(
+        _a: *mut archive,
+        opts: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_add_passphrase(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_set_passphrase_callback(
+        arg1: *mut archive,
+        client_data: *mut ::std::os::raw::c_void,
+        arg2: archive_passphrase_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_extract(
+        arg1: *mut archive,
+        arg2: *mut archive_entry,
+        flags: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_extract2(
+        arg1: *mut archive,
+        arg2: *mut archive_entry,
+        arg3: *mut archive,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_extract_set_progress_callback(
+        arg1: *mut archive,
+        _progress_func: ::std::option::Option<
+            unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void),
+        >,
+        _user_data: *mut ::std::os::raw::c_void,
+    );
+}
+extern "C" {
+    pub fn archive_read_extract_set_skip_file(
+        arg1: *mut archive,
+        arg2: la_int64_t,
+        arg3: la_int64_t,
+    );
+}
+extern "C" {
+    pub fn archive_read_close(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_free(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_finish(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_new() -> *mut archive;
+}
+extern "C" {
+    pub fn archive_write_set_bytes_per_block(
+        arg1: *mut archive,
+        bytes_per_block: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_get_bytes_per_block(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_bytes_in_last_block(
+        arg1: *mut archive,
+        bytes_in_last_block: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_get_bytes_in_last_block(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_skip_file(
+        arg1: *mut archive,
+        arg2: la_int64_t,
+        arg3: la_int64_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_compression_bzip2(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_compression_compress(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_compression_gzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_compression_lzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_compression_lzma(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_compression_none(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_compression_program(
+        arg1: *mut archive,
+        cmd: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_compression_xz(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter(
+        arg1: *mut archive,
+        filter_code: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_by_name(
+        arg1: *mut archive,
+        name: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_b64encode(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_bzip2(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_compress(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_grzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_gzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_lrzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_lz4(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_lzip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_lzma(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_lzop(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_none(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_program(
+        arg1: *mut archive,
+        cmd: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_uuencode(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_xz(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_add_filter_zstd(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format(
+        arg1: *mut archive,
+        format_code: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_by_name(
+        arg1: *mut archive,
+        name: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_7zip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_ar_bsd(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_ar_svr4(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_cpio(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_cpio_newc(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_gnutar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_iso9660(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_mtree(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_mtree_classic(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_pax(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_pax_restricted(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_raw(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_shar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_shar_dump(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_ustar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_v7tar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_warc(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_xar(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_zip(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_filter_by_ext(
+        a: *mut archive,
+        filename: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_filter_by_ext_def(
+        a: *mut archive,
+        filename: *const ::std::os::raw::c_char,
+        def_ext: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_zip_set_compression_deflate(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_zip_set_compression_store(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_open(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: archive_open_callback,
+        arg4: archive_write_callback,
+        arg5: archive_close_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_open_fd(
+        arg1: *mut archive,
+        _fd: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_open_filename(
+        arg1: *mut archive,
+        _file: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_open_filename_w(
+        arg1: *mut archive,
+        _file: *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_open_file(
+        arg1: *mut archive,
+        _file: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_open_FILE(arg1: *mut archive, arg2: *mut FILE) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_open_memory(
+        arg1: *mut archive,
+        _buffer: *mut ::std::os::raw::c_void,
+        _buffSize: size_t,
+        _used: *mut size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_header(
+        arg1: *mut archive,
+        arg2: *mut archive_entry,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_data(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_void,
+        arg3: size_t,
+    ) -> la_ssize_t;
+}
+extern "C" {
+    pub fn archive_write_data_block(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_void,
+        arg3: size_t,
+        arg4: la_int64_t,
+    ) -> la_ssize_t;
+}
+extern "C" {
+    pub fn archive_write_finish_entry(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_close(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_fail(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_free(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_finish(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_format_option(
+        _a: *mut archive,
+        m: *const ::std::os::raw::c_char,
+        o: *const ::std::os::raw::c_char,
+        v: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_filter_option(
+        _a: *mut archive,
+        m: *const ::std::os::raw::c_char,
+        o: *const ::std::os::raw::c_char,
+        v: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_option(
+        _a: *mut archive,
+        m: *const ::std::os::raw::c_char,
+        o: *const ::std::os::raw::c_char,
+        v: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_options(
+        _a: *mut archive,
+        opts: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_passphrase(
+        _a: *mut archive,
+        p: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_set_passphrase_callback(
+        arg1: *mut archive,
+        client_data: *mut ::std::os::raw::c_void,
+        arg2: archive_passphrase_callback,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_disk_new() -> *mut archive;
+}
+extern "C" {
+    pub fn archive_write_disk_set_skip_file(
+        arg1: *mut archive,
+        arg2: la_int64_t,
+        arg3: la_int64_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_disk_set_options(
+        arg1: *mut archive,
+        flags: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_disk_set_standard_lookup(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_disk_set_group_lookup(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut ::std::os::raw::c_void,
+                arg2: *const ::std::os::raw::c_char,
+                arg3: la_int64_t,
+            ) -> la_int64_t,
+        >,
+        arg4: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_disk_set_user_lookup(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut ::std::os::raw::c_void,
+                arg2: *const ::std::os::raw::c_char,
+                arg3: la_int64_t,
+            ) -> la_int64_t,
+        >,
+        arg4: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_write_disk_gid(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: la_int64_t,
+    ) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_write_disk_uid(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: la_int64_t,
+    ) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_read_disk_new() -> *mut archive;
+}
+extern "C" {
+    pub fn archive_read_disk_set_symlink_logical(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_set_symlink_physical(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_set_symlink_hybrid(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_entry_from_file(
+        arg1: *mut archive,
+        arg2: *mut archive_entry,
+        arg3: ::std::os::raw::c_int,
+        arg4: *const stat,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_gname(
+        arg1: *mut archive,
+        arg2: la_int64_t,
+    ) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_read_disk_uname(
+        arg1: *mut archive,
+        arg2: la_int64_t,
+    ) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_read_disk_set_standard_lookup(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_set_gname_lookup(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut ::std::os::raw::c_void,
+                arg2: la_int64_t,
+            ) -> *const ::std::os::raw::c_char,
+        >,
+        arg4: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_set_uname_lookup(
+        arg1: *mut archive,
+        arg2: *mut ::std::os::raw::c_void,
+        arg3: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut ::std::os::raw::c_void,
+                arg2: la_int64_t,
+            ) -> *const ::std::os::raw::c_char,
+        >,
+        arg4: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_open(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_open_w(
+        arg1: *mut archive,
+        arg2: *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_descend(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_can_descend(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_current_filesystem(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_current_filesystem_is_synthetic(
+        arg1: *mut archive,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_current_filesystem_is_remote(
+        arg1: *mut archive,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_set_atime_restored(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_set_behavior(
+        arg1: *mut archive,
+        flags: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_set_matching(
+        arg1: *mut archive,
+        _matching: *mut archive,
+        _excluded_func: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut archive,
+                arg2: *mut ::std::os::raw::c_void,
+                arg3: *mut archive_entry,
+            ),
+        >,
+        _client_data: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_read_disk_set_metadata_filter_callback(
+        arg1: *mut archive,
+        _metadata_filter_func: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut archive,
+                arg2: *mut ::std::os::raw::c_void,
+                arg3: *mut archive_entry,
+            ) -> ::std::os::raw::c_int,
+        >,
+        _client_data: *mut ::std::os::raw::c_void,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_free(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_filter_count(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_filter_bytes(arg1: *mut archive, arg2: ::std::os::raw::c_int) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_filter_code(
+        arg1: *mut archive,
+        arg2: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_filter_name(
+        arg1: *mut archive,
+        arg2: ::std::os::raw::c_int,
+    ) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_position_compressed(arg1: *mut archive) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_position_uncompressed(arg1: *mut archive) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_compression_name(arg1: *mut archive) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_compression(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_errno(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_error_string(arg1: *mut archive) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_format_name(arg1: *mut archive) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_format(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_clear_error(arg1: *mut archive);
+}
+extern "C" {
+    pub fn archive_set_error(
+        arg1: *mut archive,
+        _err: ::std::os::raw::c_int,
+        fmt: *const ::std::os::raw::c_char,
+        ...
+    );
+}
+extern "C" {
+    pub fn archive_copy_error(dest: *mut archive, src: *mut archive);
+}
+extern "C" {
+    pub fn archive_file_count(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_new() -> *mut archive;
+}
+extern "C" {
+    pub fn archive_match_free(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_excluded(
+        arg1: *mut archive,
+        arg2: *mut archive_entry,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_path_excluded(
+        arg1: *mut archive,
+        arg2: *mut archive_entry,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_set_inclusion_recursion(
+        arg1: *mut archive,
+        arg2: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_exclude_pattern(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_exclude_pattern_w(
+        arg1: *mut archive,
+        arg2: *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_exclude_pattern_from_file(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+        _nullSeparator: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_exclude_pattern_from_file_w(
+        arg1: *mut archive,
+        arg2: *const wchar_t,
+        _nullSeparator: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_pattern(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_pattern_w(
+        arg1: *mut archive,
+        arg2: *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_pattern_from_file(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+        _nullSeparator: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_pattern_from_file_w(
+        arg1: *mut archive,
+        arg2: *const wchar_t,
+        _nullSeparator: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_path_unmatched_inclusions(arg1: *mut archive) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_path_unmatched_inclusions_next(
+        arg1: *mut archive,
+        arg2: *mut *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_path_unmatched_inclusions_next_w(
+        arg1: *mut archive,
+        arg2: *mut *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_time_excluded(
+        arg1: *mut archive,
+        arg2: *mut archive_entry,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_time(
+        arg1: *mut archive,
+        _flag: ::std::os::raw::c_int,
+        _sec: time_t,
+        _nsec: ::std::os::raw::c_long,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_date(
+        arg1: *mut archive,
+        _flag: ::std::os::raw::c_int,
+        _datestr: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_date_w(
+        arg1: *mut archive,
+        _flag: ::std::os::raw::c_int,
+        _datestr: *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_file_time(
+        arg1: *mut archive,
+        _flag: ::std::os::raw::c_int,
+        _pathname: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_file_time_w(
+        arg1: *mut archive,
+        _flag: ::std::os::raw::c_int,
+        _pathname: *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_exclude_entry(
+        arg1: *mut archive,
+        _flag: ::std::os::raw::c_int,
+        arg2: *mut archive_entry,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_owner_excluded(
+        arg1: *mut archive,
+        arg2: *mut archive_entry,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_uid(arg1: *mut archive, arg2: la_int64_t)
+        -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_gid(arg1: *mut archive, arg2: la_int64_t)
+        -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_uname(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_uname_w(
+        arg1: *mut archive,
+        arg2: *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_gname(
+        arg1: *mut archive,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_match_include_gname_w(
+        arg1: *mut archive,
+        arg2: *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_utility_string_sort(
+        arg1: *mut *mut ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_clear(arg1: *mut archive_entry) -> *mut archive_entry;
+}
+extern "C" {
+    pub fn archive_entry_clone(arg1: *mut archive_entry) -> *mut archive_entry;
+}
+extern "C" {
+    pub fn archive_entry_free(arg1: *mut archive_entry);
+}
+extern "C" {
+    pub fn archive_entry_new() -> *mut archive_entry;
+}
+extern "C" {
+    pub fn archive_entry_new2(arg1: *mut archive) -> *mut archive_entry;
+}
+extern "C" {
+    pub fn archive_entry_atime(arg1: *mut archive_entry) -> time_t;
+}
+extern "C" {
+    pub fn archive_entry_atime_nsec(arg1: *mut archive_entry) -> ::std::os::raw::c_long;
+}
+extern "C" {
+    pub fn archive_entry_atime_is_set(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_birthtime(arg1: *mut archive_entry) -> time_t;
+}
+extern "C" {
+    pub fn archive_entry_birthtime_nsec(arg1: *mut archive_entry) -> ::std::os::raw::c_long;
+}
+extern "C" {
+    pub fn archive_entry_birthtime_is_set(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_ctime(arg1: *mut archive_entry) -> time_t;
+}
+extern "C" {
+    pub fn archive_entry_ctime_nsec(arg1: *mut archive_entry) -> ::std::os::raw::c_long;
+}
+extern "C" {
+    pub fn archive_entry_ctime_is_set(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_dev(arg1: *mut archive_entry) -> dev_t;
+}
+extern "C" {
+    pub fn archive_entry_dev_is_set(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_devmajor(arg1: *mut archive_entry) -> dev_t;
+}
+extern "C" {
+    pub fn archive_entry_devminor(arg1: *mut archive_entry) -> dev_t;
+}
+extern "C" {
+    pub fn archive_entry_filetype(arg1: *mut archive_entry) -> mode_t;
+}
+extern "C" {
+    pub fn archive_entry_fflags(
+        arg1: *mut archive_entry,
+        arg2: *mut ::std::os::raw::c_ulong,
+        arg3: *mut ::std::os::raw::c_ulong,
+    );
+}
+extern "C" {
+    pub fn archive_entry_fflags_text(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_gid(arg1: *mut archive_entry) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_entry_gname(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_gname_utf8(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_gname_w(arg1: *mut archive_entry) -> *const wchar_t;
+}
+extern "C" {
+    pub fn archive_entry_hardlink(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_hardlink_utf8(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_hardlink_w(arg1: *mut archive_entry) -> *const wchar_t;
+}
+extern "C" {
+    pub fn archive_entry_ino(arg1: *mut archive_entry) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_entry_ino64(arg1: *mut archive_entry) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_entry_ino_is_set(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_mode(arg1: *mut archive_entry) -> mode_t;
+}
+extern "C" {
+    pub fn archive_entry_mtime(arg1: *mut archive_entry) -> time_t;
+}
+extern "C" {
+    pub fn archive_entry_mtime_nsec(arg1: *mut archive_entry) -> ::std::os::raw::c_long;
+}
+extern "C" {
+    pub fn archive_entry_mtime_is_set(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_nlink(arg1: *mut archive_entry) -> ::std::os::raw::c_uint;
+}
+extern "C" {
+    pub fn archive_entry_pathname(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_pathname_utf8(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_pathname_w(arg1: *mut archive_entry) -> *const wchar_t;
+}
+extern "C" {
+    pub fn archive_entry_perm(arg1: *mut archive_entry) -> mode_t;
+}
+extern "C" {
+    pub fn archive_entry_rdev(arg1: *mut archive_entry) -> dev_t;
+}
+extern "C" {
+    pub fn archive_entry_rdevmajor(arg1: *mut archive_entry) -> dev_t;
+}
+extern "C" {
+    pub fn archive_entry_rdevminor(arg1: *mut archive_entry) -> dev_t;
+}
+extern "C" {
+    pub fn archive_entry_sourcepath(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_sourcepath_w(arg1: *mut archive_entry) -> *const wchar_t;
+}
+extern "C" {
+    pub fn archive_entry_size(arg1: *mut archive_entry) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_entry_size_is_set(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_strmode(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_symlink(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_symlink_utf8(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_symlink_type(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_symlink_w(arg1: *mut archive_entry) -> *const wchar_t;
+}
+extern "C" {
+    pub fn archive_entry_uid(arg1: *mut archive_entry) -> la_int64_t;
+}
+extern "C" {
+    pub fn archive_entry_uname(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_uname_utf8(arg1: *mut archive_entry) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_uname_w(arg1: *mut archive_entry) -> *const wchar_t;
+}
+extern "C" {
+    pub fn archive_entry_is_data_encrypted(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_is_metadata_encrypted(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_is_encrypted(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_set_atime(
+        arg1: *mut archive_entry,
+        arg2: time_t,
+        arg3: ::std::os::raw::c_long,
+    );
+}
+extern "C" {
+    pub fn archive_entry_unset_atime(arg1: *mut archive_entry);
+}
+extern "C" {
+    pub fn archive_entry_set_birthtime(
+        arg1: *mut archive_entry,
+        arg2: time_t,
+        arg3: ::std::os::raw::c_long,
+    );
+}
+extern "C" {
+    pub fn archive_entry_unset_birthtime(arg1: *mut archive_entry);
+}
+extern "C" {
+    pub fn archive_entry_set_ctime(
+        arg1: *mut archive_entry,
+        arg2: time_t,
+        arg3: ::std::os::raw::c_long,
+    );
+}
+extern "C" {
+    pub fn archive_entry_unset_ctime(arg1: *mut archive_entry);
+}
+extern "C" {
+    pub fn archive_entry_set_dev(arg1: *mut archive_entry, arg2: dev_t);
+}
+extern "C" {
+    pub fn archive_entry_set_devmajor(arg1: *mut archive_entry, arg2: dev_t);
+}
+extern "C" {
+    pub fn archive_entry_set_devminor(arg1: *mut archive_entry, arg2: dev_t);
+}
+extern "C" {
+    pub fn archive_entry_set_filetype(arg1: *mut archive_entry, arg2: ::std::os::raw::c_uint);
+}
+extern "C" {
+    pub fn archive_entry_set_fflags(
+        arg1: *mut archive_entry,
+        arg2: ::std::os::raw::c_ulong,
+        arg3: ::std::os::raw::c_ulong,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_fflags_text(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_copy_fflags_text_w(
+        arg1: *mut archive_entry,
+        arg2: *const wchar_t,
+    ) -> *const wchar_t;
+}
+extern "C" {
+    pub fn archive_entry_set_gid(arg1: *mut archive_entry, arg2: la_int64_t);
+}
+extern "C" {
+    pub fn archive_entry_set_gname(arg1: *mut archive_entry, arg2: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn archive_entry_set_gname_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_gname(arg1: *mut archive_entry, arg2: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn archive_entry_copy_gname_w(arg1: *mut archive_entry, arg2: *const wchar_t);
+}
+extern "C" {
+    pub fn archive_entry_update_gname_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_set_hardlink(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_set_hardlink_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_hardlink(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_hardlink_w(arg1: *mut archive_entry, arg2: *const wchar_t);
+}
+extern "C" {
+    pub fn archive_entry_update_hardlink_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_set_ino(arg1: *mut archive_entry, arg2: la_int64_t);
+}
+extern "C" {
+    pub fn archive_entry_set_ino64(arg1: *mut archive_entry, arg2: la_int64_t);
+}
+extern "C" {
+    pub fn archive_entry_set_link(arg1: *mut archive_entry, arg2: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn archive_entry_set_link_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_link(arg1: *mut archive_entry, arg2: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn archive_entry_copy_link_w(arg1: *mut archive_entry, arg2: *const wchar_t);
+}
+extern "C" {
+    pub fn archive_entry_update_link_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_set_mode(arg1: *mut archive_entry, arg2: mode_t);
+}
+extern "C" {
+    pub fn archive_entry_set_mtime(
+        arg1: *mut archive_entry,
+        arg2: time_t,
+        arg3: ::std::os::raw::c_long,
+    );
+}
+extern "C" {
+    pub fn archive_entry_unset_mtime(arg1: *mut archive_entry);
+}
+extern "C" {
+    pub fn archive_entry_set_nlink(arg1: *mut archive_entry, arg2: ::std::os::raw::c_uint);
+}
+extern "C" {
+    pub fn archive_entry_set_pathname(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_set_pathname_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_pathname(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_pathname_w(arg1: *mut archive_entry, arg2: *const wchar_t);
+}
+extern "C" {
+    pub fn archive_entry_update_pathname_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_set_perm(arg1: *mut archive_entry, arg2: mode_t);
+}
+extern "C" {
+    pub fn archive_entry_set_rdev(arg1: *mut archive_entry, arg2: dev_t);
+}
+extern "C" {
+    pub fn archive_entry_set_rdevmajor(arg1: *mut archive_entry, arg2: dev_t);
+}
+extern "C" {
+    pub fn archive_entry_set_rdevminor(arg1: *mut archive_entry, arg2: dev_t);
+}
+extern "C" {
+    pub fn archive_entry_set_size(arg1: *mut archive_entry, arg2: la_int64_t);
+}
+extern "C" {
+    pub fn archive_entry_unset_size(arg1: *mut archive_entry);
+}
+extern "C" {
+    pub fn archive_entry_copy_sourcepath(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_sourcepath_w(arg1: *mut archive_entry, arg2: *const wchar_t);
+}
+extern "C" {
+    pub fn archive_entry_set_symlink(arg1: *mut archive_entry, arg2: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn archive_entry_set_symlink_type(arg1: *mut archive_entry, arg2: ::std::os::raw::c_int);
+}
+extern "C" {
+    pub fn archive_entry_set_symlink_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_symlink(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_symlink_w(arg1: *mut archive_entry, arg2: *const wchar_t);
+}
+extern "C" {
+    pub fn archive_entry_update_symlink_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_set_uid(arg1: *mut archive_entry, arg2: la_int64_t);
+}
+extern "C" {
+    pub fn archive_entry_set_uname(arg1: *mut archive_entry, arg2: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn archive_entry_set_uname_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_copy_uname(arg1: *mut archive_entry, arg2: *const ::std::os::raw::c_char);
+}
+extern "C" {
+    pub fn archive_entry_copy_uname_w(arg1: *mut archive_entry, arg2: *const wchar_t);
+}
+extern "C" {
+    pub fn archive_entry_update_uname_utf8(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_set_is_data_encrypted(
+        arg1: *mut archive_entry,
+        is_encrypted: ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_set_is_metadata_encrypted(
+        arg1: *mut archive_entry,
+        is_encrypted: ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn archive_entry_stat(arg1: *mut archive_entry) -> *const stat;
+}
+extern "C" {
+    pub fn archive_entry_copy_stat(arg1: *mut archive_entry, arg2: *const stat);
+}
+extern "C" {
+    pub fn archive_entry_mac_metadata(
+        arg1: *mut archive_entry,
+        arg2: *mut size_t,
+    ) -> *const ::std::os::raw::c_void;
+}
+extern "C" {
+    pub fn archive_entry_copy_mac_metadata(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_void,
+        arg3: size_t,
+    );
+}
+extern "C" {
+    pub fn archive_entry_acl_clear(arg1: *mut archive_entry);
+}
+extern "C" {
+    pub fn archive_entry_acl_add_entry(
+        arg1: *mut archive_entry,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+        arg6: *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_acl_add_entry_w(
+        arg1: *mut archive_entry,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+        arg4: ::std::os::raw::c_int,
+        arg5: ::std::os::raw::c_int,
+        arg6: *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_acl_reset(
+        arg1: *mut archive_entry,
+        arg2: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_acl_next(
+        arg1: *mut archive_entry,
+        arg2: ::std::os::raw::c_int,
+        arg3: *mut ::std::os::raw::c_int,
+        arg4: *mut ::std::os::raw::c_int,
+        arg5: *mut ::std::os::raw::c_int,
+        arg6: *mut ::std::os::raw::c_int,
+        arg7: *mut *const ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_acl_next_w(
+        arg1: *mut archive_entry,
+        arg2: ::std::os::raw::c_int,
+        arg3: *mut ::std::os::raw::c_int,
+        arg4: *mut ::std::os::raw::c_int,
+        arg5: *mut ::std::os::raw::c_int,
+        arg6: *mut ::std::os::raw::c_int,
+        arg7: *mut *const wchar_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_acl_to_text_w(
+        arg1: *mut archive_entry,
+        arg2: *mut la_ssize_t,
+        arg3: ::std::os::raw::c_int,
+    ) -> *mut wchar_t;
+}
+extern "C" {
+    pub fn archive_entry_acl_to_text(
+        arg1: *mut archive_entry,
+        arg2: *mut la_ssize_t,
+        arg3: ::std::os::raw::c_int,
+    ) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_acl_from_text_w(
+        arg1: *mut archive_entry,
+        arg2: *const wchar_t,
+        arg3: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_acl_from_text(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_acl_text_w(
+        arg1: *mut archive_entry,
+        arg2: ::std::os::raw::c_int,
+    ) -> *const wchar_t;
+}
+extern "C" {
+    pub fn archive_entry_acl_text(
+        arg1: *mut archive_entry,
+        arg2: ::std::os::raw::c_int,
+    ) -> *const ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn archive_entry_acl_types(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_acl_count(
+        arg1: *mut archive_entry,
+        arg2: ::std::os::raw::c_int,
+    ) -> ::std::os::raw::c_int;
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct archive_acl {
+    _unused: [u8; 0],
+}
+extern "C" {
+    pub fn archive_entry_acl(arg1: *mut archive_entry) -> *mut archive_acl;
+}
+extern "C" {
+    pub fn archive_entry_xattr_clear(arg1: *mut archive_entry);
+}
+extern "C" {
+    pub fn archive_entry_xattr_add_entry(
+        arg1: *mut archive_entry,
+        arg2: *const ::std::os::raw::c_char,
+        arg3: *const ::std::os::raw::c_void,
+        arg4: size_t,
+    );
+}
+extern "C" {
+    pub fn archive_entry_xattr_count(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_xattr_reset(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_xattr_next(
+        arg1: *mut archive_entry,
+        arg2: *mut *const ::std::os::raw::c_char,
+        arg3: *mut *const ::std::os::raw::c_void,
+        arg4: *mut size_t,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_sparse_clear(arg1: *mut archive_entry);
+}
+extern "C" {
+    pub fn archive_entry_sparse_add_entry(
+        arg1: *mut archive_entry,
+        arg2: la_int64_t,
+        arg3: la_int64_t,
+    );
+}
+extern "C" {
+    pub fn archive_entry_sparse_count(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_sparse_reset(arg1: *mut archive_entry) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn archive_entry_sparse_next(
+        arg1: *mut archive_entry,
+        arg2: *mut la_int64_t,
+        arg3: *mut la_int64_t,
+    ) -> ::std::os::raw::c_int;
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct archive_entry_linkresolver {
+    _unused: [u8; 0],
+}
+extern "C" {
+    pub fn archive_entry_linkresolver_new() -> *mut archive_entry_linkresolver;
+}
+extern "C" {
+    pub fn archive_entry_linkresolver_set_strategy(
+        arg1: *mut archive_entry_linkresolver,
+        arg2: ::std::os::raw::c_int,
+    );
+}
+extern "C" {
+    pub fn archive_entry_linkresolver_free(arg1: *mut archive_entry_linkresolver);
+}
+extern "C" {
+    pub fn archive_entry_linkify(
+        arg1: *mut archive_entry_linkresolver,
+        arg2: *mut *mut archive_entry,
+        arg3: *mut *mut archive_entry,
+    );
+}
+extern "C" {
+    pub fn archive_entry_partial_links(
+        res: *mut archive_entry_linkresolver,
+        links: *mut ::std::os::raw::c_uint,
+    ) -> *mut archive_entry;
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct rr_file {
+    pub section: *mut ::std::os::raw::c_char,
+    pub archive: *mut archive,
+    pub entry: *mut archive_entry,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct rr_file_info {
+    pub path: *mut ::std::os::raw::c_char,
+    pub name: *mut ::std::os::raw::c_char,
+}
+extern "C" {
+    pub fn rrfile_info_create(
+        rr_info: *mut *mut rr_file_info,
+        rr_path: *mut ::std::os::raw::c_char,
+        rr_name: *mut ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    pub fn rrfile_info_clear(rr_info: *mut *mut rr_file_info);
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct rr_file_state {
+    _unused: [u8; 0],
+}
+extern "C" {
+    pub fn rrfile_open_read(
+        fpath: *const ::std::os::raw::c_char,
+        section: *const ::std::os::raw::c_char,
+        rr: *mut *mut rr_file,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn rrfile_read_cmdline(
+        fpath: *const ::std::os::raw::c_char,
+        cmdline: *mut *mut ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn rrfile_read_metadata(
+        fpath: *const ::std::os::raw::c_char,
+        metadata: *mut *mut ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn rrfile_read_hashes(
+        fpath: *const ::std::os::raw::c_char,
+        hashes: *mut *mut ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn rrfile_read_contents_as_string(
+        fpath: *const ::std::os::raw::c_char,
+        section: *const ::std::os::raw::c_char,
+        contents: *mut *mut ::std::os::raw::c_char,
+        strip: bool,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn rrfile_free(rr: *mut rr_file) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn rrfile_section_size(rr: *mut rr_file) -> i64;
+}
+extern "C" {
+    pub fn rrfile_fseek_cur(rr: *mut rr_file, len: size_t);
+}
+extern "C" {
+    pub fn rrfile_fseek_set(
+        rr: *mut *mut rr_file,
+        filename: *const ::std::os::raw::c_char,
+        len: size_t,
+    );
+}
+extern "C" {
+    #[doc = " rrfile_qemu_getbuffer implements QEMUFileGetBufferFunc"]
+    #[doc = ""]
+    #[doc = " The pos argument is ignored because the tar file can only stream"]
+    #[doc = ""]
+    #[doc = " Returns:"]
+    #[doc = "   The number of bytes actually read"]
+    pub fn rrfile_qemu_getbuffer(
+        opaque: *mut ::std::os::raw::c_void,
+        buffer: *mut u8,
+        pos: i64,
+        size: size_t,
+    ) -> ssize_t;
+}
+extern "C" {
+    #[doc = " rrfile_close implements QEMUFileCloseFunc *close"]
+    #[doc = ""]
+    #[doc = " Returns:"]
+    #[doc = "   An error code"]
+    pub fn rrfile_qemu_close(opaque: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    #[doc = " An fread like wrapper for an rrfile"]
+    pub fn rrfile_fread(
+        ptr: *mut ::std::os::raw::c_void,
+        size: size_t,
+        nmemb: size_t,
+        rr: *mut rr_file,
+    ) -> size_t;
+}
+extern "C" {
+    #[doc = " Open an rr2 file for writing. This creates the archive and the magic file,"]
+    #[doc = " but does not create the snapshot"]
+    pub fn rrfile_open_write(fpath: *const ::std::os::raw::c_char) -> *mut rr_file_state;
+}
+extern "C" {
+    #[doc = " Add a file to the recording archive, deleting the original"]
+    pub fn rrfile_add_recording_file(
+        rstate: *mut rr_file_state,
+        type_: *const ::std::os::raw::c_char,
+        fpath: *const ::std::os::raw::c_char,
+    ) -> bool;
+}
+extern "C" {
+    pub fn rrfile_write_metadata_file(
+        rstate: *mut rr_file_state,
+        contents: *const ::std::os::raw::c_char,
+    );
+}
+extern "C" {
+    #[doc = " copy a file file from one recording archive to another recording archive"]
+    pub fn rrfile_copy_recording_file(
+        rstate: *mut rr_file_state,
+        type_: *const ::std::os::raw::c_char,
+        replay_name: *mut ::std::os::raw::c_char,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    #[doc = " Close a newly create rr2 file, calculating file hashes, etc"]
+    pub fn rrfile_finalize(arg1: *mut rr_file_state);
+}
+extern "C" {
+    #[doc = " Update the rrfile module to use rr_archive as its working archive."]
+    #[doc = " This is used to store the open archive file while the vm is writing"]
+    #[doc = " and the nondetlog is being written"]
+    pub fn rrfile_set_working(rr_archive: *mut rr_file_state);
+}
+extern "C" {
+    pub fn rrfile_get_working() -> *mut rr_file_state;
+}
+extern "C" {
+    pub fn has_rr2_file_extention(filename: *const ::std::os::raw::c_char) -> bool;
+}
+extern "C" {
+    pub fn is_gzip(filename: *const ::std::os::raw::c_char) -> bool;
+}
+extern "C" {
+    pub fn rr2_name(fpath: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
+    pub fn is_rr2_file(filename: *const ::std::os::raw::c_char) -> bool;
+}
+extern "C" {
+    pub fn remove_rr2_ext(base_name: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
+}
 extern "C" {
     pub fn rr_get_pc() -> u64;
 }
@@ -39855,14 +42643,21 @@ pub const RR_log_type_RECORD: RR_log_type = 0;
 pub const RR_log_type_REPLAY: RR_log_type = 1;
 pub type RR_log_type = ::std::os::raw::c_uint;
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
+#[derive(Copy, Clone)]
 pub struct RR_log_t {
     pub type_: RR_log_type,
     pub last_prog_point: RR_prog_point,
+    pub rr2: bool,
     pub name: *mut ::std::os::raw::c_char,
-    pub fp: *mut FILE,
+    pub file: RR_log_t__bindgen_ty_1,
     pub size: ::std::os::raw::c_ulonglong,
     pub bytes_read: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union RR_log_t__bindgen_ty_1 {
+    pub fp: *mut FILE,
+    pub replay_rr: *mut rr_file,
 }
 pub type RR_log = RR_log_t;
 extern "C" {
@@ -40979,6 +43774,8 @@ pub struct _Panda__LogEntry {
     pub asid_libraries: *mut Panda__LoadedLibs,
     pub dwarf_call: *mut Panda__DwarfCall,
     pub dwarf_ret: *mut Panda__DwarfCall,
+    pub dwarf2_call: *mut Panda__DwarfCall,
+    pub dwarf2_ret: *mut Panda__DwarfCall,
     pub proc_trace: *mut Panda__ProcTrace,
     pub signal_event: *mut Panda__SignalEvent,
     pub syscall: *mut Panda__Syscall,
@@ -42142,38 +44939,101 @@ pub const PlMode_PL_MODE_WRITE: PlMode = 0;
 pub const PlMode_PL_MODE_READ_FWD: PlMode = 1;
 pub const PlMode_PL_MODE_READ_BWD: PlMode = 2;
 pub const PlMode_PL_MODE_UNKNOWN: PlMode = 3;
+#[doc = " typedef enum PLMode - The pandalog mode."]
+#[doc = " @PL_MODE_WRITE: open for write."]
+#[doc = " @PL_MODE_READ_FWD: open for read, forwards direction"]
+#[doc = " @PL_MODE_READ_BWD: open for read, backwards direction"]
+#[doc = " @PL_MODE_UNKNOWN: not sure"]
 pub type PlMode = ::std::os::raw::c_uint;
 extern "C" {
-    pub fn pandalog_open_write(path: *const ::std::os::raw::c_char, chunk_size: u32);
+    #[doc = " pandalog_open_write() - Open the pandalog for write."]
+    #[doc = " @filename: Filename for pandalog that will be created."]
+    #[doc = " @chunk_size: Chunk size in bytes."]
+    #[doc = ""]
+    #[doc = " Open the pandalog for writing, using this filename and chunk"]
+    #[doc = " size. Chunk size might be changed to improve performance."]
+    pub fn pandalog_open_write(filename: *const ::std::os::raw::c_char, chunk_size: u32);
 }
 extern "C" {
-    pub fn pandalog_open_read_fwd(path: *const ::std::os::raw::c_char);
+    #[doc = " pandalog_open_read_fwd() - Open the pandalog for reading forwards."]
+    #[doc = " @filename: Filename for pandalog that we will be reading."]
+    #[doc = ""]
+    #[doc = " Open the pandalog for reading in forwards direction. This is the"]
+    #[doc = " same direction as time flows."]
+    pub fn pandalog_open_read_fwd(filename: *const ::std::os::raw::c_char);
 }
 extern "C" {
-    pub fn pandalog_open_read_bwd(path: *const ::std::os::raw::c_char);
+    #[doc = " pandalog_open_read_bwd() - Open the pandalog for reading backwards."]
+    #[doc = " @filename: Filename for pandalog that we will be reading."]
+    #[doc = ""]
+    #[doc = " Pandalog opened for reading in backwards direction. This is the"]
+    #[doc = " opposite direction as time flows, and so can be useful for analyses"]
+    #[doc = " that work backwards from the end of an execution trace, such as a"]
+    #[doc = " backwards dynamic slice."]
+    #[doc = ""]
+    pub fn pandalog_open_read_bwd(filename: *const ::std::os::raw::c_char);
 }
 extern "C" {
-    pub fn pandalog_open(path: *const ::std::os::raw::c_char, mode: *const ::std::os::raw::c_char);
+    #[doc = " pandalog_open() - Open the pandalog for read or write."]
+    #[doc = " @filename: Filename for the pandalog."]
+    #[doc = " @mode: Either \"r\" or \"w\"."]
+    #[doc = ""]
+    #[doc = " Pandalog opened for reading or writing (thus in forwards"]
+    #[doc = " direction, i.e., the same direction as time flows)."]
+    pub fn pandalog_open(
+        filename: *const ::std::os::raw::c_char,
+        mode: *const ::std::os::raw::c_char,
+    );
 }
 extern "C" {
+    #[doc = " pandalog_close() - Close the pandalog for read or write."]
+    #[doc = ""]
+    #[doc = " Pandalog flushed and closed (regardless of direction or read/write"]
+    #[doc = " mode)."]
     pub fn pandalog_close();
 }
 extern "C" {
+    #[doc = " pandalog_write_entry() - Write an entry to the pandalog."]
+    #[doc = " @entry: Pointer to the entry."]
+    #[doc = ""]
+    #[doc = " XXX: Tell reader where to look to know what Panda__LogEntry looks like."]
     pub fn pandalog_write_entry(entry: *mut Panda__LogEntry);
 }
 extern "C" {
+    #[doc = " pandalog_read_entry() - Read an entry from the pandalog."]
+    #[doc = ""]
+    #[doc = " Return: pointer to allocated and populated pandalog entry."]
     pub fn pandalog_read_entry() -> *mut Panda__LogEntry;
 }
 extern "C" {
+    #[doc = " pandalog_seek() - Fast forward or rewind to instruction in pandalog."]
+    #[doc = " @instr: The instruction count to seek to."]
+    #[doc = ""]
     pub fn pandalog_seek(instr: u64);
 }
 extern "C" {
+    #[doc = " pandalog_free_entry() - Free memory for this entry."]
+    #[doc = " @entry: Pointer to the entry."]
+    #[doc = ""]
+    #[doc = " Since pandalog_read_entry allocates, caller will need to free the"]
+    #[doc = " memory for the entry."]
     pub fn pandalog_free_entry(entry: *mut Panda__LogEntry);
 }
 extern "C" {
     pub static mut pandalog: ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_init() - Initialize panda guest."]
+    #[doc = " @argc: number of command line args"]
+    #[doc = " @argv: command line args"]
+    #[doc = " @envp: environment variables"]
+    #[doc = ""]
+    #[doc = " Initialize panda emulator with command line and environment"]
+    #[doc = " variables.  These may have come from running cmd-line panda or may"]
+    #[doc = " have been crafted by something using panda as a library, e.g.,"]
+    #[doc = " by the PYTHON panda interface."]
+    #[doc = ""]
+    #[doc = " Return: always 0"]
     pub fn panda_init(
         argc: ::std::os::raw::c_int,
         argv: *mut *mut ::std::os::raw::c_char,
@@ -42181,42 +45041,111 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_run() - Give control to panda to emulate guest."]
+    #[doc = ""]
+    #[doc = " Allow panda to emulate guest, executing any registered callbacks as"]
+    #[doc = " well as loaded plugin code. This will return when panda emulation"]
+    #[doc = " exits its \"main loop\" and would normally end as a program."]
+    #[doc = ""]
+    #[doc = " Return: always 0"]
     pub fn panda_run() -> ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_stop() - Pauses the guest being emulated."]
+    #[doc = " @code: New state to assign to guest cpu."]
+    #[doc = ""]
+    #[doc = " This is only used to pause emulation, with code=4."]
+    #[doc = " XXX: Perhaps rename and un-expose code arg?"]
     pub fn panda_stop(code: ::std::os::raw::c_int);
 }
 extern "C" {
+    #[doc = " panda_cont() - Continue guest after pause."]
+    #[doc = ""]
+    #[doc = " Resume after panda_stop."]
     pub fn panda_cont();
 }
 extern "C" {
     pub fn _panda_set_library_mode(arg1: bool);
 }
 extern "C" {
-    pub fn panda_delvm(snapshot_name: *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int;
-}
-extern "C" {
+    #[doc = " panda_start_pandalog() - Turn on pandalogging."]
+    #[doc = " @name: Filename for logging."]
+    #[doc = ""]
+    #[doc = " Pandalogging will be enabled from this point on and will be output"]
+    #[doc = " to the file indicated."]
     pub fn panda_start_pandalog(name: *const ::std::os::raw::c_char);
 }
 extern "C" {
-    pub fn panda_revert(snapshot_name: *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int;
+    #[doc = " panda_snap() - Take a guest snapshot."]
+    #[doc = " @name: Name that will be assigned to the snapshot."]
+    #[doc = ""]
+    #[doc = " Take a snapshot of guest state which includes RAM, registers, and"]
+    #[doc = " some device state including hard drive and assign it the name"]
+    #[doc = " provided, storing all this in the current qcow."]
+    #[doc = ""]
+    #[doc = " Return: The value returned by the internal Qemu snapshot taking"]
+    #[doc = " function, which returns 0 on success."]
+    pub fn panda_snap(name: *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_delvm() - Delete a guest snapshot."]
+    #[doc = " @name: Name of snapshot to delete."]
+    #[doc = ""]
+    #[doc = " Delete a guest snapshot by name from the current qcow."]
+    #[doc = ""]
+    #[doc = " Return: not used"]
+    pub fn panda_delvm(name: *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    #[doc = " panda_revert() - Revert to a guest snapshot."]
+    #[doc = " @name: The name of the snapshot to revert to."]
+    #[doc = ""]
+    #[doc = " Pause emulation and restore to a snapshot."]
+    #[doc = ""]
+    #[doc = " Return: The value returned by internal Qemu revert function which"]
+    #[doc = " is 0 on success but otherwise ... there are various errors."]
+    pub fn panda_revert(name: *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    #[doc = " panda_reset() - Request reboot of guest."]
+    #[doc = ""]
+    #[doc = " Think ctrl-alt-delete. This is a request, so it won't happen"]
+    #[doc = " immediately."]
     pub fn panda_reset();
 }
 extern "C" {
-    pub fn panda_snap(snapshot_name: *mut ::std::os::raw::c_char) -> ::std::os::raw::c_int;
-}
-extern "C" {
+    #[doc = " panda_finish() - Stop emulating guest and end analysis."]
+    #[doc = ""]
+    #[doc = " XXX This doesnt appear to be used by pypanda. Perhaps it is vestigal?"]
     pub fn panda_finish() -> ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_was_aborted() - Returns true if abort requested."]
+    #[doc = ""]
+    #[doc = " This will be true, e.g., if someone hit ctrl-c or called"]
+    #[doc = " `panda_reset` to kill analysis but that is still pending."]
+    #[doc = ""]
+    #[doc = " Return: true/false"]
     pub fn panda_was_aborted() -> bool;
 }
 extern "C" {
+    #[doc = " panda_set_qemu_path() - Sets path to \"qemu\" binary, needed internally."]
+    #[doc = " @filepath: Full path to qemu (actually panda)."]
+    #[doc = ""]
+    #[doc = " XXX this looks like its not actually used anywhere?"]
     pub fn panda_set_qemu_path(filepath: *mut ::std::os::raw::c_char);
 }
 extern "C" {
+    #[doc = " panda_init_plugin() - Initialize a plugin by name."]
+    #[doc = " @plugin_name: The name of the plugin."]
+    #[doc = " @plugin_args: The array of string arguments."]
+    #[doc = " @num_args: The number of arguments."]
+    #[doc = ""]
+    #[doc = " Initialize this plugin with these arguments, which sets the"]
+    #[doc = " arguments as if they had come in on the panda commandline and then"]
+    #[doc = " loads the plugin."]
+    #[doc = ""]
+    #[doc = " XXX: Rename to load_plugin ?"]
     pub fn panda_init_plugin(
         plugin_name: *mut ::std::os::raw::c_char,
         plugin_args: *mut *mut ::std::os::raw::c_char,
@@ -42224,6 +45153,18 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_register_callback_helper() - Register a callback function."]
+    #[doc = " @plugin: Pointer to plugin."]
+    #[doc = " @type: Type of callback, indicating when cb function will run."]
+    #[doc = " @cb: The callback function itself and other info."]
+    #[doc = ""]
+    #[doc = " This function can be used to register a callback to run in"]
+    #[doc = " panda. To call it, you will need a pointer to a plugin as well as a"]
+    #[doc = " pointer to a fully-formed panda_cb object. The plugin"]
+    #[doc = " pointer can be fake but should be a handle that uniquely distinguishes plugins."]
+    #[doc = ""]
+    #[doc = " type is a number. See typedef panda_cb_type."]
+    #[doc = " cb is a pointer to a struct. See typedef panda_cb."]
     pub fn panda_register_callback_helper(
         plugin: *mut ::std::os::raw::c_void,
         type_: panda_cb_type,
@@ -42231,39 +45172,98 @@ extern "C" {
     );
 }
 extern "C" {
+    #[doc = " panda_enable_callback_helper() - Enable a callback."]
+    #[doc = " @plugin: Pointer to plugin to which the callback belongs."]
+    #[doc = " @type: Type of callback, indicating when cb function will run."]
+    #[doc = " @cb: The callback function itself and other info."]
+    #[doc = ""]
+    #[doc = " This function can be used to enable a previously registered"]
+    #[doc = " callback to run in panda. To call it, you will need a pointer to"]
+    #[doc = " the plugin that owns the callback as well as a pointer to the"]
+    #[doc = " panda_cb object which contains the callback."]
+    #[doc = ""]
+    #[doc = " type is a number. See typedef panda_cb_type."]
+    #[doc = " cb is a pointer to a struct. See typedef panda_cb."]
     pub fn panda_enable_callback_helper(
         plugin: *mut ::std::os::raw::c_void,
-        arg1: panda_cb_type,
+        type_: panda_cb_type,
         cb: *mut panda_cb,
     );
 }
 extern "C" {
+    #[doc = " panda_disable_callback_helper() - Disable a callback."]
+    #[doc = " @plugin: Pointer to plugin to which the callback belongs."]
+    #[doc = " @type: Type of callback, indicating when cb function will run."]
+    #[doc = " @cb: The callback function itself and other info."]
+    #[doc = ""]
+    #[doc = " This function can be used to disable a previously registered"]
+    #[doc = " callback to run in panda. To call it, you will need a pointer to"]
+    #[doc = " the plugin that owns the callback as well as a pointer to the"]
+    #[doc = " panda_cb object which contains the callback."]
+    #[doc = ""]
+    #[doc = " type is a number. See typedef panda_cb_type."]
+    #[doc = " cb is a pointer to a struct. See typedef panda_cb."]
     pub fn panda_disable_callback_helper(
         plugin: *mut ::std::os::raw::c_void,
-        arg1: panda_cb_type,
+        type_: panda_cb_type,
         cb: *mut panda_cb,
     );
 }
 extern "C" {
-    pub fn rr_get_guest_instr_count_external() -> ::std::os::raw::c_int;
+    #[doc = " rr_get_guest_instr_count_external() - Get instruction count for replay."]
+    #[doc = ""]
+    #[doc = " This will only return the number of guest instruction emulated"]
+    #[doc = " since replay began."]
+    #[doc = ""]
+    #[doc = " Unclear what this returns if not in replay mode."]
+    #[doc = ""]
+    #[doc = ""]
+    #[doc = " Return: a uint64_t, the instruction count."]
+    pub fn rr_get_guest_instr_count_external() -> u64;
 }
 extern "C" {
+    #[doc = " panda_virtual_memory_read_external() - Copy data from guest (virtual) memory into host buffer."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = " @addr: Guest virtual address of start of desired read."]
+    #[doc = " @buf: Host pointer to a buffer into which data will be copied from guest."]
+    #[doc = " @len: Number of bytes to copy."]
+    #[doc = ""]
+    #[doc = " Return:"]
+    #[doc = " * 0      - Read succeeded"]
+    #[doc = " * -1     - An error"]
     pub fn panda_virtual_memory_read_external(
-        env: *mut CPUState,
+        cpu: *mut CPUState,
         addr: target_ulong,
         buf: *mut ::std::os::raw::c_char,
         len: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_virtual_memory_write_external() - Copy data from host buffer into guest (virtual) memory."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = " @addr: Guest virtual address of start of desired write."]
+    #[doc = " @buf: Host pointer to a buffer from which data will be copied into guest."]
+    #[doc = " @len: Number of bytes to copy."]
+    #[doc = ""]
+    #[doc = " Return:"]
+    #[doc = " * 0      - Write succeeded"]
+    #[doc = " * -1     - An error"]
     pub fn panda_virtual_memory_write_external(
-        env: *mut CPUState,
+        cpu: *mut CPUState,
         addr: target_ulong,
         buf: *mut ::std::os::raw::c_char,
         len: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_physical_memory_read_external() - Copy data from guest (physical) memory into host buffer."]
+    #[doc = " @addr: Guest physical address of start of read."]
+    #[doc = " @buf: Host pointer to a buffer into which data will be copied from guest."]
+    #[doc = " @len: Number of bytes to copy."]
+    #[doc = ""]
+    #[doc = " Return:"]
+    #[doc = " * MEMTX_OK      - Read succeeded"]
+    #[doc = " * MEMTX_ERROR   - An error"]
     pub fn panda_physical_memory_read_external(
         addr: hwaddr,
         buf: *mut u8,
@@ -42271,6 +45271,14 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_physical_memory_write_external() - Copy data from host buffer into guest (physical)memory."]
+    #[doc = " @addr: Guest physical address of start of desired write."]
+    #[doc = " @buf: Host pointer to a buffer from which data will be copied into guest."]
+    #[doc = " @len: Number of bytes to copy."]
+    #[doc = ""]
+    #[doc = " Return:"]
+    #[doc = " * MEMTX_OK      - Write succeeded"]
+    #[doc = " * MEMTX_ERROR   - An error"]
     pub fn panda_physical_memory_write_external(
         addr: hwaddr,
         buf: *mut u8,
@@ -42278,21 +45286,70 @@ extern "C" {
     ) -> ::std::os::raw::c_int;
 }
 extern "C" {
+    #[doc = " panda_get_retval_external() - Get return value for function."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = ""]
+    #[doc = " Platform-independent abstraction for retrieving a call return"]
+    #[doc = " value. This function still has to be called in the proper context"]
+    #[doc = " to retrieve a meaningful value, such as just after a RET"]
+    #[doc = " instruction under x86."]
+    #[doc = ""]
+    #[doc = " Return: Guest return value."]
     pub fn panda_get_retval_external(cpu: *const CPUState) -> target_ulong;
 }
 extern "C" {
+    #[doc = " PandaPhysicalAddressToRamOffset_external() - Translate guest physical to ram offset."]
+    pub fn PandaPhysicalAddressToRamOffset_external(
+        out: *mut ram_addr_t,
+        addr: hwaddr,
+        is_write: bool,
+    ) -> MemTxResult;
+}
+extern "C" {
+    #[doc = " panda_in_kernel_external() - Determine if guest is in kernel."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = ""]
+    #[doc = " Determines if guest is currently executing in kernel mode, e.g. execution privilege level."]
+    #[doc = ""]
+    #[doc = " Return: True if in kernel, false otherwise."]
     pub fn panda_in_kernel_external(cpu: *const CPUState) -> bool;
 }
 extern "C" {
+    #[doc = " panda_in_kernel_mode_external() - Determine if guest is in kernel."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = ""]
+    #[doc = " Determines if guest is currently executing in kernel mode, e.g. execution privilege level."]
+    #[doc = ""]
+    #[doc = " XXX Duplicate of panda_in_kernel_external?"]
+    #[doc = ""]
+    #[doc = " Return: True if in kernel, false otherwise."]
     pub fn panda_in_kernel_mode_external(cpu: *const CPUState) -> bool;
 }
 extern "C" {
+    #[doc = " panda_in_kernel_code_linux_external() - Determine if current pc is kernel code."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = ""]
+    #[doc = " Determines if guest is currently executing kernelspace code,"]
+    #[doc = " regardless of privilege level.  Necessary because there's a small"]
+    #[doc = " bit of kernelspace code that runs AFTER a switch to usermode"]
+    #[doc = " privileges. Therefore, certain analysis logic can't rely on"]
+    #[doc = " panda_in_kernel_mode() alone."]
+    #[doc = ""]
+    #[doc = " Return: true if pc is in kernel, false otherwise."]
     pub fn panda_in_kernel_code_linux_external(cpu: *mut CPUState) -> bool;
 }
 extern "C" {
+    #[doc = " panda_current_ksp_external() - Get guest kernel stack pointer."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = ""]
+    #[doc = " Return: Guest kernel stack pointer value."]
     pub fn panda_current_ksp_external(cpu: *mut CPUState) -> target_ulong;
 }
 extern "C" {
+    #[doc = " panda_current_sp_external() - Get current guest stack pointer."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = ""]
+    #[doc = " Return: Returns guest stack pointer."]
     pub fn panda_current_sp_external(cpu: *const CPUState) -> target_ulong;
 }
 extern "C" {
@@ -42302,12 +45359,23 @@ extern "C" {
     ) -> target_ulong;
 }
 extern "C" {
-    pub fn panda_virt_to_phys_external(cpu: *mut CPUState, virt_addr: target_ulong)
-        -> target_ulong;
+    #[doc = " panda_virt_to_phys_external() - Translate guest virtual to physical address."]
+    #[doc = " @cpu: Cpu state."]
+    #[doc = " @addr: Guest virtual address."]
+    #[doc = ""]
+    #[doc = " This conversion will fail if asked about a virtual address that is"]
+    #[doc = " not currently mapped to a physical one in the guest."]
+    #[doc = ""]
+    #[doc = " Return: A guest physical address."]
+    pub fn panda_virt_to_phys_external(cpu: *mut CPUState, addr: target_ulong) -> target_ulong;
 }
 extern "C" {
+    #[doc = " panda_setup_signal_handling() - Provide panda with a function to be called on certain signals."]
+    #[doc = " @sigfun: The function to call on signal."]
+    #[doc = ""]
+    #[doc = " This function will be called on any of {SIGINT, SIGHUP, SIGTERM}."]
     pub fn panda_setup_signal_handling(
-        f: ::std::option::Option<
+        sigfun: ::std::option::Option<
             unsafe extern "C" fn(
                 arg1: ::std::os::raw::c_int,
                 arg2: *mut ::std::os::raw::c_void,
@@ -42317,21 +45385,53 @@ extern "C" {
     );
 }
 extern "C" {
+    #[doc = " map_memory() - Add a region to the memory map."]
+    #[doc = " @name: The name of the region."]
+    #[doc = " @size: Size of the region, in bytes."]
+    #[doc = " @address: Start of the region."]
+    #[doc = ""]
+    #[doc = " If setting up an environment to run code or rehost some embedded"]
+    #[doc = " system, this function can be used to set up regions in the"]
+    #[doc = " machine's memory map.  RAM only, at present."]
+    #[doc = ""]
+    #[doc = " XXX: Rename as panda_map_memory?"]
     pub fn map_memory(name: *mut ::std::os::raw::c_char, size: u64, address: u64);
 }
 extern "C" {
+    #[doc = " panda_init_monitor() - Create a monitor for panda."]
+    #[doc = ""]
+    #[doc = " Creates a monitor panda can easily interact with."]
     pub fn panda_init_monitor();
 }
 extern "C" {
+    #[doc = " panda_monitor_run() - Run a command in the panda monitor and collect response."]
+    #[doc = " @buf: The command."]
+    #[doc = ""]
+    #[doc = " Run this command as if it were typed into the qemu monitor, and"]
+    #[doc = " return what output would have been printed to the monitor."]
+    #[doc = ""]
+    #[doc = " NB: Some commands may cause spinloops."]
+    #[doc = ""]
+    #[doc = " Return: A string, the output of the command."]
     pub fn panda_monitor_run(buf: *mut ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
+    #[doc = " get_cpu() - Get cpu state object."]
+    #[doc = ""]
+    #[doc = " Use this to obtain a pointer to a cpu object needed for other API functions."]
+    #[doc = ""]
+    #[doc = " Return: host pointer to cpu."]
     pub fn get_cpu() -> *mut CPUState;
 }
 extern "C" {
     pub fn garray_len(list: *mut GArray) -> ::std::os::raw::c_ulong;
 }
 extern "C" {
+    #[doc = " panda_cleanup_record() - End recording."]
+    #[doc = ""]
+    #[doc = " This function ends recording, if that is currently in progress."]
+    #[doc = ""]
+    #[doc = " XXX: Rename to something more like panda_end_record?  Also, where is begin_record then?"]
     pub fn panda_cleanup_record();
 }
 extern "C" {
