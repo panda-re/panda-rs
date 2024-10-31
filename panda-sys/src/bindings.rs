@@ -34,6 +34,11 @@ mod mipsel;
 pub use mipsel::*;
 
 #[cfg(feature = "mips64")]
-mod mipsel;
+mod mips64;
 #[cfg(feature = "mips64")]
-pub use mipsel::*;
+pub use mips64::*;
+
+#[cfg(feature = "mips64el")]
+mod mips64el;
+#[cfg(feature = "mips64el")]
+pub use mips64el::*;

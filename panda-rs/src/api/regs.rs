@@ -226,6 +226,7 @@ pub fn reg_sp() -> Reg {
         feature = "mips",
         feature = "mipsel",
         feature = "mips64"
+        feature = "mips64el"
     ))]
     return Reg::SP;
 
@@ -250,7 +251,7 @@ pub fn reg_ret_addr() -> Option<Reg> {
     #[cfg(any(feature = "arm", feature = "aarch64", feature = "ppc"))]
     return Some(Reg::LR);
 
-    #[cfg(any(feature = "mips", feature = "mipsel", feature = "mips64"))]
+    #[cfg(any(feature = "mips", feature = "mipsel", feature = "mips64", feature = "mips64el"))]
     return Some(Reg::RA);
 }
 
@@ -269,7 +270,7 @@ pub fn get_reg<T: Into<Reg>>(cpu: &CPUState, reg: T) -> target_ulong {
         val = (*cpu_arch).xregs[reg.into() as usize];
     }
 
-    #[cfg(any(feature = "mips", feature = "mipsel", feature = "mips64"))]
+    #[cfg(any(feature = "mips", feature = "mipsel", feature = "mips64", feature = "mips64el"))]
     unsafe {
         val = (*cpu_arch).active_tc.gpr[reg.into() as usize];
     }
@@ -296,7 +297,7 @@ pub fn set_reg<T: Into<Reg>>(cpu: &CPUState, reg: T, val: target_ulong) {
         (*cpu_arch).regs[reg.into() as usize] = val;
     }
 
-    #[cfg(any(feature = "mips", feature = "mipsel", feature = "mips64"))]
+    #[cfg(any(feature = "mips", feature = "mipsel", feature = "mips64", feature = "mips64el"))]
     unsafe {
         (*cpu_arch).active_tc.gpr[reg.into() as usize] = val;
     }
