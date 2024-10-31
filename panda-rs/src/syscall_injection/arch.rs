@@ -14,7 +14,7 @@ pub(crate) const VFORK: target_ulong = 190;
 pub(crate) const VFORK: target_ulong = 220;
 
 // TODO: mips needs to be changed to VFORK
-#[cfg(feature = "mips64")]
+#[cfg(any(feature = "mips64", feature = "mips64el"))]
 pub(crate) const VFORK: target_ulong = 4002;
 
 #[cfg(any(feature = "mips", feature = "mipsel"))]
