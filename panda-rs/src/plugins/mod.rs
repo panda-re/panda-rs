@@ -1,9 +1,10 @@
 //! Bindings for various built-in PANDA plugins
 
-use crate::sys::panda_require;
+use crate::{sys::panda_require, ARCH_NAME};
 use libloading::Symbol;
+use once_cell::sync::OnceCell;
 use std::ffi::CString;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 pub mod cosi;
 pub mod glib;
@@ -388,46 +389,81 @@ pub struct Plugin {
     lib: libloading::Library,
 }
 
-#[cfg(feature = "x86_64")]
-const PLUGIN_DIR: &str = "x86_64-softmmu/panda/plugins";
+const PANDA_GLOBAL_INSTALLS: &[&str] = &["/usr/local/lib/panda", "/usr/lib/panda"];
 
-#[cfg(feature = "i386")]
-const PLUGIN_DIR: &str = "i386-softmmu/panda/plugins";
+fn get_panda_path() -> Option<&'static Path> {
+    static PANDA_PATH: OnceCell<Option<PathBuf>> = OnceCell::new();
 
-#[cfg(feature = "arm")]
-const PLUGIN_DIR: &str = "arm-softmmu/panda/plugins";
+    PANDA_PATH
+        .get_or_init(|| {
+            if let Ok(path) = std::env::var("PANDA_PATH") {
+                Some(PathBuf::from(path))
+            } else {
+                for possible_path in PANDA_GLOBAL_INSTALLS {
+                    let path = PathBuf::from(possible_path);
 
-#[cfg(feature = "aarch64")]
-const PLUGIN_DIR: &str = "aarch64-softmmu/panda/plugins";
+                    if path.exists() {
+                        return Some(path);
+                    }
+                }
 
-#[cfg(feature = "mips")]
-const PLUGIN_DIR: &str = "mips-softmmu/panda/plugins";
+                None
+            }
+        })
+        .as_deref()
+}
 
-#[cfg(feature = "mipsel")]
-const PLUGIN_DIR: &str = "mipsel-softmmu/panda/plugins";
+fn get_panda_plugin_dir() -> Option<&'static Path> {
+    static PANDA_PLUGIN_DIR: OnceCell<Option<PathBuf>> = OnceCell::new();
 
-#[cfg(feature = "mips64")]
-const PLUGIN_DIR: &str = "mips64-softmmu/panda/plugins";
+    PANDA_PLUGIN_DIR
+        .get_or_init(|| {
+            let panda_path = get_panda_path()?;
 
-#[cfg(feature = "mips64el")]
-const PLUGIN_DIR: &str = "mips64el-softmmu/panda/plugins";
+            if let Ok(path) = std::env::var("PANDA_PLUGIN_DIR") {
+                Some(panda_path.join(path))
+            } else {
+                let path = panda_path.join(&format!("{}/panda/plugins", ARCH_NAME));
+                if path.exists() {
+                    return Some(path);
+                }
 
-#[cfg(feature = "ppc")]
-const PLUGIN_DIR: &str = "ppc-softmmu/panda/plugins";
+                let path = panda_path.join(&format!("{}-softmmu/panda/plugins", ARCH_NAME));
+                if path.exists() {
+                    return Some(path);
+                }
+
+                let path = panda_path.join(ARCH_NAME);
+                if path.exists() {
+                    return Some(path);
+                }
+
+                None
+            }
+        })
+        .as_deref()
+}
 
 impl Plugin {
     pub fn new(name: &str) -> Self {
-        std::env::set_var(
-            "PANDA_DIR",
-            std::env::var("PANDA_PATH").expect("Missing PANDA_PATH"),
-        );
-        let c_name = CString::new(name).unwrap();
+        let panda_path =
+            get_panda_path().expect("PANDA_PATH not set and PANDA is not installed globally");
+
         unsafe {
+            std::env::set_var("PANDA_DIR", &panda_path);
+
+            let c_name = CString::new(name).unwrap();
             panda_require(c_name.as_ptr());
         }
-        let path = Path::new(&std::env::var("PANDA_PATH").unwrap())
-            .join(&std::env::var("PANDA_PLUGIN_DIR").unwrap_or(PLUGIN_DIR.to_owned()))
+
+        let path = get_panda_plugin_dir()
+            .expect("Could not find panda plugin dir, consider setting PANDA_PLUGIN_DIR")
             .join(&format!("panda_{}.so", name));
+
+        if !path.exists() {
+            panic!("Could not find plugin {} at {}", name, path.display());
+        }
+
         Self {
             lib: libloading::Library::new(path).expect("Failed to load plugin"),
         }
